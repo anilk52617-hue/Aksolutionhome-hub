@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AK SOLUTION HUB | प्रीमियम सर्विस</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --primary: #0056b3; 
+            --accent: #ffcc00; 
+            --bg: #f8faff;
+            --card-bg: #ffffff;
+            --text-main: #333;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            color: var(--text-main);
+            overflow-x: hidden; 
+        }
+
+        /* स्प्लैश स्क्रीन */
+        #splash { 
+            position: fixed; width: 100%; height: 100%; background: linear-gradient(135deg, #87CEEB, #0056b3); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            z-index: 10000; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        /* हेडर */
+        header { 
+            background: white; padding: 20px; text-align: center; 
+            border-bottom-left-radius: 25px; border-bottom-right-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .brand-logo { width: 70px; border-radius: 12px; margin-bottom: 8px; }
+        .brand-name { font-size: 22px; font-weight: 800; color: var(--primary); }
+
+        /* फ्लोटिंग नेविगेशन */
+        nav { 
+            position: fixed; bottom: 15px; left: 5%; width: 90%; 
+            background: rgba(0, 86, 179, 0.95); backdrop-filter: blur(10px);
+            display: flex; justify-content: space-around; padding: 12px 0; 
+            border-radius: 20px; z-index: 999; box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 11px; text-align: center; transition: 0.3s; }
+        nav a.active { color: var(--accent); transform: translateY(-3px); font-weight: bold; }
+        nav a i { display: block; font-size: 20px; margin-bottom: 4px; }
+
+        .container { padding: 20px 15px 110px; max-width: 500px; margin: auto; }
+        .page { display: none; }
+        .active-page { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* सर्विस कार्ड्स */
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .service-card { 
+            background: white; padding: 18px; border-radius: 18px; text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #eee;
+        }
+        .service-card i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
+
+        /* फीडबैक/रिव्यु सेक्शन */
+        .review-box { 
+            background: white; padding: 15px; border-radius: 15px; margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-left: 5px solid var(--accent);
+        }
+        .star-rating { color: var(--accent); margin-bottom: 5px; }
+        
+        /* इनपुट्स */
+        .input-group { background: white; padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #eee; }
+        input, select, textarea { width: 100%; border: none; outline: none; font-size: 15px; background: transparent; }
+
+        .btn { 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; padding: 15px; border-radius: 12px; border: none; 
+            font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-wa { background: #25D366; color: white; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div id="splash">
+    <div style="background:white; padding:20px; border-radius:25px; box-shadow:0 15px 35px rgba(0,0,0,0.2);">
+        <img src="57255.jpg" style="width:100px; border-radius:15px;">
+    </div>
+    <h2 style="color:white; margin-top:20px; letter-spacing:1px;">AK SOLUTION</h2>
+</div>
+
+<header>
+    <img src="57255.jpg" class="brand-logo">
+    <div class="brand-name">AK SOLUTION HUB</div>
+    <div style="font-size:12px; color:#777;">Khurja • Bulandshahr</div>
+</header>
+
+<div class="container">
+    <div id="home" class="page active-page">
+        <h3 style="margin-bottom:15px; font-size:18px;"><i class="fas fa-tools"></i> हमारी सेवाएं</h3>
+        <div class="service-grid">
+            <div class="service-card" onclick="goToBook('AC सर्विस')"><i class="fas fa-snowflake"></i><span>AC सर्विस</span></div>
+            <div class="service-card" onclick="goToBook('बिजली फिटिंग')"><i class="fas fa-bolt"></i><span>बिजली काम</span></div>
+            <div class="service-card" onclick="goToBook('प्लंबिंग')"><i class="fas fa-faucet"></i><span>प्लंबिंग काम</span></div>
+            <div class="service-card" onclick="goToBook('RO रिपेयर')"><i class="fas fa-tint"></i><span>RO रिपेयर</span></div>
+        </div>
+
+        <h3 style="margin-top:25px; margin-bottom:10px; font-size:18px;"><i class="fas fa-star"></i> ग्राहकों की राय</h3>
+        <div id="reviews-container">
+            <div class="review-box">
+                <div class="star-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p style="margin:0; font-weight:bold; font-size:14px;">राहुल शर्मा</p>
+                <p style="margin:5px 0 0; font-size:13px; color:#555;">"बहुत अच्छी सर्विस है, समय पर आए और काम भी सफाई से किया।"</p>
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" style="margin-top:15px; background:#444;" onclick="changeTab('contact', document.querySelectorAll('nav a')[3])">रिव्यु लिखें</button>
+    </div>
+
+    <div id="booking" class="page">
+        <h3 style="text-align:center;">बुकिंग फॉर्म</h3>
+        <div class="input-group"><input type="text" id="cust-name" placeholder="आपका नाम"></div>
+        <div class="input-group">
+            <select id="cust-service">
+                <option value="">काम चुनें</option>
+                <option value="AC सर्विस">AC सर्विस</option>
+                <option value="Electricity">बिजली काम</option>
+                <option value="Plumbing">प्लंबिंग काम</option>
+            </select>
+        </div>
+        <div class="input-group"><textarea id="cust-addr" rows="3" placeholder="पूरा पता"></textarea></div>
+        <button class="btn btn-wa" onclick="sendToWhatsApp()"><i class="fab fa-whatsapp"></i> व्हाट्सएप बुकिंग</button>
+    </div>
+
+    <div id="payment" class="page">
+        <div style="background:linear-gradient(45deg, #1e3c72, #2a5298); color:white; padding:30px; border-radius:20px; text-align:center;">
+            <p style="margin:0; opacity:0.8;">Payable to AK Solution</p>
+            <h2 style="margin:10px 0;">9927464530@paytm</h2>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=9927464530@paytm" style="width:120px; background:white; padding:10px; border-radius:10px; margin-top:10px;">
+        </div>
+        <a href="upi://pay?pa=9927464530@paytm&pn=AK%20Solution" class="btn btn-primary" style="margin-top:20px;">UPI से पेमेंट करें</a>
+    </div>
+
+    <div id="contact" class="page">
+        <h3><i class="fas fa-pen"></i> अपना अनुभव साझा करें</h3>
+        <div class="input-group"><input type="text" id="rev-name" placeholder="आपका नाम"></div>
+        <div class="input-group"><textarea id="rev-msg" rows="3" placeholder="आपका रिव्यु (काम कैसा लगा?)"></textarea></div>
+        <button class="btn btn-primary" onclick="submitReview()">रिव्यु सबमिट करें</button>
+        
+        <hr style="margin:25px 0; opacity:0.2;">
+        
+        <div style="text-align:center;">
+            <p><i class="fas fa-map-marker-alt" style="color:red;"></i> खुर्जा, बुलंदशहर</p>
+            <p><i class="fas fa-phone-alt" style="color:green;"></i> +91 9927464530</p>
+        </div>
+    </div>
+</div>
+
+<nav>
+    <a onclick="changeTab('home', this)" class="active"><i class="fas fa-home"></i>होम</a>
+    <a onclick="changeTab('booking', this)"><i class="fas fa-tools"></i>बुकिंग</a>
+    <a onclick="changeTab('payment', this)"><i class="fas fa-wallet"></i>पेमेंट</a>
+    <a onclick="changeTab('contact', this)"><i class="fas fa-comment-dots"></i>रिव्यु</a>
+</nav>
+
+<script>
+    // स्प्लैश स्क्रीन
+    window.onload = () => {
+        setTimeout(() => {
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => document.getElementById('splash').style.display = 'none', 600);
+        }, 2000);
+    };
+
+    function changeTab(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(id).classList.add('active-page');
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        el.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function goToBook(val) {
+        changeTab('booking', document.querySelectorAll('nav a')[1]);
+        document.getElementById('cust-service').value = val;
+    }
+
+    function sendToWhatsApp() {
+        const n = document.getElementById('cust-name').value;
+        const s = document.getElementById('cust-service').value;
+        const a = document.getElementById('cust-addr').value;
+        if(n && s && a) {
+            const msg = `*AK SOLUTION HUB*%0A*नाम:* ${n}%0A*काम:* ${s}%0A*पता:* ${a}`;
+            window.open(`https://wa.me/919927464530?text=${msg}`);
+        } else { alert("कृपया फॉर्म भरें!"); }
+    }
+
+    function submitReview() {
+        const name = document.getElementById('rev-name').value;
+        const msg = document.getElementById('rev-msg').value;
+        if(name && msg) {
+            const container = document.getElementById('reviews-container');
+            const div = document.createElement('div');
+            div.className = 'review-box';
+            div.innerHTML = `<div class="star-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                             <p style="margin:0; font-weight:bold; font-size:14px;">${name}</p>
+                             <p style="margin:5px 0 0; font-size:13px; color:#555;">"${msg}"</p>`;
+            container.prepend(div);
+            alert("आपका रिव्यु जोड़ने के लिए धन्यवाद!");
+            document.getElementById('rev-name').value = '';
+            document.getElementById('rev-msg').value = '';
+            changeTab('home', document.querySelectorAll('nav a')[0]);
+        } else { alert("कृपया नाम और संदेश लिखें!"); }
+    }
+</script>
+
+</body>
+</html>
