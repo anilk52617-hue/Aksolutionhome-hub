@@ -4,51 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AK SOLUTION HUB</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0056b3">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
         :root { --primary: #0056b3; --accent: #ffcc00; --bg: #f8faff; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; overflow-x: hidden; }
-        
-        /* स्प्लैश और हेडर */
         #splash { position: fixed; width: 100%; height: 100%; background: linear-gradient(135deg, #87CEEB, #0056b3); display: flex; align-items: center; justify-content: center; z-index: 10000; transition: 0.6s; }
         header { background: white; padding: 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .brand-logo { width: 70px; border-radius: 12px; }
-
-        /* नेविगेशन */
         nav { position: fixed; bottom: 15px; left: 5%; width: 90%; background: rgba(0, 86, 179, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 12px 0; border-radius: 20px; z-index: 999; }
         nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 11px; text-align: center; cursor: pointer; }
         nav a.active { color: var(--accent); font-weight: bold; }
         nav a i { display: block; font-size: 20px; margin-bottom: 4px; }
-
         .container { padding: 20px 15px 120px; max-width: 500px; margin: auto; }
         .page { display: none; }
         .active-page { display: block; animation: slideUp 0.4s ease-out; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* कार्ड्स और बटन */
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 15px; }
         .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .service-card { background: white; padding: 18px; border-radius: 18px; text-align: center; border: 1px solid #eee; cursor: pointer; }
         .service-card i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
-        
         .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; margin-bottom: 10px; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-wa { background: #25D366; color: white; }
         .btn-gps { background: #607d8b; color: white; font-size: 14px; }
-        .btn-staff { background: #444; color: white; font-size: 12px; opacity: 0.8; margin-top: 30px; }
-        
         .input-group { background: #f9f9f9; padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #eee; display: flex; align-items: center; }
         .input-group i { color: var(--primary); margin-right: 10px; width: 20px; }
         input, select, textarea { width: 100%; border: none; outline: none; font-size: 15px; background: transparent; font-family: inherit; }
-
         table { width: 100%; border-collapse: collapse; }
         th { background: var(--primary); color: white; padding: 10px; text-align: left; }
         td { padding: 10px; border-bottom: 1px solid #eee; }
-
-        .history-item { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -62,7 +46,6 @@
 </header>
 
 <div class="container">
-    
     <div id="home" class="page active-page">
         <h3 style="margin-bottom:15px;"><i class="fas fa-tools"></i> हमारी सेवाएं</h3>
         <div class="service-grid">
@@ -72,8 +55,7 @@
             <div class="service-card" onclick="goToBook('RO रिपेयर')"><i class="fas fa-tint"></i><span>RO रिपेयर</span></div>
         </div>
         <a href="tel:9927464530" class="btn btn-primary" style="margin-top:20px;"><i class="fas fa-phone-alt"></i> अभी कॉल करें</a>
-        <button id="installBtn" class="btn btn-primary" style="display:none; background:#333; margin-top:10px;"><i class="fas fa-download"></i> ऐप इंस्टॉल करें</button>
-        <button class="btn btn-staff" onclick="openTeamLogin()"><i class="fas fa-user-shield"></i> टीम लॉगिन</button>
+        <button class="btn" style="background:#444; color:white; font-size:12px; opacity:0.8; margin-top:30px;" onclick="openTeamLogin()"><i class="fas fa-user-shield"></i> टीम लॉगिन</button>
     </div>
 
     <div id="rates" class="page">
@@ -82,7 +64,7 @@
             <table>
                 <tr><th>सेवा</th><th>रेट</th></tr>
                 <tr><td>AC सर्विस</td><td>₹499</td></tr>
-                <tr><td>बिजली बोर्ड</td><td>₹149</td></tr>
+                <tr><td>बिजली काम</td><td>₹149</td></tr>
                 <tr><td>नल रिपेयर</td><td>₹199</td></tr>
                 <tr><td>RO सर्विस</td><td>₹599</td></tr>
             </table>
@@ -116,28 +98,18 @@
             <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="custPhone" placeholder="मोबाइल नंबर"></div>
             <div class="input-group"><i class="fas fa-map-marker-alt"></i><textarea id="custAddress" placeholder="पूरा पता" rows="2"></textarea></div>
 
-            <button class="btn btn-gps" onclick="getLocation()"><i class="fas fa-crosshairs"></i> लोकेशन जोड़ें</button>
+            <button class="btn btn-gps" onclick="getLocation()"><i class="fas fa-crosshairs"></i> वर्तमान लोकेशन जोड़ें</button>
             <button class="btn btn-wa" onclick="sendToWhatsApp()"><i class="fab fa-whatsapp"></i> व्हाट्सएप पर भेजें</button>
         </div>
     </div>
 
     <div id="admin" class="page">
         <div class="card">
-            <h3 style="color:var(--primary);"><i class="fas fa-user-shield"></i> एडमिन पैनल</h3>
-            <div style="display:flex; gap:10px; margin-bottom:15px;">
-                <div style="flex:1; background:#e3f2fd; padding:10px; border-radius:10px; text-align:center;">
-                    <small>कुल बुकिंग</small><div id="totalCount" style="font-size:20px; font-weight:bold;">0</div>
-                </div>
-                <button onclick="exportData()" style="flex:1; border:none; background: #2e7d32; color:white; border-radius:10px; font-weight:bold;">
-                    <i class="fas fa-file-csv"></i> एक्सपोर्ट
-                </button>
-            </div>
-            <h4>बुकिंग हिस्ट्री (Last 10)</h4>
-            <div id="bookingHistory"></div>
-            <button class="btn" onclick="resetApp()" style="background:#ffcdd2; color:#b71c1c; margin-top:20px; font-size:12px;">सारा डेटा डिलीट करें</button>
+            <h3 style="color:var(--primary);"><i class="fas fa-user-shield"></i> एडमिन डैशबोर्ड</h3>
+            <div id="bookingHistory">कोई रिकॉर्ड नहीं</div>
+            <button class="btn" onclick="localStorage.clear(); location.reload();" style="background:#ffcdd2; color:#b71c1c; margin-top:20px;">डेटा रीसेट करें</button>
         </div>
     </div>
-
 </div>
 
 <nav>
@@ -147,7 +119,6 @@
 </nav>
 
 <script>
-    // पेज लोड सेटअप
     window.onload = () => { 
         setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1500); 
         updateSerialUI();
@@ -157,10 +128,8 @@
     function changeTab(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
-        if(el) {
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            el.classList.add('active');
-        }
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        if(el) el.classList.add('active');
         if(id === 'admin') updateAdminUI();
     }
 
@@ -169,13 +138,15 @@
         document.getElementById('serviceType').value = service;
     }
 
+    // GPS फंक्शन ठीक किया गया
     function getLocation() {
         if (navigator.geolocation) {
+            alert("लोकेशन ली जा रही है...");
             navigator.geolocation.getCurrentPosition((p) => {
-                const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                document.getElementById('custAddress').value += `\nMAP: ${link}`;
-                alert("लोकेशन एड्रेस में जोड़ दी गई है!");
-            });
+                const link = "https://www.google.com/maps?q=" + p.coords.latitude + "," + p.coords.longitude;
+                document.getElementById('custAddress').value += "\n📍 GPS: " + link;
+                alert("✅ लोकेशन जुड़ गई!");
+            }, () => alert("GPS ऑन करें!"));
         }
     }
 
@@ -184,6 +155,7 @@
         document.getElementById('displaySerial').innerText = "#" + (parseInt(last) + 1);
     }
 
+    // व्हाट्सएप फंक्शन ठीक किया गया
     function sendToWhatsApp() {
         const s = document.getElementById('serviceType').value;
         const d = document.getElementById('bookDate').value;
@@ -192,50 +164,29 @@
         const p = document.getElementById('custPhone').value;
         const a = document.getElementById('custAddress').value;
 
-        if(!s || !n || !p || !a) return alert("कृपया सब भरें!");
+        if(!s || !n || !p || !a) return alert("सब भरें!");
 
-        let last = parseInt(localStorage.getItem('lastSerial') || 0);
-        let current = last + 1;
-
-        // डेटा सेव करें
-        let history = JSON.parse(localStorage.getItem('akHistory') || '[]');
-        history.unshift({id: current, service: s, date: d, time: t, name: n, phone: p, address: a});
-        localStorage.setItem('akHistory', JSON.stringify(history));
+        let current = parseInt(localStorage.getItem('lastSerial') || 0) + 1;
+        
+        // हिस्ट्री सेव करना
+        let h = JSON.parse(localStorage.getItem('akHistory') || '[]');
+        h.unshift({id: current, service: s, date: d, time: t, name: n, phone: p});
+        localStorage.setItem('akHistory', JSON.stringify(h));
         localStorage.setItem('lastSerial', current);
 
-        const msg = `*AK SOLUTION HUB*%0A*बुकिंग नं:* #${current}%0A*सेवा:* ${s}%0A*दिनांक:* ${d}%0A*समय:* ${t}%0A*नाम:* ${n}%0A*फोन:* ${p}%0A*पता:* ${a}`;
+        const msg = `*AK SOLUTION HUB*%0A*बुकिंग नं:* #${current}%0A*सेवा:* ${s}%0A*तारीख:* ${d}%0A*समय:* ${t}%0A*नाम:* ${n}%0A*फोन:* ${p}%0A*पता और GPS:* ${a}`;
+        
         window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
         updateSerialUI();
     }
 
     function updateAdminUI() {
-        let history = JSON.parse(localStorage.getItem('akHistory') || '[]');
-        document.getElementById('totalCount').innerText = history.length;
-        let html = history.slice(0,10).map(i => `
-            <div class="history-item">
-                <b>#${i.id} - ${i.service}</b><br>${i.name} (${i.phone})<br><small>${i.date}</small>
-            </div>
-        `).join('') || 'कोई रिकॉर्ड नहीं';
-        document.getElementById('bookingHistory').innerHTML = html;
+        let h = JSON.parse(localStorage.getItem('akHistory') || '[]');
+        document.getElementById('bookingHistory').innerHTML = h.map(i => `<div>#${i.id} - ${i.name} (${i.service})</div>`).join('') || 'कोई रिकॉर्ड नहीं';
     }
 
     function openTeamLogin() {
         if(prompt("पासवर्ड:") === "ak123") changeTab('admin');
-        else alert("गलत पासवर्ड!");
-    }
-
-    function exportData() {
-        let history = JSON.parse(localStorage.getItem('akHistory') || '[]');
-        let csv = "ID,Service,Name,Phone,Date\n" + history.map(i => `${i.id},${i.service},${i.name},${i.phone},${i.date}`).join("\n");
-        let blob = new Blob([csv], {type: 'text/csv'});
-        let a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'bookings.csv';
-        a.click();
-    }
-
-    function resetApp() {
-        if(confirm("सारा डेटा डिलीट करें?")) { localStorage.clear(); location.reload(); }
     }
 </script>
 </body>
