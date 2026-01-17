@@ -7,147 +7,153 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #0056b3; --accent: #ffcc00; --bg: #f8faff; --success: #25D366; --orange: #ff9800; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; scroll-behavior: smooth; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; overflow-x: hidden; }
         
-        #splash { position: fixed; width: 100%; height: 100%; background: linear-gradient(135deg, #0056b3, #00b4db); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; color: white; transition: 0.5s; }
+        /* लोडिंग स्क्रीन स्टाइल */
+        #splash { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(135deg, #0056b3, #00b4db); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            z-index: 99999; color: white; transition: opacity 0.8s ease-out; 
+        }
+
         header { background: white; padding: 15px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .brand-logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
-
         .container { padding: 15px 15px 120px; max-width: 500px; margin: auto; }
-        .page { display: none; animation: fadeIn 0.4s; }
-        .active-page { display: block; }
+        
+        .page { display: none; }
+        .active-page { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
-        .warranty-badge { background: linear-gradient(45deg, #1e3c72, #2a5298); color: white; padding: 12px; border-radius: 15px; text-align: center; margin-bottom: 20px; font-weight: bold; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
+        /* कार्ड स्टाइल */
         .rolling-card { background: white; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-left: 6px solid var(--primary); }
-        .card-img { width: 100%; height: 150px; object-fit: cover; }
-        .card-header { background: #f8faff; padding: 10px 15px; font-weight: bold; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; }
+        .card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
+        .card-header { background: #f8faff; padding: 12px 15px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
         .price-item { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px dashed #eee; align-items: center; }
         .price-tag { color: var(--primary); font-weight: bold; }
-        .check-btn { width: 22px; height: 22px; accent-color: var(--primary); }
-
+        
         .input-group { background: #f2f2f2; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        input, textarea { width: 100%; border: none; background: transparent; outline: none; font-family: inherit; }
+        input, textarea { width: 100%; border: none; background: transparent; outline: none; font-size: 16px; }
 
         nav { position: fixed; bottom: 15px; left: 5%; width: 90%; background: #0056b3; display: flex; justify-content: space-around; padding: 12px 0; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 999; }
-        nav a { color: white; opacity: 0.7; text-decoration: none; font-size: 11px; text-align: center; flex: 1; cursor: pointer; }
+        nav a { color: white; opacity: 0.7; text-decoration: none; font-size: 11px; text-align: center; flex: 1; }
         nav a.active { opacity: 1; color: var(--accent); font-weight: bold; }
         nav a i { display: block; font-size: 20px; margin-bottom: 3px; }
 
-        .btn-calc { background: var(--orange); color: white; position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%); width: 80%; padding: 12px; border-radius: 25px; border: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: none; z-index: 998; }
-        .btn-wa { background: var(--success); color: white; width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .btn-calc { background: var(--orange); color: white; position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%); width: 85%; padding: 15px; border-radius: 30px; border: none; font-weight: bold; display: none; z-index: 998; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-wa { background: var(--success); color: white; width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 18px; font-weight: bold; }
     </style>
 </head>
-<body>
+<body onload="removeSplash()">
 
 <div id="splash">
+    <i class="fas fa-tools fa-spin" style="font-size: 50px; margin-bottom: 15px;"></i>
     <h2>AK SOLUTION</h2>
-    <p>Loading Best Services...</p>
+    <p>बेहतरीन सर्विस लोड हो रही है...</p>
 </div>
 
 <header>
     <img src="57255.jpg" class="brand-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2940/2940650.png'">
     <div style="font-size:20px; font-weight:800; color:var(--primary);">AK SOLUTION HUB</div>
-    <div style="font-size:11px; color:#666;">खुर्जा, बुलंदशहर</div>
+    <div style="font-size:12px; color:#666;"><i class="fas fa-map-marker-alt"></i> खुर्जा, बुलंदशहर</div>
 </header>
 
 <div class="container">
     <div id="home" class="page active-page">
-        <div class="warranty-badge"><i class="fas fa-shield-alt"></i> 30 दिन की फ्री सर्विस वारंटी</div>
+        <div style="background:linear-gradient(45deg, #1e3c72, #2a5298); color:white; padding:12px; border-radius:15px; text-align:center; margin-bottom:20px;">
+            <i class="fas fa-shield-alt"></i> 30 दिन की सर्विस वारंटी
+        </div>
         
         <div class="rolling-card">
-            <img class="card-img" src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=500&q=60">
-            <div class="card-header"><i class="fas fa-snowflake" style="color:#00b4db;"></i> AC सर्विस एवं रिपेयर</div>
+            <img class="card-img" src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=500">
+            <div class="card-header"><i class="fas fa-snowflake" style="color:#00b4db;"></i> AC सर्विस</div>
             <div class="price-item">
                 <label>Split AC सर्विस</label>
-                <div><span class="price-tag">₹499</span> <input type="checkbox" class="check-btn" data-price="499" data-name="Split AC Service"></div>
+                <div><span class="price-tag">₹499</span> <input type="checkbox" class="check-btn" data-price="499" data-name="Split AC Service" onchange="calc()"></div>
             </div>
         </div>
 
         <div class="rolling-card" style="border-left-color: #4caf50;">
-            <img class="card-img" src="https://images.unsplash.com/photo-1585837554808-a19e13732296?auto=format&fit=crop&w=500&q=60">
-            <div class="card-header"><i class="fas fa-tint" style="color:#4caf50;"></i> RO सर्विस / रिपेयर</div>
+            <img class="card-img" src="https://images.unsplash.com/photo-1585837554808-a19e13732296?q=80&w=500">
+            <div class="card-header"><i class="fas fa-tint" style="color:#4caf50;"></i> RO रिपेयर</div>
             <div class="price-item">
                 <label>RO फ़िल्टर सर्विस</label>
-                <div><span class="price-tag">₹349</span> <input type="checkbox" class="check-btn" data-price="349" data-name="RO Service"></div>
+                <div><span class="price-tag">₹349</span> <input type="checkbox" class="check-btn" data-price="349" data-name="RO Service" onchange="calc()"></div>
             </div>
         </div>
 
-        <button class="btn-calc" id="totalBtn" onclick="goToBooking()">
-            बुकिंग करें (Total: ₹<span id="totalAmt">0</span>)
+        <button class="btn-calc" id="totalBtn" onclick="openBooking()">
+            बुकिंग कन्फर्म करें (कुल: ₹<span id="totalAmt">0</span>)
         </button>
     </div>
 
     <div id="booking" class="page">
-        <div style="background:white; padding:20px; border-radius:20px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
-            <h3>सर्विस बुकिंग</h3>
-            <div class="input-group"><i class="fas fa-tools"></i><input type="text" id="selServ" readonly></div>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <div class="input-group" style="flex:1;"><i class="fas fa-calendar"></i><input type="date" id="bDate"></div>
-                <div class="input-group" style="flex:1;"><i class="fas fa-clock"></i><input type="time" id="bTime"></div>
+        <div style="background:white; padding:20px; border-radius:20px;">
+            <h3 style="margin-top:0;">बुकिंग जानकारी</h3>
+            <div class="input-group"><i class="fas fa-briefcase"></i><input type="text" id="selS" readonly></div>
+            <div style="display:flex; gap:10px;">
+                <div class="input-group" style="flex:1;"><i class="fas fa-calendar"></i><input type="date" id="bD"></div>
+                <div class="input-group" style="flex:1;"><i class="fas fa-clock"></i><input type="time" id="bT"></div>
             </div>
-            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="cName" placeholder="आपका नाम"></div>
-            <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="cPhone" placeholder="मोबाइल नंबर"></div>
-            <div class="input-group"><i class="fas fa-map-marker-alt"></i><textarea id="cAddr" placeholder="पूरा पता"></textarea></div>
-            <button class="btn-wa" onclick="sendWA()"><i class="fab fa-whatsapp"></i> व्हाट्सएप भेजें</button>
+            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="cN" placeholder="आपका नाम"></div>
+            <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="cP" placeholder="मोबाइल नंबर"></div>
+            <div class="input-group"><i class="fas fa-map-marker-alt"></i><textarea id="cA" placeholder="पूरा पता" rows="2"></textarea></div>
+            <button class="btn-wa" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> व्हाट्सएप भेजें</button>
         </div>
     </div>
 </div>
 
 <nav>
-    <a onclick="showTab('home', this)" class="active"><i class="fas fa-home"></i>होम</a>
-    <a onclick="showTab('booking', this)"><i class="fas fa-calendar-check"></i>बुकिंग</a>
-    <a onclick="alert('Admin Pass: ak123')"><i class="fas fa-user-shield"></i>एडमिन</a>
+    <a href="javascript:void(0)" onclick="tab('home')" id="homeTab" class="active"><i class="fas fa-home"></i>होम</a>
+    <a href="javascript:void(0)" onclick="tab('booking')" id="bookTab"><i class="fas fa-calendar-check"></i>बुकिंग</a>
+    <a href="javascript:void(0)" onclick="alert('Admin: ak123')"><i class="fas fa-user-shield"></i>एडमिन</a>
 </nav>
 
 <script>
-    let currentTotal = 0; 
-    let selectedNames = "";
+    // लोडिंग स्क्रीन हटाने का पक्का तरीका
+    function removeSplash() {
+        const s = document.getElementById('splash');
+        if(s) {
+            s.style.opacity = '0';
+            setTimeout(() => s.style.display = 'none', 800);
+        }
+    }
 
-    // पक्का समाधान: 2 सेकंड बाद लोडिंग स्क्रीन हटाना
-    window.addEventListener('load', function() {
-        setTimeout(function() {
-            var s = document.getElementById('splash');
-            if(s) {
-                s.style.opacity = '0';
-                setTimeout(() => s.style.display = 'none', 500);
-            }
-        }, 2000);
-    });
+    // अगर 3 सेकंड तक स्क्रीन नहीं हटती, तो ज़बरदस्ती हटाओ
+    setTimeout(removeSplash, 3000);
 
-    // चेकबॉक्स कैलकुलेशन
-    document.querySelectorAll('.check-btn').forEach(cb => {
-        cb.addEventListener('change', () => {
-            let total = 0; let names = [];
-            document.querySelectorAll('.check-btn:checked').forEach(c => {
-                total += parseInt(c.dataset.price);
-                names.push(c.dataset.name);
-            });
-            currentTotal = total; selectedNames = names.join(", ");
-            document.getElementById('totalAmt').innerText = total;
-            document.getElementById('totalBtn').style.display = total > 0 ? 'block' : 'none';
+    let total = 0; let services = "";
+
+    function calc() {
+        total = 0; let names = [];
+        document.querySelectorAll('.check-btn:checked').forEach(c => {
+            total += parseInt(c.dataset.price);
+            names.push(c.dataset.name);
         });
-    });
+        services = names.join(", ");
+        document.getElementById('totalAmt').innerText = total;
+        document.getElementById('totalBtn').style.display = total > 0 ? 'block' : 'none';
+    }
 
-    function showTab(id, el) {
+    function tab(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-        if(el) el.classList.add('active');
+        if(id=='home') document.getElementById('homeTab').classList.add('active');
+        else document.getElementById('bookTab').classList.add('active');
         window.scrollTo(0,0);
     }
 
-    function goToBooking() {
-        document.getElementById('selServ').value = selectedNames + " (₹" + currentTotal + ")";
-        showTab('booking', document.querySelectorAll('nav a')[1]);
+    function openBooking() {
+        document.getElementById('selS').value = services + " (₹" + total + ")";
+        tab('booking');
     }
 
-    function sendWA() {
-        const n = document.getElementById('cName').value, p = document.getElementById('cPhone').value, a = document.getElementById('cAddr').value;
-        const d = document.getElementById('bDate').value, t = document.getElementById('bTime').value;
-        if(!n || !p || !a) return alert("जानकारी भरें!");
-        const msg = `*AK SOLUTION HUB*\n✅ *बुकिंग*\n----\n*सेवा:* ${selectedNames}\n*कुल:* ₹${currentTotal}\n*समय:* ${d} | ${t}\n----\n*नाम:* ${n}\n*फोन:* ${p}\n*पता:* ${a}`;
+    function sendWhatsApp() {
+        const n = document.getElementById('cN').value, p = document.getElementById('cP').value, a = document.getElementById('cA').value;
+        const d = document.getElementById('bD').value, t = document.getElementById('bT').value;
+        if(!n || !p || !a || !d || !t) return alert("कृपया सभी जानकारी भरें!");
+        const msg = `*AK SOLUTION HUB*\n✅ *बुकिंग कन्फर्म*\n----\n*सेवा:* ${services}\n*कुल राशि:* ₹${total}\n*समय:* ${d} | ${t}\n----\n*नाम:* ${n}\n*फोन:* ${p}\n*पता:* ${a}`;
         window.open("https://api.whatsapp.com/send?phone=919927464530&text=" + encodeURIComponent(msg));
     }
 </script>
