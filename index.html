@@ -9,46 +9,49 @@
         :root { --primary: #0056b3; --accent: #ffcc00; --bg: #f8faff; --success: #25D366; --orange: #ff9800; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; overflow-x: hidden; }
         
-        /* लोडिंग स्क्रीन स्टाइल - यह सबसे ऊपर रहेगी */
-        #splash { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: linear-gradient(135deg, #0056b3, #00b4db); 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            z-index: 99999; color: white; transition: opacity 0.5s ease;
-        }
-
+        /* लोडिंग स्क्रीन */
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0056b3, #00b4db); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; color: white; transition: 0.5s; }
+        
         header { background: white; padding: 15px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .brand-logo { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
-        
-        .container { padding: 15px 15px 120px; max-width: 500px; margin: auto; }
-        .page { display: none; animation: fadeIn 0.4s; }
-        .active-page { display: block; }
+
+        .container { padding: 15px 15px 130px; max-width: 500px; margin: auto; }
+        .page { display: none; }
+        .active-page { display: block; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
-        .rolling-card { background: white; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-left: 6px solid var(--primary); }
-        .card-img { width: 100%; height: 160px; object-fit: cover; display: block; }
-        .card-header { background: #f8faff; padding: 12px 15px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
-        .price-item { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px dashed #eee; align-items: center; }
-        .price-tag { color: var(--primary); font-weight: bold; }
-        
-        .input-group { background: #f2f2f2; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        input, textarea { width: 100%; border: none; background: transparent; outline: none; font-size: 16px; }
+        /* रोलिंग स्लाइडर स्टाइल */
+        .slider-box { width: 100%; height: 180px; border-radius: 20px; overflow: hidden; position: relative; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .slides { display: flex; width: 400%; height: 100%; transition: 0.8s ease-in-out; }
+        .slide { width: 25%; height: 100%; position: relative; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        .slide-text { position: absolute; bottom: 0; background: rgba(0,0,0,0.6); color: white; width: 100%; padding: 10px; font-size: 14px; text-align: center; }
 
-        nav { position: fixed; bottom: 15px; left: 5%; width: 90%; background: #0056b3; display: flex; justify-content: space-around; padding: 12px 0; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 999; }
+        /* सर्विस कार्ड */
+        .rolling-card { background: white; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow: hidden; border-left: 6px solid var(--primary); }
+        .price-item { display: flex; justify-content: space-between; padding: 15px; align-items: center; }
+        .price-tag { color: var(--primary); font-weight: bold; font-size: 18px; }
+        .check-btn { width: 25px; height: 25px; accent-color: var(--primary); }
+
+        /* जीपीएस बटन */
+        .gps-btn { width: 100%; padding: 12px; background: #e3f2fd; border: 1px dashed #2196f3; border-radius: 12px; color: #1565c0; font-weight: bold; margin-bottom: 10px; cursor: pointer; }
+
+        nav { position: fixed; bottom: 15px; left: 5%; width: 90%; background: #0056b3; display: flex; justify-content: space-around; padding: 12px 0; border-radius: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 999; }
         nav a { color: white; opacity: 0.7; text-decoration: none; font-size: 11px; text-align: center; flex: 1; cursor: pointer; }
         nav a.active { opacity: 1; color: var(--accent); font-weight: bold; }
         nav a i { display: block; font-size: 20px; margin-bottom: 3px; }
 
         .btn-calc { background: var(--orange); color: white; position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%); width: 85%; padding: 15px; border-radius: 30px; border: none; font-weight: bold; display: none; z-index: 998; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .btn-wa { background: var(--success); color: white; width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 18px; font-weight: bold; }
+        .input-group { background: #f2f2f2; padding: 12px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        input, textarea { width: 100%; border: none; background: transparent; outline: none; font-size: 16px; }
     </style>
 </head>
-<body>
+<body onload="startSlider()">
 
 <div id="splash">
-    <i class="fas fa-tools fa-spin" style="font-size: 50px; margin-bottom: 15px;"></i>
+    <i class="fas fa-tools fa-spin" style="font-size: 40px; margin-bottom: 10px;"></i>
     <h2>AK SOLUTION</h2>
-    <p>Loading Awesome Services...</p>
 </div>
 
 <header>
@@ -59,100 +62,107 @@
 
 <div class="container">
     <div id="home" class="page active-page">
-        <div style="background:linear-gradient(45deg, #1e3c72, #2a5298); color:white; padding:12px; border-radius:15px; text-align:center; margin-bottom:20px;">
-            <i class="fas fa-shield-alt"></i> 30 दिन की सर्विस वारंटी
-        </div>
         
-        <div class="rolling-card">
-            <img class="card-img" src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=500">
-            <div class="card-header"><i class="fas fa-snowflake" style="color:#00b4db;"></i> AC सर्विस एवं रिपेयर</div>
-            <div class="price-item">
-                <label>Split AC सर्विस</label>
-                <div><span class="price-tag">₹499</span> <input type="checkbox" class="check-btn" data-price="499" data-name="Split AC Service" onchange="calc()"></div>
+        <div class="slider-box">
+            <div class="slides" id="mainSlides">
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=500">
+                    <div class="slide-text">Professional AC Services</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=500">
+                    <div class="slide-text">Best Plumbing Solutions</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1585837554808-a19e13732296?w=500">
+                    <div class="slide-text">RO Service & Filter Change</div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1626806819282-2c1dc61a0e04?w=500">
+                    <div class="slide-text">Washing Machine Repair</div>
+                </div>
             </div>
         </div>
 
-        <div class="rolling-card" style="border-left-color: #4caf50;">
-            <img class="card-img" src="https://images.unsplash.com/photo-1585837554808-a19e13732296?q=80&w=500">
-            <div class="card-header"><i class="fas fa-tint" style="color:#4caf50;"></i> RO रिपेयर</div>
-            <div class="price-item">
-                <label>RO फ़िल्टर सर्विस</label>
-                <div><span class="price-tag">₹349</span> <input type="checkbox" class="check-btn" data-price="349" data-name="RO Service" onchange="calc()"></div>
-            </div>
-        </div>
+        <div class="rolling-card"><div class="price-item"><label>AC सर्विस</label><div><span class="price-tag">₹499</span> <input type="checkbox" class="check-btn" data-price="499" data-name="AC Service" onchange="calc()"></div></div></div>
+        <div class="rolling-card" style="border-left-color:#2196f3;"><div class="price-item"><label>प्लंबर सर्विस</label><div><span class="price-tag">₹199</span> <input type="checkbox" class="check-btn" data-price="199" data-name="Plumber" onchange="calc()"></div></div></div>
+        <div class="rolling-card" style="border-left-color:#4caf50;"><div class="price-item"><label>RO सर्विस</label><div><span class="price-tag">₹349</span> <input type="checkbox" class="check-btn" data-price="349" data-name="RO Service" onchange="calc()"></div></div></div>
+        <div class="rolling-card" style="border-left-color:#e91e63;"><div class="price-item"><label>वाशिंग मशीन</label><div><span class="price-tag">₹299</span> <input type="checkbox" class="check-btn" data-price="299" data-name="WM Service" onchange="calc()"></div></div></div>
 
-        <button class="btn-calc" id="totalBtn" onclick="openBooking()">
-            बुकिंग करें (Total: ₹<span id="totalAmt">0</span>)
-        </button>
+        <button class="btn-calc" id="totalBtn" onclick="tab('booking')">बुक करें (Total: ₹<span id="totalAmt">0</span>)</button>
     </div>
 
     <div id="booking" class="page">
         <div style="background:white; padding:20px; border-radius:20px;">
-            <h3 style="margin-top:0;">बुकिंग जानकारी</h3>
-            <div class="input-group"><i class="fas fa-tools"></i><input type="text" id="selS" readonly></div>
-            <div style="display:flex; gap:10px;">
-                <div class="input-group" style="flex:1;"><i class="fas fa-calendar"></i><input type="date" id="bD"></div>
-                <div class="input-group" style="flex:1;"><i class="fas fa-clock"></i><input type="time" id="bT"></div>
-            </div>
-            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="cN" placeholder="आपका नाम"></div>
-            <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="cP" placeholder="मोबाइल नंबर"></div>
-            <div class="input-group"><i class="fas fa-map-marker-alt"></i><textarea id="cA" placeholder="पूरा पता" rows="2"></textarea></div>
-            <button class="btn-wa" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> व्हाट्सएप भेजें</button>
+            <h3>बुकिंग विवरण</h3>
+            <div class="input-group"><i class="fas fa-cog"></i><input type="text" id="selS" readonly></div>
+            <div style="display:flex; gap:10px;"><div class="input-group" style="flex:1;"><input type="date" id="bD"></div><div class="input-group" style="flex:1;"><input type="time" id="bT"></div></div>
+            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="cN" placeholder="नाम"></div>
+            <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="cP" placeholder="मोबाइल"></div>
+            
+            <button class="gps-btn" onclick="getLoc()"><i class="fas fa-map-marker-alt"></i> जीपीएस लोकेशन डालें</button>
+            <div class="input-group"><textarea id="cA" placeholder="पता यहाँ लिखें" rows="2"></textarea></div>
+            
+            <button class="btn-wa" onclick="sendWA()"><i class="fab fa-whatsapp"></i> व्हाट्सएप भेजें</button>
         </div>
     </div>
 </div>
 
 <nav>
-    <a onclick="tab('home')" id="hT" class="active"><i class="fas fa-home"></i>होम</a>
-    <a onclick="tab('booking')" id="bT"><i class="fas fa-calendar-check"></i>बुकिंग</a>
+    <a onclick="tab('home')" id="hN" class="active"><i class="fas fa-home"></i>होम</a>
+    <a onclick="tab('booking')" id="bN"><i class="fas fa-calendar-alt"></i>बुकिंग</a>
     <a onclick="alert('Admin: ak123')"><i class="fas fa-user-shield"></i>एडमिन</a>
 </nav>
 
 <script>
-    // लोडिंग स्क्रीन हटाने का पक्का तरीका
-    function hideSplash() {
-        const s = document.getElementById('splash');
-        if(s) {
-            s.style.opacity = '0';
-            setTimeout(() => s.style.display = 'none', 600);
+    // लोडिंग हटाना
+    setTimeout(() => { document.getElementById('splash').style.display='none'; }, 2000);
+
+    // रोलिंग स्लाइडर लॉजिक
+    let slideIdx = 0;
+    function startSlider() {
+        setInterval(() => {
+            slideIdx = (slideIdx + 1) % 4;
+            document.getElementById('mainSlides').style.transform = `translateX(-${slideIdx * 25}%)`;
+        }, 3000);
+    }
+
+    // जीपीएस लोकेशन
+    function getLoc() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(p => {
+                const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                document.getElementById('cA').value = "मेरा स्थान: " + link + "\nपता: ";
+                alert("लोकेशन सेट हो गई!");
+            });
         }
     }
 
-    // 2 सेकंड बाद हर हाल में लोडिंग स्क्रीन हटा दो
-    window.onload = () => setTimeout(hideSplash, 2000);
-
-    let tAmt = 0; let sList = "";
-
+    let total = 0; let srv = "";
     function calc() {
-        tAmt = 0; let names = [];
+        total = 0; let n = [];
         document.querySelectorAll('.check-btn:checked').forEach(c => {
-            tAmt += parseInt(c.dataset.price);
-            names.push(c.dataset.name);
+            total += parseInt(c.dataset.price); n.push(c.dataset.name);
         });
-        sList = names.join(", ");
-        document.getElementById('totalAmt').innerText = tAmt;
-        document.getElementById('totalBtn').style.display = tAmt > 0 ? 'block' : 'none';
+        srv = n.join(", ");
+        document.getElementById('totalAmt').innerText = total;
+        document.getElementById('totalBtn').style.display = total > 0 ? 'block' : 'none';
+        document.getElementById('selS').value = srv + " (₹" + total + ")";
     }
 
     function tab(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-        if(id=='home') document.getElementById('hT').classList.add('active');
-        else document.getElementById('bT').classList.add('active');
+        if(id=='home') document.getElementById('hN').classList.add('active'); else document.getElementById('bN').classList.add('active');
         window.scrollTo(0,0);
     }
 
-    function openBooking() {
-        document.getElementById('selS').value = sList + " (₹" + tAmt + ")";
-        tab('booking');
-    }
-
-    function sendWhatsApp() {
+    function sendWA() {
         const n = document.getElementById('cN').value, p = document.getElementById('cP').value, a = document.getElementById('cA').value;
         const d = document.getElementById('bD').value, t = document.getElementById('bT').value;
-        if(!n || !p || !a || !d || !t) return alert("कृपया सभी जानकारी भरें!");
-        const msg = `*AK SOLUTION HUB*\n✅ *नई बुकिंग*\n----\n*सेवा:* ${sList}\n*कुल राशि:* ₹${tAmt}\n*समय:* ${d} | ${t}\n----\n*नाम:* ${n}\n*फोन:* ${p}\n*पता:* ${a}`;
+        if(!n || !p || !a) return alert("जानकारी भरें!");
+        const msg = `*AK SOLUTION HUB*\n✅ *बुकिंग*\n----\n*सेवा:* ${srv}\n*टोटल:* ₹${total}\n*समय:* ${d} | ${t}\n----\n*नाम:* ${n}\n*फोन:* ${p}\n*पता:* ${a}`;
         window.open("https://api.whatsapp.com/send?phone=919927464530&text=" + encodeURIComponent(msg));
     }
 </script>
