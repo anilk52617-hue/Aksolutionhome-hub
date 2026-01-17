@@ -66,4 +66,90 @@
         </div>
 
         <div class="rolling-card" style="border-left-color: #4caf50;">
-            <img class="card-img" src="
+            <img class="card-img" src="https://images.unsplash.com/photo-1585837554808-a19e13732296?auto=format&fit=crop&w=500&q=60">
+            <div class="card-header"><i class="fas fa-tint" style="color:#4caf50;"></i> RO सर्विस / रिपेयर</div>
+            <div class="price-item">
+                <label>RO फ़िल्टर सर्विस</label>
+                <div><span class="price-tag">₹349</span> <input type="checkbox" class="check-btn" data-price="349" data-name="RO Service"></div>
+            </div>
+        </div>
+
+        <button class="btn-calc" id="totalBtn" onclick="goToBooking()">
+            बुकिंग करें (Total: ₹<span id="totalAmt">0</span>)
+        </button>
+    </div>
+
+    <div id="booking" class="page">
+        <div style="background:white; padding:20px; border-radius:20px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+            <h3>सर्विस बुकिंग</h3>
+            <div class="input-group"><i class="fas fa-tools"></i><input type="text" id="selServ" readonly></div>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <div class="input-group" style="flex:1;"><i class="fas fa-calendar"></i><input type="date" id="bDate"></div>
+                <div class="input-group" style="flex:1;"><i class="fas fa-clock"></i><input type="time" id="bTime"></div>
+            </div>
+            <div class="input-group"><i class="fas fa-user"></i><input type="text" id="cName" placeholder="आपका नाम"></div>
+            <div class="input-group"><i class="fas fa-phone"></i><input type="tel" id="cPhone" placeholder="मोबाइल नंबर"></div>
+            <div class="input-group"><i class="fas fa-map-marker-alt"></i><textarea id="cAddr" placeholder="पूरा पता"></textarea></div>
+            <button class="btn-wa" onclick="sendWA()"><i class="fab fa-whatsapp"></i> व्हाट्सएप भेजें</button>
+        </div>
+    </div>
+</div>
+
+<nav>
+    <a onclick="showTab('home', this)" class="active"><i class="fas fa-home"></i>होम</a>
+    <a onclick="showTab('booking', this)"><i class="fas fa-calendar-check"></i>बुकिंग</a>
+    <a onclick="alert('Admin Pass: ak123')"><i class="fas fa-user-shield"></i>एडमिन</a>
+</nav>
+
+<script>
+    let currentTotal = 0; 
+    let selectedNames = "";
+
+    // पक्का समाधान: 2 सेकंड बाद लोडिंग स्क्रीन हटाना
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var s = document.getElementById('splash');
+            if(s) {
+                s.style.opacity = '0';
+                setTimeout(() => s.style.display = 'none', 500);
+            }
+        }, 2000);
+    });
+
+    // चेकबॉक्स कैलकुलेशन
+    document.querySelectorAll('.check-btn').forEach(cb => {
+        cb.addEventListener('change', () => {
+            let total = 0; let names = [];
+            document.querySelectorAll('.check-btn:checked').forEach(c => {
+                total += parseInt(c.dataset.price);
+                names.push(c.dataset.name);
+            });
+            currentTotal = total; selectedNames = names.join(", ");
+            document.getElementById('totalAmt').innerText = total;
+            document.getElementById('totalBtn').style.display = total > 0 ? 'block' : 'none';
+        });
+    });
+
+    function showTab(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(id).classList.add('active-page');
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        if(el) el.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function goToBooking() {
+        document.getElementById('selServ').value = selectedNames + " (₹" + currentTotal + ")";
+        showTab('booking', document.querySelectorAll('nav a')[1]);
+    }
+
+    function sendWA() {
+        const n = document.getElementById('cName').value, p = document.getElementById('cPhone').value, a = document.getElementById('cAddr').value;
+        const d = document.getElementById('bDate').value, t = document.getElementById('bTime').value;
+        if(!n || !p || !a) return alert("जानकारी भरें!");
+        const msg = `*AK SOLUTION HUB*\n✅ *बुकिंग*\n----\n*सेवा:* ${selectedNames}\n*कुल:* ₹${currentTotal}\n*समय:* ${d} | ${t}\n----\n*नाम:* ${n}\n*फोन:* ${p}\n*पता:* ${a}`;
+        window.open("https://api.whatsapp.com/send?phone=919927464530&text=" + encodeURIComponent(msg));
+    }
+</script>
+</body>
+</html>
