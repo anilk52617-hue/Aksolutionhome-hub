@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AK SOLUTION HUB</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0056b3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --primary: #0056b3; --accent: #ffcc00; --bg: #f8faff; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; overflow-x: hidden; }
+        
+        /* स्प्लैश और हेडर */
+        #splash { position: fixed; width: 100%; height: 100%; background: linear-gradient(135deg, #87CEEB, #0056b3); display: flex; align-items: center; justify-content: center; z-index: 10000; transition: 0.6s; }
+        header { background: white; padding: 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .brand-logo { width: 70px; border-radius: 12px; }
+
+        /* नेविगेशन */
+        nav { position: fixed; bottom: 15px; left: 5%; width: 90%; background: rgba(0, 86, 179, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 12px 0; border-radius: 20px; z-index: 999; }
+        nav a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 11px; text-align: center; cursor: pointer; }
+        nav a.active { color: var(--accent); font-weight: bold; }
+        nav a i { display: block; font-size: 20px; margin-bottom: 4px; }
+
+        .container { padding: 20px 15px 120px; max-width: 500px; margin: auto; }
+        .page { display: none; }
+        .active-page { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* कार्ड्स और बटन */
+        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 15px; }
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .service-card { background: white; padding: 18px; border-radius: 18px; text-align: center; border: 1px solid #eee; cursor: pointer; }
+        .service-card i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
+        
+        .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; margin-bottom: 10px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-wa { background: #25D366; color: white; }
+        .btn-gps { background: #ff5722; color: white; font-size: 14px; }
+        .btn-staff { background: #444; color: white; font-size: 12px; opacity: 0.8; margin-top: 30px; }
+        
+        .input-group { background: white; padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #eee; }
+        input, select, textarea { width: 100%; border: none; outline: none; font-size: 15px; background: transparent; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: white; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<div id="splash"><h2 style="color:white;">AK SOLUTION</h2></div>
+
+<header>
+    <img src="57255.jpg" class="brand-logo" onerror="this.src='https://via.placeholder.com/70'">
+    <div style="font-size:22px; font-weight:800; color:var(--primary);">AK SOLUTION HUB</div>
+    <div style="font-size:12px; color:#666;">खुर्जा, बुलंदशहर</div>
+</header>
+
+<div class="container">
+    <div id="home" class="page active-page">
+        <h3 style="margin-bottom:15px;"><i class="fas fa-tools"></i> हमारी सेवाएं</h3>
+        <div class="service-grid">
+            <div class="service-card" onclick="goToBook('AC सर्विस')"><i class="fas fa-snowflake"></i><span>AC सर्विस</span></div>
+            <div class="service-card" onclick="goToBook('बिजली फिटिंग')"><i class="fas fa-bolt"></i><span>बिजली काम</span></div>
+            <div class="service-card" onclick="goToBook('प्लंबिंग')"><i class="fas fa-faucet"></i><span>प्लंबिंग काम</span></div>
+            <div class="service-card" onclick="goToBook('RO रिपेयर')"><i class="fas fa-tint"></i><span>RO रिपेयर</span></div>
+        </div>
+        <a href="tel:9927464530" class="btn btn-primary" style="margin-top:20px;"><i class="fas fa-phone-alt"></i> अभी कॉल करें</a>
+        
+        <button id="installBtn" class="btn btn-wa" style="display:none; background:#0056b3; margin-top:10px;"><i class="fas fa-download"></i> ऐप इंस्टॉल करें</button>
+
+        <button class="btn btn-staff" onclick="openTeamLogin()"><i class="fas fa-user-shield"></i> टीम लॉगिन</button>
+    </div>
+
+    </div>
+
+<nav>
+    <a onclick="changeTab('home', this)" class="active"><i class="fas fa-home"></i>होम</a>
+    <a onclick="changeTab('rates', this)"><i class="fas fa-list-ul"></i>रेट</a>
+    <a onclick="changeTab('booking', this)"><i class="fas fa-tools"></i>बुकिंग</a>
+</nav>
+
+<script>
+    // Install App Script
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'flex';
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                installBtn.style.display = 'none';
+            }
+            deferredPrompt = null;
+        }
+    });
+
+    // बाकी Functions (changeTab, goToBook, getLocation, sendToWhatsApp) यहाँ जोड़ें...
+    window.onload = () => { setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1500); };
+    function changeTab(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(id).classList.add('active-page');
+        if(el) {
+            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+            el.classList.add('active');
+        }
+    }
+    function openTeamLogin() {
+        const p = prompt("पासवर्ड डालें:");
+        if(p === "ak123") {
+            // Team Dashboard logic
+            alert("Team Panel Opened");
+        }
+    }
+</script>
+</body>
+</html>
