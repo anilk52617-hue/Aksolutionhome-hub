@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #0056b3; --accent: #ffcc00; --bg: #f8faff; --success: #25D366; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #333; -webkit-tap-highlight-color: transparent; }
         
         /* Splash Screen */
         #splash { position: fixed; width: 100%; height: 100%; background: linear-gradient(135deg, #0056b3, #00b4db); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; transition: 0.6s; color: white; }
         
         header { background: white; padding: 20px; text-align: center; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .brand-logo { width: 70px; border-radius: 50%; border: 2px solid var(--primary); }
+        .brand-logo { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
 
         .container { padding: 20px 15px 120px; max-width: 500px; margin: auto; }
         .page { display: none; }
@@ -22,12 +22,13 @@
 
         .card { background: white; padding: 18px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 20px; }
         .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .service-card { background: white; padding: 18px; border-radius: 18px; text-align: center; border: 1px solid #eee; cursor: pointer; }
+        .service-card { background: white; padding: 18px; border-radius: 18px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; }
+        .service-card:active { transform: scale(0.95); background: #f0f7ff; }
         .service-card i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
 
         .btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 15px; border-radius: 12px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; margin-bottom: 10px; transition: 0.3s; }
         .btn-primary { background: var(--primary); color: white; }
-        .btn-wa { background: var(--success); color: white; }
+        .btn-wa { background: var(--success); color: white; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
         .btn-gps { background: #607d8b; color: white; font-size: 14px; }
 
         .input-group { background: #f9f9f9; padding: 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #eee; display: flex; align-items: center; }
@@ -166,7 +167,6 @@
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
         if(el) el.classList.add('active'); else {
-            // ऑटो-फोकस नेविगेशन
             if(id === 'booking') document.querySelectorAll('nav a')[2].classList.add('active');
         }
         if(id === 'admin') updateAdminUI();
@@ -183,7 +183,7 @@
             alert("लोकेशन ली जा रही है...");
             navigator.geolocation.getCurrentPosition((p) => {
                 const link = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                document.getElementById('custAddress').value += "\n📍 GPS: " + link;
+                document.getElementById('custAddress').value += "\n📍 मैप: " + link;
                 alert("✅ लोकेशन जुड़ गई!");
             }, () => alert("GPS ऑन करें!"));
         }
@@ -212,63 +212,11 @@
         localStorage.setItem('akHistory', JSON.stringify(h));
         localStorage.setItem('lastSerial', current);
 
-        // व्हाट्सएप मैसेज (Fixed URL Encoding)
-        const msgText = `*AK SOLUTION HUB*%0A✅ *शिकायत प्राप्त हुई*%0A--------------------%0A*बुकिंग नं:* #${current}%0A*सेवा:* ${s}%0A*नाम:* ${n}%0A*फोन:* ${p}%0A*पता:* ${a.replace(/\n/g, " ")}%0A--------------------%0A_हमारी टीम आपसे जल्द संपर्क करेगी।_`;
-        
-        const waUrl = `https://api.whatsapp.com/send?phone=919927464530&text=${msgText}`;
-        window.open(waUrl, '_blank');
-
-        // कंफर्मेशन अलर्ट
-        setTimeout(() => {
-            alert(`धन्यवाद ${n}!\nआपकी ${s} की शिकायत (#${current}) दर्ज कर ली गई है।`);
-            updateSerialUI();
-            changeTab('home', document.querySelector('nav a:first-child'));
-        }, 1000);
-    }
-
-    function saveReview() {
-        const n = document.getElementById('revName').value;
-        const r = document.getElementById('revRating').value;
-        const m = document.getElementById('revText').value;
-
-        if(!n || !m) return alert("नाम और अनुभव लिखें!");
-
-        let revs = JSON.parse(localStorage.getItem('akReviews') || '[]');
-        revs.unshift({name: n, rating: r, msg: m, date: new Date().toLocaleDateString()});
-        localStorage.setItem('akReviews', JSON.stringify(revs));
-        
-        alert("रिव्यू के लिए धन्यवाद!");
-        document.getElementById('revName').value = "";
-        document.getElementById('revText').value = "";
-        updateReviewUI();
-    }
-
-    function updateReviewUI() {
-        let revs = JSON.parse(localStorage.getItem('akReviews') || '[]');
-        const div = document.getElementById('reviewList');
-        if(revs.length === 0) return;
-        div.innerHTML = revs.map(i => `
-            <div class="review-item">
-                <b>${i.name}</b> <small style="color:#999; float:right;">${i.date}</small><br>
-                <span style="color:orange;">${i.rating}</span>
-                <p style="margin:5px 0 0; font-size:13px; color:#555;">${i.msg}</p>
-            </div>
-        `).join('');
-    }
-
-    function updateAdminUI() {
-        let h = JSON.parse(localStorage.getItem('akHistory') || '[]');
-        document.getElementById('bookingHistory').innerHTML = h.map(i => `
-            <div style="padding:10px; border-bottom:1px solid #eee; font-size:13px;">
-                <b>#${i.id}</b> - ${i.name}<br>
-                🔧 ${i.service} | 📞 ${i.phone}
-            </div>
-        `).join('') || 'कोई रिकॉर्ड नहीं';
-    }
-
-    function openTeamLogin() {
-        if(prompt("पासवर्ड डालें (Admin):") === "ak123") changeTab('admin');
-    }
-</script>
-</body>
-</html>
+        // व्हाट्सएप मैसेज फॉर्मेट (Fixed Formatting)
+        const line = "--------------------";
+        const msgText = 
+            `*AK SOLUTION HUB*%0A` + 
+            `✅ *शिकायत प्राप्त हुई*%0A` + 
+            `${line}%0A` + 
+            `*बुकिंग नं:* #${current}%0A` + 
+            `*नाम:* ${n}%0A` +
