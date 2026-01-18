@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK SOLUTION HUB - Official</title>
+    <title>AK SOLUTION HUB - Admin Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #0056b3; --bg: #f8fafc; --green: #2ecc71; --red: #d32f2f; --dark: #2c3e50; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 130px; padding-bottom: 100px; text-align: center; color: #333; }
         
-        /* Header & Ticker */
+        /* Header */
         .header-top { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo-box { padding: 10px; display: flex; flex-direction: column; align-items: center; }
         .logo-circle { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; background: #eee; }
@@ -22,32 +22,23 @@
         .slides { display: flex; width: 500%; height: 100%; transition: 0.8s ease-in-out; }
         .slides img { width: 20%; height: 100%; object-fit: cover; }
 
-        /* Navigation Pages */
+        /* Pages */
         .page { display: none; padding: 15px; min-height: 70vh; animation: fadeIn 0.3s; }
         .active-page { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Grid & Cards */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px; }
-        .card { background: white; padding: 15px 5px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; }
-        .card i { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
-        .card span { font-size: 11px; font-weight: bold; display: block; }
+        /* Admin Booking Card */
+        .booking-card { background: white; border-left: 5px solid var(--primary); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
+        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .act-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; font-size: 13px; }
+        .btn-call { background: var(--green); }
+        .btn-wa { background: #25D366; }
+        .btn-del { background: var(--red); }
 
-        .feat-box { background: white; border-radius: 12px; padding: 15px; margin: 20px 10px; text-align: left; border: 1px solid #ddd; display: none; }
-        .f-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; background: #f0f7ff; padding: 10px; border-radius: 10px; }
-        .f-item { font-size: 11px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
-        
-        /* Inputs & Buttons */
         .input-box { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .btn-main { background: var(--green); color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-main { background: var(--primary); color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
-        /* Call Float */
-        .float-call { position: fixed; right: 20px; bottom: 90px; background: var(--green); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 3000; text-decoration: none; }
-
-        /* Admin/Booking Cards */
-        .booking-card { background: white; border-left: 5px solid var(--primary); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
-        /* Bottom Nav */
+        /* Nav Bar */
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 70px; z-index: 2000; }
         .nav-item { flex: 1; font-size: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; cursor: pointer; }
         .nav-item.active { color: var(--primary); border-top: 3px solid var(--primary); font-weight: bold; }
@@ -55,15 +46,13 @@
 </head>
 <body>
 
-<a href="tel:9927464530" class="float-call"><i class="fas fa-phone-alt"></i></a>
-
 <div class="header-top">
     <div class="logo-box">
-        <div class="logo-circle"><img src="57255.jpg" alt="Logo"></div>
+        <div class="logo-circle"><img src="57255.jpg"></div>
         <div class="brand-text">AK SOLUTION HUB</div>
     </div>
     <div class="ticker-bar">
-        <marquee scrollamount="5">⚡ 30 मिनट में सर्विस ⚡ व्हाट्सएप: 9927464530 ⚡ 30 दिन वारंटी ⚡</marquee>
+        <marquee>⚡ एडमिन पैनल लोड हो गया है ⚡</marquee>
     </div>
 </div>
 
@@ -73,160 +62,108 @@
             <img src="1.jpg"><img src="2.jpg"><img src="3.jpg"><img src="4.jpg"><img src="5.jpg">
         </div>
     </div>
-    <div class="grid">
-        <div class="card" onclick="openCat('ac')"><i class="fas fa-snowflake"></i><span>AC</span></div>
-        <div class="card" onclick="openCat('elec')"><i class="fas fa-bolt"></i><span>BIJLI</span></div>
-        <div class="card" onclick="openCat('ro')"><i class="fas fa-tint"></i><span>RO</span></div>
-        <div class="card" onclick="openCat('wm')"><i class="fas fa-soap"></i><span>WASHING</span></div>
-        <div class="card" onclick="openCat('fridge')"><i class="fas fa-refrigerator"></i><span>FRIDGE</span></div>
-        <div class="card" onclick="openCat('plumber')"><i class="fas fa-faucet"></i><span>PLUMBER</span></div>
-    </div>
-    <div id="feat-display" class="feat-box">
-        <h4 id="feat-title" style="margin:0; color:var(--primary);">सेवा जानकारी</h4>
-        <div id="rate-tag" style="background:var(--primary); color:white; padding:12px; border-radius:10px; margin-top:10px; cursor:pointer; font-weight:bold; display:flex; justify-content:space-between;">
-            <span>बुक करें</span><span id="price-tag">₹499</span>
-        </div>
-        <div id="f-list" class="f-grid"></div>
-    </div>
-</div>
-
-<div id="booking" class="page">
-    <h3>सर्विस बुकिंग</h3>
-    <div class="feat-box" style="display:block;">
-        <p id="sel-service-text" style="font-weight:bold; color:var(--dark); background:#eee; padding:10px; border-radius:5px;">कोई सेवा नहीं चुनी गई</p>
-        <input type="text" id="cust-name" class="input-box" placeholder="आपका नाम">
-        <input type="tel" id="cust-phone" class="input-box" placeholder="मोबाइल नंबर" maxlength="10">
-        <button onclick="getGPS()" class="input-box" id="gps-btn" style="background:#55acee; color:white; border:none; font-weight:bold; cursor:pointer;"><i class="fas fa-map-marker-alt"></i> GPS लोकेशन जोड़ें</button>
-        <textarea id="cust-addr" class="input-box" rows="3" placeholder="गली, मोहल्ला, मकान नंबर..."></textarea>
-        <button class="btn-main" onclick="confirmWA()"><i class="fab fa-whatsapp"></i> व्हाट्सएप बुकिंग भेजें</button>
-    </div>
+    <p>कृपया नीचे दिए गए मेनू से विकल्प चुनें।</p>
 </div>
 
 <div id="admin" class="page">
-    <h3>एडमिन पैनल</h3>
+    <h3>एडमिन कंट्रोल रूम</h3>
+    
     <div id="admin-login">
-        <input type="password" id="admin-pass" class="input-box" placeholder="पासवर्ड (AK123)">
-        <button class="btn-main" onclick="checkAdmin()">लॉगिन</button>
+        <input type="password" id="admin-pass" class="input-box" placeholder="पासवर्ड डालें">
+        <button class="btn-main" onclick="checkAdmin()">लॉगिन करें</button>
     </div>
+
     <div id="admin-content" style="display:none;">
-        <button class="btn-main" style="background:var(--red); margin-bottom:20px;" onclick="clearBookings()">डाटा साफ़ करें</button>
-        <div id="bookings-list"></div>
+        <input type="text" id="admin-search" class="input-box" placeholder="ग्राहक का नाम या मोबाइल खोजें..." onkeyup="filterOrders()">
+        
+        <div id="order-stats" style="display:flex; justify-content:space-around; margin-bottom:15px; font-weight:bold; color:var(--primary);">
+            <span>कुल बुकिंग: <span id="count-total">0</span></span>
+        </div>
+
+        <div id="bookings-list">
+            </div>
+        
+        <button class="btn-main" style="background:var(--red); margin-top:20px;" onclick="clearData()">सब डाटा साफ़ करें</button>
     </div>
 </div>
 
 <div class="nav-bar">
     <div class="nav-item active" onclick="navTo('home', this)"><i class="fas fa-home"></i><span>होम</span></div>
-    <div class="nav-item" onclick="navTo('booking', this)"><i class="fas fa-calendar-check"></i><span>बुकिंग</span></div>
-    <div class="nav-item" onclick="navTo('track', this)"><i class="fas fa-map-marker-alt"></i><span>ट्रैक</span></div>
-    <div class="nav-item" onclick="navTo('review', this)"><i class="fas fa-star"></i><span>रिव्यू</span></div>
     <div class="nav-item" onclick="navTo('admin', this)"><i class="fas fa-user-shield"></i><span>एडमिन</span></div>
 </div>
 
 <script>
-    const allServices = {
-        ac: { n:"AC सर्विसिंग", p:"₹499", f:["जेट सफाई","गैस चेक","30 दिन वारंटी"] },
-        elec: { n:"बिजली रिपेयर", p:"₹299", f:["सुरक्षित वायरिंग","MCB चेक","24/7 सेवा"] },
-        ro: { n:"RO सर्विस", p:"₹399", f:["TDS टेस्टिंग","फिल्टर सफाई","शुद्ध पानी"] },
-        wm: { n:"वॉशिंग मशीन", p:"₹499", f:["मोटर चेक","गियर बॉक्स","पैनल रिपेयर"] },
-        fridge: { n:"फ्रिज रिपेयर", p:"₹350", f:["गैस रिफिल","थर्मोस्टेट","कूलिंग"] },
-        plumber: { n:"प्लंबर सेवा", p:"₹99", f:["लीकेज फिक्स","पाइप फिटिंग","टंकी सफाई"] }
-    };
+    // एडमिन लॉगिन चेक
+    function checkAdmin() {
+        const pass = document.getElementById('admin-pass').value;
+        if(pass === "AK123") {
+            document.getElementById('admin-login').style.display = "none";
+            document.getElementById('admin-content').style.display = "block";
+            loadOrders();
+        } else {
+            alert("गलत पासवर्ड!");
+        }
+    }
 
-    let gpsLink = "नहीं दी गई";
+    // बुकिंग्स लोड करना
+    function loadOrders() {
+        const list = document.getElementById('bookings-list');
+        const bks = JSON.parse(localStorage.getItem('ak_bookings') || "[]");
+        document.getElementById('count-total').innerText = bks.length;
+        
+        list.innerHTML = "";
+        bks.reverse().forEach((b, index) => {
+            list.innerHTML += `
+                <div class="booking-card">
+                    <small style="color:gray;">#${index + 1} | ${b.date}</small>
+                    <h4 style="margin:5px 0; color:var(--primary);">${b.service || "सेवा उपलब्ध नहीं"}</h4>
+                    <b>नाम:</b> ${b.name}<br>
+                    <b>फोन:</b> ${b.phone}<br>
+                    <b>पता:</b> ${b.address || b.addr}<br>
+                    
+                    <div class="action-btns">
+                        <a href="tel:${b.phone}" class="act-btn btn-call"><i class="fas fa-phone"></i> कॉल</a>
+                        <a href="https://wa.me/91${b.phone}" class="act-btn btn-wa"><i class="fab fa-whatsapp"></i> चैट</a>
+                        <a href="${b.location || b.gpsLink}" target="_blank" class="act-btn" style="background:orange;"><i class="fas fa-map-marker-alt"></i> मैप</a>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // सर्च फिल्टर
+    function filterOrders() {
+        const query = document.getElementById('admin-search').value.toLowerCase();
+        const cards = document.querySelectorAll('.booking-card');
+        cards.forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(query) ? "block" : "none";
+        });
+    }
 
     function navTo(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        if(el) el.classList.add('active');
-        window.scrollTo(0,0);
+        el.classList.add('active');
     }
 
-    function openCat(id) {
-        const box = document.getElementById('feat-display');
-        const s = allServices[id];
-        box.style.display = "block";
-        document.getElementById('feat-title').innerText = s.n;
-        document.getElementById('price-tag').innerText = s.p;
-        document.getElementById('rate-tag').onclick = () => {
-            document.getElementById('sel-service-text').innerText = "सेवा: " + s.n;
-            navTo('booking', document.querySelectorAll('.nav-item')[1]);
-        };
-        document.getElementById('f-list').innerHTML = s.f.map(f => `<div class="f-item"><i class="fas fa-check-circle" style="color:var(--green)"></i> ${f}</div>`).join('');
-        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    // FIXED GPS FUNCTION
-    function getGPS() {
-        const btn = document.getElementById('gps-btn');
-        if (navigator.geolocation) {
-            btn.innerText = "ढूँढ रहे हैं...";
-            navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-                gpsLink = `https://www.google.com/maps?q=${lat},${lon}`;
-                btn.style.background = "var(--green)";
-                btn.innerHTML = "<i class='fas fa-check'></i> लोकेशन मिल गई ✅";
-            }, (err) => {
-                alert("GPS अनुमति की आवश्यकता है! कृपया ब्राउज़र सेटिंग में लोकेशन ऑन करें।");
-                btn.innerText = "GPS लोकेशन जोड़ें";
-            }, { enableHighAccuracy: true, timeout: 5000 });
-        } else {
-            alert("आपका ब्राउज़र GPS सपोर्ट नहीं करता।");
+    function clearData() {
+        if(confirm("क्या आप वाकई सारा डाटा डिलीट करना चाहते हैं?")) {
+            localStorage.removeItem('ak_bookings');
+            loadOrders();
         }
     }
 
-    // FIXED WHATSAPP LINK
-    function confirmWA() {
-        const n = document.getElementById('cust-name').value.trim();
-        const p = document.getElementById('cust-phone').value.trim();
-        const a = document.getElementById('cust-addr').value.trim();
-        const s = document.getElementById('sel-service-text').innerText;
-        
-        if(!n || p.length < 10 || !a) return alert("कृपया पूरी जानकारी भरें!");
-        
-        // Save to Admin
-        const bData = { name: n, phone: p, address: a, service: s, location: gpsLink, date: new Date().toLocaleString() };
-        let bookings = JSON.parse(localStorage.getItem('ak_bookings') || "[]");
-        bookings.push(bData);
-        localStorage.setItem('ak_bookings', JSON.stringify(bookings));
-
-        const msg = encodeURIComponent(`*AK SOLUTION HUB*\n------------------\n*सेवा:* ${s}\n*ग्राहक:* ${n}\n*फोन:* ${p}\n*पता:* ${a}\n*लोकेशन:* ${gpsLink}`);
-        
-        // Use wa.me for better compatibility
-        window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
-    }
-
-    function checkAdmin() {
-        if(document.getElementById('admin-pass').value === "AK123") {
-            document.getElementById('admin-login').style.display = "none";
-            document.getElementById('admin-content').style.display = "block";
-            loadBookings();
-        } else { alert("गलत पासवर्ड!"); }
-    }
-
-    function loadBookings() {
-        const list = document.getElementById('bookings-list');
-        const bks = JSON.parse(localStorage.getItem('ak_bookings') || "[]");
-        list.innerHTML = bks.length ? "" : "कोई बुकिंग नहीं";
-        bks.reverse().forEach(b => {
-            list.innerHTML += `<div class="booking-card">
-                <p><b>तारीख:</b> ${b.date}</p>
-                <p><b>सेवा:</b> ${b.service}</p>
-                <p><b>ग्राहक:</b> ${b.name} (${b.phone})</p>
-                <p><b>पता:</b> ${b.address}</p>
-                <p><a href="${b.location}" target="_blank" style="color:var(--primary)">📍 मैप पर देखें</a></p>
-            </div>`;
-        });
-    }
-
-    function clearBookings() { if(confirm("सारा डाटा मिटा दें?")) { localStorage.removeItem('ak_bookings'); loadBookings(); } }
-
+    // Slider Logic
     let sIdx = 0;
     setInterval(() => {
         const s = document.getElementById('slider');
-        if(s) { sIdx = (sIdx + 1) % 5; s.style.transform = `translateX(-${sIdx * 20}%)`; }
+        if(s) {
+            sIdx = (sIdx + 1) % 5;
+            s.style.transform = `translateX(-${sIdx * 20}%)`;
+        }
     }, 3000);
 </script>
+
 </body>
 </html>
