@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK SOLUTION HUB - Latest Updated</title>
+    <title>AK SOLUTION HUB - Official</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #0056b3; --yellow: #ffcc00; --bg: #f4f7f6; --green: #25D366; }
@@ -17,7 +17,6 @@
         .marquee-text { display: inline-block; animation: scroll-left 25s linear infinite; font-size: 14px; }
         @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         
-        /* स्लाइडर जो पहले हट गया था */
         .slider-frame { width: 94%; height: 180px; margin: 15px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; }
         .slider-images { display: flex; width: 400%; height: 100%; animation: slide-loop 16s infinite ease-in-out; }
         .each-slide { width: 25%; height: 100%; }
@@ -36,7 +35,6 @@
         .sub-box { display: none; background: white; margin: 15px 0; border-radius: 12px; border: 2.5px solid var(--primary); overflow: hidden; }
         .sub-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 500; }
 
-        /* नेविगेशन बार फिक्स */
         nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); display: flex; justify-content: space-around; padding: 12px 0; z-index: 2000; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); }
         nav a { color: white; text-decoration: none; text-align: center; font-size: 11px; opacity: 0.6; cursor: pointer; flex: 1; }
         nav a.active { opacity: 1; color: var(--yellow); font-weight: bold; }
@@ -45,6 +43,8 @@
         #bookingBar { position: fixed; bottom: 75px; width: 90%; left: 5%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1500; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, textarea { width: 90%; padding: 12px; margin: 10px auto; display: block; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; }
+        
+        .success-box { display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; text-align: center; margin: 10px 0; border: 1px solid #c3e6cb; }
     </style>
 </head>
 <body>
@@ -55,7 +55,7 @@
     <div style="font-size:12px; color:#666;">खुर्जा, बुलंदशहर (U.P)</div>
 </header>
 
-<div class="marquee-box"><div class="marquee-text">🛠️ खुर्जा की बेस्ट होम सर्विस | संपर्क: 9927464530 | GPS और कंप्लेंट ID के साथ 🛠️</div></div>
+<div class="marquee-box"><div class="marquee-text">🛠️ खुर्जा की बेस्ट होम सर्विस | GPS और कंप्लेंट ID के साथ | 100% संतोषजनक सेवा 🛠️</div></div>
 
 <div id="home" class="page active">
     <div class="slider-frame">
@@ -88,69 +88,41 @@
         <div class="sub-item"><span>पंखा रिपेयर</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Fan Repair"></b></div>
         <div class="sub-item"><span>स्विच बोर्ड फिटिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Work"></b></div>
         <div class="sub-item"><span>इनवर्टर सेटिंग</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="Inverter"></b></div>
-        <div class="sub-item"><span>नई वायरिंग (Point)</span><b>₹99 <input type="checkbox" class="cb" data-p="99" data-n="Wiring"></b></div>
+        <div class="sub-item"><span>नई वायरिंग</span><b>₹99 <input type="checkbox" class="cb" data-p="99" data-n="Wiring"></b></div>
         <div class="sub-item"><span>MCB चेंज</span><b>₹249 <input type="checkbox" class="cb" data-p="249" data-n="MCB Change"></b></div>
-    </div>
-
-    <div id="pl" class="sub-box">
-        <div class="sub-item"><span>नल/टोंटी फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Tap Fitting"></b></div>
-        <div class="sub-item"><span>टंकी सफाई</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Tank Clean"></b></div>
-        <div class="sub-item"><span>लीकेज रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Leakage"></b></div>
-        <div class="sub-item"><span>वॉश बेसिन फिटिंग</span><b>₹299 <input type="checkbox" class="cb" data-p="299" data-n="Basin Install"></b></div>
-        <div class="sub-item"><span>मोटर रिपेयर</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Motor Work"></b></div>
-    </div>
-
-    <div id="ro" class="sub-box">
-        <div class="sub-item"><span>RO सर्विस</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO Service"></b></div>
-        <div class="sub-item"><span>फिल्टर किट चेंज</span><b>₹1249 <input type="checkbox" class="cb" data-p="1249" data-n="RO Filter"></b></div>
-        <div class="sub-item"><span>मेंब्रेन चेंज</span><b>₹699 <input type="checkbox" class="cb" data-p="699" data-n="Membrane"></b></div>
-        <div class="sub-item"><span>पंप रिपेयर</span><b>₹899 <input type="checkbox" class="cb" data-p="899" data-n="RO Pump"></b></div>
-        <div class="sub-item"><span>RO इंस्टालेशन</span><b>₹449 <input type="checkbox" class="cb" data-p="449" data-n="RO Install"></b></div>
-    </div>
-
-    <div id="fr" class="sub-box">
-        <div class="sub-item"><span>गैस चार्जिंग</span><b>₹1499 <input type="checkbox" class="cb" data-p="1499" data-n="Fridge Gas"></b></div>
-        <div class="sub-item"><span>थर्मोस्टेट चेंज</span><b>₹449 <input type="checkbox" class="cb" data-p="449" data-n="Fridge Part"></b></div>
-        <div class="sub-item"><span>कंप्रेसर रिपेयर</span><b>₹2499 <input type="checkbox" class="cb" data-p="2499" data-n="Compressor"></b></div>
-        <div class="sub-item"><span>डोर रबड़ चेंज</span><b>₹599 <input type="checkbox" class="cb" data-p="599" data-n="Fridge Rubber"></b></div>
-        <div class="sub-item"><span>रिले चेंज</span><b>₹349 <input type="checkbox" class="cb" data-p="349" data-n="Fridge Relay"></b></div>
-    </div>
-
-    <div id="gy" class="sub-box">
-        <div class="sub-item"><span>गीजर सर्विस</span><b>₹349 <input type="checkbox" class="cb" data-p="349" data-n="Geyser Service"></b></div>
-        <div class="sub-item"><span>एलिमेंट चेंज</span><b>₹599 <input type="checkbox" class="cb" data-p="599" data-n="Element"></b></div>
-        <div class="sub-item"><span>गीजर इंस्टालेशन</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="Geyser Install"></b></div>
-        <div class="sub-item"><span>पाइप/वाल्व चेंज</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Geyser Pipe"></b></div>
-        <div class="sub-item"><span>थर्मोस्टेट रिपेयर</span><b>₹299 <input type="checkbox" class="cb" data-p="299" data-n="Geyser Thermo"></b></div>
     </div>
 </div>
 
 <div id="booking" class="page">
     <div class="card">
-        <h3 style="color:var(--primary); text-align:center;">📋 बुकिंग कन्फर्म करें</h3>
-        <p id="bSummary" style="background:#fff9c4; padding:10px; border-radius:8px;">कोई सर्विस नहीं चुनी गई</p>
-        <input type="tel" id="uPhone" placeholder="अपना 10 अंकों का मोबाइल नंबर">
+        <h3 style="color:var(--primary); text-align:center;">📋 बुकिंग विवरण</h3>
+        
+        <div id="sMessage" class="success-box">
+            ✅ आपकी कंप्लेंट दर्ज हो गई है!<br>
+            <b>ID: <span id="finalID"></span></b>
+        </div>
+
+        <div style="background:#eee; padding:8px; border-radius:5px; text-align:center; font-weight:bold; font-size:12px; margin-bottom:10px;">
+            ID: <span id="tempID">AK-WAIT</span>
+        </div>
+
+        <p id="bSummary" style="background:#fff9c4; padding:10px; border-radius:8px; font-size:13px;">कोई सर्विस नहीं चुनी गई</p>
+        
+        <input type="text" id="uName" placeholder="ग्राहक का नाम">
+        <input type="tel" id="uPhone" placeholder="मोबाइल नंबर">
+        
         <button onclick="sendWA()" style="width:100%; background:var(--green); color:white; padding:15px; border:none; border-radius:10px; font-weight:bold; font-size:16px;">
-            <i class="fab fa-whatsapp"></i> व्हाट्सएप पर भेजें
+            <i class="fab fa-whatsapp"></i> व्हाट्सएप पर बुक करें
         </button>
     </div>
 </div>
 
 <div id="review" class="page">
-    <div class="card">
-        <h3>⭐ आपका अनुभव</h3>
-        <input type="text" placeholder="आपका नाम">
-        <textarea style="height:100px;" placeholder="सर्विस कैसी लगी? यहाँ लिखें..."></textarea>
-        <button onclick="alert('धन्यवाद! आपका रिव्यू मिल गया है।')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">सबमिट करें</button>
-    </div>
+    <div class="card"><h3>⭐ आपका अनुभव</h3><input type="text" placeholder="नाम"><textarea placeholder="रिव्यू..."></textarea><button onclick="alert('धन्यवाद!')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">सबमिट</button></div>
 </div>
 
 <div id="admin" class="page">
-    <div class="card">
-        <h3>🔒 एडमिन लॉगिन</h3>
-        <input type="password" placeholder="सिक्योरिटी कोड">
-        <button onclick="alert('एक्सेस डिनाइड!')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">लॉगिन</button>
-    </div>
+    <div class="card"><h3>🔒 एडमिन</h3><input type="password" placeholder="कोड"><button onclick="alert('Denied')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">लॉगिन</button></div>
 </div>
 
 <div id="bookingBar">कुल बिल: ₹<span id="tBill">0</span> | <span onclick="showPage('booking')" style="text-decoration:underline; cursor:pointer;">बुक करें</span></div>
@@ -163,13 +135,19 @@
 </nav>
 
 <script>
+    let currentID = "";
+
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
         document.getElementById('n-' + id).classList.add('active');
         
-        // बुकिंग बार को केवल होम पेज पर दिखाएं जब बिल हो
+        if(id === 'booking') {
+            currentID = "AK-" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('tempID').innerText = currentID;
+        }
+
         const bill = parseInt(document.getElementById('tBill').innerText);
         document.getElementById('bookingBar').style.display = (id === 'home' && bill > 0) ? 'block' : 'none';
     }
@@ -198,11 +176,35 @@
     });
 
     function sendWA() {
+        let name = document.getElementById('uName').value;
         let phone = document.getElementById('uPhone').value;
         let details = document.getElementById('bSummary').innerText;
-        if(phone.length < 10) return alert("कृपया सही मोबाइल नंबर दर्ज करें");
-        let msg = `*AK SOLUTION HUB*%0Aबुकिंग विवरण: ${details}%0Aग्राहक फोन: ${phone}`;
-        window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
+        
+        if(name.trim() === "" || phone.length < 10) return alert("कृपया नाम और सही मोबाइल नंबर डालें");
+        if(details.includes("कोई सर्विस नहीं")) return alert("कृपया सर्विस चुनें");
+
+        // GPS Location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                let gps = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+                finishBooking(name, phone, details, gps);
+            }, function() {
+                finishBooking(name, phone, details, "उपलब्ध नहीं");
+            });
+        } else {
+            finishBooking(name, phone, details, "सपोर्ट नहीं करता");
+        }
+    }
+
+    function finishBooking(name, phone, details, gps) {
+        document.getElementById('finalID').innerText = currentID;
+        document.getElementById('sMessage').style.display = "block";
+
+        let msg = `*AK SOLUTION HUB*%0A--------------------------%0A🆔 *ID:* ${currentID}%0A👤 *नाम:* ${name}%0A📞 *फोन:* ${phone}%0A🛠️ *विवरण:* ${details}%0A📍 *लोकेशन:* ${gps}`;
+        
+        setTimeout(() => {
+            window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
+        }, 1000);
     }
 </script>
 </body>
