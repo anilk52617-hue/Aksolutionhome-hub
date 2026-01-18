@@ -10,68 +10,73 @@
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 90px; text-align: center; }
         
         /* Header */
-        .header { padding: 15px; background: white; }
-        .logo-circle { width: 70px; height: 70px; border-radius: 50%; border: 2.5px solid var(--primary); margin: 0 auto; overflow: hidden; }
+        .header { padding: 15px; background: white; border-bottom: 1px solid #ddd; }
+        .logo-circle { width: 70px; height: 70px; border-radius: 50%; border: 2.5px solid var(--primary); margin: 0 auto; overflow: hidden; background: #eee; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
         .brand-name { color: var(--primary); font-size: 22px; font-weight: 900; margin-top: 5px; }
-        .location { font-size: 14px; font-weight: bold; }
+        .location { font-size: 14px; font-weight: bold; color: #555; }
 
         /* Page Display Logic */
-        .page { display: none; }
+        .page { display: none; padding-top: 10px; }
         .active-page { display: block; }
 
         /* Marquee */
-        .yellow-strip { background: var(--yellow); border: 1px solid #000; padding: 10px 0; font-weight: bold; overflow: hidden; white-space: nowrap; }
-        .marquee-content { display: inline-block; animation: scroll 15s linear infinite; }
-        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        .yellow-strip { background: var(--yellow); border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 10px 0; font-weight: bold; overflow: hidden; }
+        .marquee-content { display: inline-block; white-space: nowrap; animation: scroll 15s linear infinite; padding-left: 100%; }
+        @keyframes scroll { from { transform: translateX(0%); } to { transform: translateX(-100%); } }
 
         /* Slider */
-        .slider-box { width: 92%; height: 190px; margin: 10px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .slider-box { width: 92%; height: 190px; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; }
         .slides { display: flex; width: 400%; height: 100%; transition: 0.8s ease-in-out; }
         .slides img { width: 25%; height: 100%; object-fit: cover; }
 
         /* Grid Icons */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; }
-        .card { background: white; padding: 18px 5px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); cursor: pointer; border: 1px solid #eee; }
-        .card i { font-size: 26px; color: var(--primary); margin-bottom: 6px; display: block; }
+        .card { background: white; padding: 18px 5px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); cursor: pointer; border: 1px solid #eee; transition: 0.3s; }
+        .card:active { transform: scale(0.95); background: #f0f0f0; }
+        .card i { font-size: 26px; color: var(--primary); margin-bottom: 8px; display: block; }
         .card span { font-size: 13px; font-weight: bold; }
 
-        /* 10 Features List */
+        /* Features List */
         .features-list { margin: 15px; border-radius: 12px; overflow: hidden; border: 1px solid #ddd; background: white; text-align: left; }
         .list-header { background: var(--primary); color: white; padding: 12px; font-weight: bold; text-align: center; }
-        .list-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; }
+        .list-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .list-item:last-child { border-bottom: none; }
 
         /* Booking Form Styles */
-        .booking-container { padding: 20px; text-align: center; }
+        .booking-container { padding: 20px; text-align: center; max-width: 500px; margin: auto; }
         .cid-text { font-size: 18px; font-weight: 900; margin-bottom: 10px; }
         .cid-id { color: #d32f2f; }
-        .input-box { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        .btn-gps { background: #007bff; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 10px 0; }
-        .btn-wa { background: var(--green); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 15px; }
+        .input-box { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 15px; box-sizing: border-box; }
+        .btn-gps { background: #007bff; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 10px 0; font-size: 15px; }
+        .btn-wa { background: var(--green); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
         /* Nav Bar */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #eee; height: 80px; z-index: 1000; }
-        .nav-item { flex: 1; padding: 15px 0; color: #666; font-size: 12px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .nav-item { flex: 1; color: #666; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
         .nav-item.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="logo-circle"><img src="57255.jpg"></div>
+    <div class="logo-circle"><img src="57255.jpg" alt="Logo"></div>
     <div class="brand-name">AK SOLUTION HUB</div>
-    <div class="location">खुर्जा, बुलंदशहर (U.P)</div>
+    <div class="location"><i class="fas fa-map-marker-alt"></i> खुर्जा, बुलंदशहर (U.P)</div>
 </div>
 
 <div id="home-page" class="page active-page">
     <div class="yellow-strip">
-        <div class="marquee-content">AK SOLUTION HUB में आपका स्वागत है | विश्वसनीय सर्विस के लिए नीचे कैटेगरी चुनें |</div>
+        <div class="marquee-content">AK SOLUTION HUB में आपका स्वागत है | विश्वसनीय सर्विस के लिए नीचे कैटेगरी चुनें | 24/7 होम सर्विस उपलब्ध |</div>
     </div>
+    
     <div class="slider-box">
         <div class="slides" id="slider">
             <img src="1.jpg"> <img src="2.jpg"> <img src="3.jpg"> <img src="4.jpg">
         </div>
     </div>
+
     <div class="grid">
         <div class="card" onclick="loadList('ac')"><i class="fas fa-snowflake"></i><span>एसी</span></div>
         <div class="card" onclick="loadList('elec')"><i class="fas fa-bolt"></i><span>बिजली</span></div>
@@ -80,6 +85,7 @@
         <div class="card" onclick="loadList('fridge')"><i class="fas fa-refrigerator"></i><span>फ्रिज</span></div>
         <div class="card" onclick="loadList('plumber')"><i class="fas fa-faucet"></i><span>प्लंबर</span></div>
     </div>
+
     <div id="feat-box" class="features-list" style="display:none;">
         <div id="feat-title" class="list-header">सर्विस लिस्ट</div>
         <div id="feat-content"></div>
@@ -89,7 +95,7 @@
 <div id="booking-page" class="page">
     <div class="booking-container">
         <div class="cid-text">Complaint ID: <span id="cid-num" class="cid-id">AK-0000</span></div>
-        <h2 id="order-service" style="color:var(--primary);">सर्विस बुकिंग</h2>
+        <h2 id="order-service" style="color:var(--primary); margin: 5px 0 20px 0;">सर्विस बुकिंग</h2>
         
         <input type="text" id="user-name" class="input-box" placeholder="आपका नाम दर्ज करें">
         <input type="tel" id="user-phone" class="input-box" placeholder="मोबाइल नंबर">
@@ -107,74 +113,20 @@
 </div>
 
 <div class="nav-bar">
-    <div class="nav-item active" onclick="navTo('home')"><i class="fas fa-home"></i>होम</div>
-    <div class="nav-item" onclick="navTo('booking')"><i class="fas fa-calendar-alt"></i>बुकिंग</div>
+    <div class="nav-item active" id="nav-home" onclick="navTo('home')"><i class="fas fa-home"></i>होम</div>
+    <div class="nav-item" id="nav-booking" onclick="navTo('booking')"><i class="fas fa-calendar-alt"></i>बुकिंग</div>
     <div class="nav-item"><i class="fas fa-star"></i>रिव्यू</div>
     <div class="nav-item"><i class="fas fa-user-shield"></i>एडमिन</div>
 </div>
 
 <script>
-    // Slider
+    // ऑटो स्लाइडर
     let sIdx = 0;
     setInterval(() => {
         sIdx = (sIdx + 1) % 4;
-        document.getElementById('slider').style.transform = `translateX(-${sIdx * 25}%)`;
+        const slider = document.getElementById('slider');
+        if(slider) slider.style.transform = `translateX(-${sIdx * 25}%)`;
     }, 3000);
 
     const data = {
-        ac: ["एसी सर्विस", "गैस रिफिल", "फिटिंग", "लीकेज", "PCB", "फैन", "कंप्रेसर", "स्टैंड", "क्लीनिंग", "अनफिटिंग"],
-        elec: ["पंख", "वायरिंग", "बोर्ड", "गीजर", "इनवर्टर", "MCB", "लाइट", "मिक्सी", "फॉल्ट", "मेनलाइन"],
-        ro: ["सर्विस", "मेम्ब्रेन", "पंप", "फिटिंग", "फिल्टर", "TDS", "लीकेज", "UV", "SV", "नया RO"],
-        wm: ["सर्विस", "मोटर", "ड्रेन", "PCB", "गियरबॉक्स", "टाइमर", "बेल्ट", "इनलेट", "ड्रम", "शॉक"],
-        fridge: ["गैस रिफिल", "थर्मास्टेट", "रिले", "कंप्रेसर", "फैन", "रबड़", "फ्रीजर", "लीकेज", "बल्ब", "ड्रेन"],
-        plumber: ["नल", "टंकी", "पाइप", "शावर", "गीजर", "टॉयलेट", "बेसिन", "सिंक", "मोटर", "वाल्व"]
-    };
-
-    function loadList(c) {
-        const box = document.getElementById('feat-box');
-        const cont = document.getElementById('feat-content');
-        document.getElementById('feat-title').innerText = c.toUpperCase() + " सर्विस लिस्ट";
-        cont.innerHTML = "";
-        data[c].forEach(i => {
-            cont.innerHTML += `<div class="list-item" onclick="startBooking('${i}')">${i} <i class="fas fa-arrow-right" style="color:#ddd;"></i></div>`;
-        });
-        box.style.display = "block";
-        box.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function startBooking(s) {
-        document.getElementById('order-service').innerText = s;
-        document.getElementById('cid-num').innerText = "AK-" + Math.floor(1000 + Math.random() * 9000);
-        navTo('booking');
-    }
-
-    function navTo(p) {
-        document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
-        document.getElementById(p + '-page').classList.add('active-page');
-        window.scrollTo(0,0);
-    }
-
-    function fetchGPS() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(p => {
-                document.getElementById('user-addr').value = `मैप लिंक: https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                alert("GPS लोकेशन मिल गई!");
-            });
-        }
-    }
-
-    function whatsappOrder() {
-        const n = document.getElementById('user-name').value;
-        const ph = document.getElementById('user-phone').value;
-        const ad = document.getElementById('user-addr').value;
-        const id = document.getElementById('cid-num').innerText;
-        const sv = document.getElementById('order-service').innerText;
-
-        if(!n || !ph || !ad) { alert("सभी जानकारी भरें!"); return; }
-
-        let msg = `*AK SOLUTION HUB*%0AID: ${id}%0Aसर्विस: ${sv}%0Aनाम: ${n}%0Aफोन: ${ph}%0Aपता: ${ad}`;
-        window.open("https://wa.me/91XXXXXXXXXX?text=" + msg);
-    }
-</script>
-</body>
-</html>
+        ac: ["एसी सर्विस", "गैस रिफिल", "फिटिंग", "लीकेज", "PCB रिपेयर", "फैन मोटर", "कंप्रेसर", "स्टैंड फिटिंग", "केमिकल क्लीनिंग
