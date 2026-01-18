@@ -95,14 +95,23 @@
         <div class="sub-item"><span>एसी सर्विस (Wet)</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="AC Service"></b></div>
         <div class="sub-item"><span>गैस रिफिलिंग</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="AC Gas"></b></div>
     </div>
+
     <div id="el" class="sub-box">
-        <div class="sub-item"><span>पंखा रिपेयर</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Fan Repair"></b></div>
+        <div class="sub-item"><span>बिजली फिटिंग (Per Point)</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Electric Point Fitting"></b></div>
+        <div class="sub-item"><span>नया हाउस वायरिंग</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="Full House Wiring"></b></div>
+        <div class="sub-item"><span>एमसीबी बॉक्स फिटिंग</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="MCB Box Fitting"></b></div>
         <div class="sub-item"><span>बोर्ड फिटिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Fitting"></b></div>
+        <div class="sub-item"><span>पंखा रिपेयर</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Fan Repair"></b></div>
     </div>
+
     <div id="pl" class="sub-box">
-        <div class="sub-item"><span>नल फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Tap Fitting"></b></div>
-        <div class="sub-item"><span>लीकेज रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Plumber Repair"></b></div>
+        <div class="sub-item"><span>वाटर फिटिंग (CPVC/PVC)</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="Water Line Fitting"></b></div>
+        <div class="sub-item"><span>टंकी (Tank) फिटिंग</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Tank Fitting"></b></div>
+        <div class="sub-item"><span>नल (Tap) फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Tap Fitting"></b></div>
+        <div class="sub-item"><span>शावर (Shower) फिटिंग</span><b>₹249 <input type="checkbox" class="cb" data-p="249" data-n="Shower Fitting"></b></div>
+        <div class="sub-item"><span>लीकेज रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Leaking Repair"></b></div>
     </div>
+
     <div id="ro" class="sub-box">
         <div class="sub-item"><span>RO सर्विस</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO Service"></b></div>
     </div>
@@ -216,58 +225,4 @@
             name: name, 
             phone: phone, 
             service: details, 
-            date: new Date().toLocaleString() 
-        };
-        
-        let history = JSON.parse(localStorage.getItem('ak_history') || "[]");
-        history.unshift(booking);
-        localStorage.setItem('ak_history', JSON.stringify(history));
-
-        let msg = `*AK SOLUTION HUB - NEW BOOKING*%0A------------------------------%0A🆔 *ID:* ${currentID}%0A👤 *Name:* ${name}%0A📞 *Phone:* ${phone}%0A🛠️ *Service:* ${details}%0A------------------------------`;
-        
-        window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
-        location.reload();
-    }
-
-    function loadData() {
-        let history = JSON.parse(localStorage.getItem('ak_history') || "[]");
-        
-        // Load User History
-        document.getElementById('historyList').innerHTML = history.map(h => `
-            <div class="h-item">
-                <span style="float:right;" class="status-badge">पेंडिंग</span>
-                <div class="h-id">ID: ${h.id}</div>
-                <div style="margin-top:5px;">${h.service}</div>
-                <small style="color:#888;">${h.date}</small>
-            </div>
-        `).join('') || "<p style='text-align:center; color:#888;'>कोई रिकॉर्ड नहीं मिला</p>";
-
-        // Load Admin Dashboard
-        document.getElementById('adminAllBookings').innerHTML = history.map(h => `
-            <div class="h-item">
-                <b>${h.name}</b> (${h.phone})<br>
-                ${h.service} <br>
-                <small>${h.date} | ID: ${h.id}</small>
-            </div>
-        `).join('') || "<p>अभी कोई बुकिंग नहीं हुई है</p>";
-    }
-
-    function adminLogin() {
-        let pin = document.getElementById('admPass').value;
-        if(pin === "2026") {
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('adminDashboard').style.display = 'block';
-        } else {
-            alert("गलत पिन कोड! कृपया सही पिन डालें।");
-        }
-    }
-
-    function clearData() {
-        if(confirm("क्या आप वाकई सारा हिस्ट्री डेटा डिलीट करना चाहते हैं?")) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
-</script>
-</body>
-</html>
+            date: new Date().toLocaleString()
