@@ -3,74 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK SOLUTION HUB - Final</title>
+    <title>AK SOLUTION HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #0056b3; --yellow: #ffcc00; --bg: #f4f7f6; --green: #25D366; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 140px; }
+        :root { --primary: #0056b3; --yellow: #ffcc00; --bg: #f4f7f6; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 120px; }
         
-        /* हेडर और स्लाइडर */
         header { background: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .main-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto 5px; overflow: hidden; background: #fff; }
+        .main-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto 5px; overflow: hidden; }
         .main-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .marquee-box { background: var(--yellow); padding: 10px 0; font-weight: bold; overflow: hidden; white-space: nowrap; }
-        .marquee-text { display: inline-block; animation: scroll-left 25s linear infinite; font-size: 14px; }
-        @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         
-        .slider-frame { width: 94%; height: 180px; margin: 15px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .slider-images { display: flex; width: 400%; height: 100%; animation: slide-loop 16s infinite ease-in-out; }
+        .marquee-box { background: var(--yellow); padding: 8px 0; font-weight: bold; overflow: hidden; white-space: nowrap; }
+        .marquee-text { display: inline-block; animation: scroll-left 20s linear infinite; font-size: 13px; }
+        @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .slider-frame { width: 92%; height: 180px; margin: 15px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .slider-images { display: flex; width: 400%; height: 100%; animation: slide-loop 12s infinite ease-in-out; }
         .each-slide { width: 25%; height: 100%; }
         .each-slide img { width: 100%; height: 100%; object-fit: cover; }
         @keyframes slide-loop { 0%, 20% { transform: translateX(0%); } 25%, 45% { transform: translateX(-25%); } 50%, 70% { transform: translateX(-50%); } 75%, 95% { transform: translateX(-75%); } 100% { transform: translateX(0%); } }
 
-        /* पेज कंट्रोल */
-        .page { display: none; padding: 10px; animation: fadeIn 0.3s; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px; }
+        .cat-btn { background: white; padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid #eee; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cat-btn i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
+        .cat-btn div { font-size: 11px; font-weight: bold; color: #333; }
 
-        /* ग्रिड और कार्ड */
-        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
-        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 5px; }
-        .cat-btn { background: white; padding: 12px 5px; border-radius: 10px; text-align: center; border: 1px solid #ddd; cursor: pointer; transition: 0.2s; }
-        .cat-btn:active { transform: scale(0.9); background: #f0f7ff; }
-        .cat-btn i { font-size: 20px; color: var(--primary); }
-        .cat-btn div { font-size: 11px; font-weight: bold; margin-top: 5px; }
+        .sub-box { display: none; background: white; margin: 10px; border-radius: 12px; border: 1.5px solid var(--primary); overflow: hidden; }
+        .sub-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; font-weight: 500; }
+        .sub-item:last-child { border-bottom: none; }
 
-        /* सब-कैटेगरी बॉक्स */
-        .sub-box { display: none; background: white; margin: 10px 0; border-radius: 12px; border: 2px solid var(--primary); overflow: hidden; animation: slideDown 0.3s ease-out; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .sub-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
-
-        /* नेविगेशन */
-        nav { position: fixed; bottom: 15px; left: 5%; width: 90%; background: var(--primary); display: flex; justify-content: space-around; padding: 12px 0; border-radius: 40px; z-index: 1001; }
-        nav a { color: white; text-decoration: none; text-align: center; font-size: 11px; opacity: 0.6; cursor: pointer; }
-        nav a.active { opacity: 1; color: var(--yellow); font-weight: bold; }
-
-        #bookingBar { position: fixed; bottom: 85px; width: 80%; left: 10%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1500; border: 2px solid white; }
-        .btn-main { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; color: white; margin-top: 10px; font-size: 14px; }
-        input, textarea { width: 92%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; display: block; margin-left: auto; margin-right: auto; }
+        #bookingBar { position: fixed; bottom: 80px; width: 90%; left: 5%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         
-        .member-card, .rev-card { background: #f1f8ff; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 5px solid var(--primary); font-size: 13px; }
+        nav { position: fixed; bottom: 10px; left: 5%; width: 90%; background: var(--primary); display: flex; justify-content: space-around; padding: 12px 0; border-radius: 30px; }
+        nav a { color: white; text-decoration: none; text-align: center; font-size: 11px; opacity: 0.7; }
+        nav a.active { opacity: 1; color: var(--yellow); }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="main-logo"><img src="57255.jpg" alt="Logo"></div>
-    <div style="font-size:22px; font-weight:900; color:var(--primary);">AK SOLUTION HUB</div>
-    <div style="font-size:12px; color:#666;">खुर्जा, बुलंदशहर (U.P)</div>
+    <div class="main-logo"><img src="57255.jpg"></div>
+    <div style="font-size:20px; font-weight:900; color:var(--primary);">AK SOLUTION HUB</div>
+    <div style="font-size:11px; color:#666;">खुर्जा, बुलंदशहर (U.P)</div>
 </header>
 
-<div class="marquee-box"><div class="marquee-text">🛠️ खुर्जा की बेस्ट होम सर्विस | एसी, फ्रिज, बिजली और आरओ रिपेयर | संपर्क: 9927464530 🛠️</div></div>
+<div class="marquee-box"><div class="marquee-text">🛠️ खुर्जा की बेस्ट होम सर्विस | संपर्क: 9927464530 | GPS और कंप्लेंट ID के साथ 🛠️</div></div>
 
-<div id="home" class="page active">
-    <div class="slider-frame">
-        <div class="slider-images">
-            <div class="each-slide"><img src="img1.jpg"></div>
-            <div class="each-slide"><img src="img2.jpg"></div>
-            <div class="each-slide"><img src="img3.jpg"></div>
-            <div class="each-slide"><img src="img4.jpg"></div>
-        </div>
+<div class="slider-frame">
+    <div class="slider-images">
+        <div class="each-slide"><img src="img1.jpg"></div>
+        <div class="each-slide"><img src="img2.jpg"></div>
+        <div class="each-slide"><img src="img3.jpg"></div>
+        <div class="each-slide"><img src="img4.jpg"></div>
     </div>
+</div>
 
-    <div class
+<div class="cat-grid">
+    <div class="cat-btn" onclick="openCat('ac')"><i class="fas fa-snowflake"></i><div>एसी</div></div>
+    <div class="cat-btn" onclick="openCat('el')"><i class="fas fa-bolt"></i><div>बिजली</div></div>
+    <div class="cat-btn" onclick="openCat('ro')"><i class="fas fa-tint"></i><div>RO</div></div>
+    <div class="cat-btn" onclick="openCat('wm')"><i class="fas fa-soap"></i><div>W. Machine</div></div>
+    <div class="cat-btn" onclick="openCat('fr')"><i class="fas fa-icicles"></i><div>फ्रिज</div></div>
+    <div class="cat-btn" onclick="openCat('gy')"><i class="fas fa-hot-tub"></i><div>गीजर</div></div>
+</div>
+
+<div id="ac" class="sub-box">
+    <div class="sub-item"><span>एसी सर्विस (Wet)</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="AC Service"></b></div>
+    <div class="sub-item"><span>गैस रिफिलिंग</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="AC Gas"></b></div>
+</div>
+
+<div id="el" class="sub-box">
+    <div class="sub-item"><span>पंखा रिपेयर</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Fan Repair"></b></div>
+    <div class="sub-item"><span>बोर्ड वायरिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Wiring"></b></div>
+</div>
+
+<div id="ro" class="sub-box">
+    <div class="sub-item"><span>RO सर्विस</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO Service"></b></div>
+    <div class="sub-item"><span>फ़िल्टर चेंज</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="RO Filter"></b></div>
+</div>
+
+<div id="wm" class="sub-box">
+    <div class="sub-item"><span>मशीन चेकअप</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="WM Visit"></b></div>
+    <div class="sub-item"><span>मोटर रिपेयर</span><b>₹799 <input type="checkbox" class="cb" data-p="799" data-n="WM Motor"></b></div>
+</div>
+
+<div id="fr" class="sub-box">
+    <div class="sub-item"><span>फ्रिज चेकअप</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Fridge Visit"></b></div>
+    <div class="sub-item"><span>गैस चार्जिंग</span><b>₹1499 <input type="checkbox" class="cb" data-p="1499" data-n="Fridge Gas"></b></div>
+</div>
+
+<div id="gy" class="sub-box">
+    <div class="sub-item"><span>गीजर सर्विस</span><b>₹349 <input type="checkbox" class="cb" data-p="349" data-n="Geyser Service"></b></div>
+    <div class="sub-item"><span>एलिमेंट चेंज</span><b>₹599 <input type="checkbox" class="cb" data-p="599" data-n="Geyser Element"></b></div>
+</div>
+
+<div id="bookingBar">कुल बिल: ₹<span id="amt">0</span> | <span onclick="alert('बुकिंग पेज पर जा रहे हैं...')">बुक करें</span></div>
+
+<nav>
+    <a class="active"><i class="fas fa-home"></i><br>होम</a>
+    <a><i class="fas fa-file-invoice"></i><br>बुकिंग</a>
+    <a><i class="fas fa-star"></i><br>रिव्यू</a>
+    <a><i class="fas fa-lock"></i><br>एडमिन</a>
+</nav>
+
+<script>
+    function openCat(id) {
+        document.querySelectorAll('.sub-box').forEach(b => b.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        window.scrollTo({ top: document.getElementById(id).offsetTop - 100, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.cb').forEach(cb => {
+        cb.addEventListener('change', () => {
+            let total = 0;
+            document.querySelectorAll('.cb:checked').forEach(i => total += parseInt(i.dataset.p));
+            document.getElementById('amt').innerText = total;
+            document.getElementById('bookingBar').style.display = total > 0 ? 'block' : 'none';
+        });
+    });
+</script>
+
+</body>
+</html>
