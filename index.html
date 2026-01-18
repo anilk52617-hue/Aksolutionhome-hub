@@ -108,8 +108,8 @@
 
         <p id="bSummary" style="background:#fff9c4; padding:10px; border-radius:8px; font-size:13px;">कोई सर्विस नहीं चुनी गई</p>
         
-        <input type="text" id="uName" placeholder="ग्राहक का नाम">
-        <input type="tel" id="uPhone" placeholder="मोबाइल नंबर">
+        <input type="text" id="uName" placeholder="ग्राहक का पूरा नाम">
+        <input type="tel" id="uPhone" placeholder="10 अंकों का मोबाइल नंबर">
         
         <button onclick="sendWA()" style="width:100%; background:var(--green); color:white; padding:15px; border:none; border-radius:10px; font-weight:bold; font-size:16px;">
             <i class="fab fa-whatsapp"></i> व्हाट्सएप पर बुक करें
@@ -182,18 +182,22 @@
         let phone = document.getElementById('uPhone').value;
         let details = document.getElementById('bSummary').innerText;
         
-        if(name.trim() === "" || phone.length < 10) return alert("कृपया नाम और सही मोबाइल नंबर डालें");
+        if(name.trim() === "") return alert("कृपया ग्राहक का नाम लिखें");
+        if(phone.length < 10) return alert("कृपया 10 अंकों का सही मोबाइल नंबर डालें");
         if(details.includes("कोई सर्विस नहीं")) return alert("कृपया सर्विस चुनें");
 
+        // GPS Location Fix
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                let gps = `https://www.google.com/maps?q=${position.coords.latitude},${position.coords.longitude}`;
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+                let gps = `https://www.google.com/maps?q=${lat},${lon}`;
                 finishBooking(name, phone, details, gps);
             }, function() {
-                finishBooking(name, phone, details, "Not Provided");
+                finishBooking(name, phone, details, "उपलब्ध नहीं (परमिशन नहीं दी)");
             });
         } else {
-            finishBooking(name, phone, details, "Not Supported");
+            finishBooking(name, phone, details, "ब्राउज़र सपोर्ट नहीं करता");
         }
     }
 
@@ -201,11 +205,17 @@
         document.getElementById('finalID').innerText = currentID;
         document.getElementById('sMessage').style.display = "block";
 
-        let msg = `*AK SOLUTION HUB*%0A--------------------------%0A🆔 *Complaint ID:* ${currentID}%0A👤 *Customer:* ${name}%0A📞 *Phone:* ${phone}%0A🛠️ *Service:* ${details}%0A📍 *Location:* ${gps}`;
+        let msg = `*AK SOLUTION HUB - NEW BOOKING*%0A` +
+                  `------------------------------%0A` +
+                  `🆔 *Complaint ID:* ${currentID}%0A` +
+                  `👤 *Name:* ${name}%0A` +
+                  `📞 *Phone:* ${phone}%0A` +
+                  `🛠️ *Service:* ${details}%0A` +
+                  `📍 *Location:* ${gps}`;
         
         setTimeout(() => {
             window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
-            currentID = ""; // Reset ID for next booking
+            currentID = ""; // Reset for next booking
         }, 1200);
     }
 </script>
