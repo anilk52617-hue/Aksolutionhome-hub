@@ -3,49 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK SOLUTION HUB - Final Fixed Selection</title>
+    <title>AK SOLUTION HUB - Final Fixed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #0056b3; --bg: #f8fafc; --yellow: #ffeb3b; --green: #25D366; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 100px; }
+        :root { --primary: #0056b3; --bg: #f8fafc; --yellow: #ffeb3b; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 90px; }
         
-        header { background: white; padding: 15px; text-align: center; border-bottom: 1px solid #eee; }
-        .logo-box { width: 75px; height: 75px; border-radius: 50%; border: 2.5px solid var(--primary); margin: 0 auto 5px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        /* Header Section */
+        header { background: white; padding: 15px; text-align: center; }
+        .logo-box { width: 70px; height: 70px; border-radius: 50%; border: 2.5px solid var(--primary); margin: 0 auto 5px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
-        .brand-title { font-size: 22px; font-weight: 900; color: var(--primary); margin: 0; }
+        .brand-title { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; }
+        .brand-sub { font-size: 13px; font-weight: bold; color: #333; margin-top: 2px; }
 
-        .page { display: none; padding: 15px; }
-        .active-page { display: block; }
+        /* पीली पट्टी (Marquee) सुधार */
+        .marquee-container { background: var(--yellow); border-top: 2px solid #000; border-bottom: 2px solid #000; overflow: hidden; white-space: nowrap; padding: 10px 0; margin: 10px 0; }
+        .marquee-text { display: inline-block; font-weight: 900; color: #000; font-size: 14px; animation: scroll 15s linear infinite; }
+        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 
-        /* Slider */
-        .slider { width: 100%; height: 190px; border-radius: 15px; overflow: hidden; margin: 15px 0; position: relative; }
-        .slides { display: flex; width: 400%; transition: 0.8s ease-in-out; height: 100%; }
-        .slide { width: 25%; height: 100%; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; }
+        /* रोलिंग इमेज स्लाइडर */
+        .slider-wrapper { width: 92%; height: 190px; margin: 10px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; }
+        .slides-container { display: flex; width: 400%; height: 100%; transition: transform 0.8s ease-in-out; }
+        .slide-img { width: 25%; height: 100%; object-fit: cover; }
 
-        /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .card { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid #eee; }
-        .card i { font-size: 26px; color: var(--primary); margin-bottom: 8px; display: block; }
-        .card span { font-size: 12px; font-weight: bold; }
+        /* सर्विस ग्रिड */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; }
+        .card { background: white; padding: 18px 5px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.06); cursor: pointer; border: 1px solid #f0f0f0; }
+        .card i { font-size: 26px; color: var(--primary); margin-bottom: 6px; display: block; }
+        .card span { font-size: 12px; font-weight: bold; color: #333; }
 
-        /* Features List Box */
-        .feature-container { background: white; margin-top: 15px; border-radius: 12px; border: 2px solid var(--primary); overflow: hidden; display: none; }
-        .list-head { background: var(--primary); color: white; padding: 12px; font-weight: bold; text-align: center; }
-        .list-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; font-weight: 600; cursor: pointer; color: #333; }
-        .list-item:active { background: #f0f0f0; }
+        /* ऑडियो बुकिंग सेक्शन */
+        .voice-box { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 25px; border-radius: 25px; text-align: center; margin: 15px; box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3); }
+        .voice-box i { font-size: 32px; margin-bottom: 8px; }
 
-        /* Booking Form */
-        .form-card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .yellow-id { background: var(--yellow); padding: 12px; border-radius: 10px; border: 2px solid #000; text-align: center; font-weight: 900; margin-bottom: 15px; color: #000; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        .btn-submit { background: var(--green); color: white; width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
-
-        /* Footer Nav */
-        .footer { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 80px; z-index: 1000; }
-        .footer a { flex: 1; text-align: center; padding: 15px 0; color: #666; text-decoration: none; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .footer a.active { color: var(--primary); }
-        .footer i { font-size: 22px; margin-bottom: 4px; }
+        /* फुटर नेविगेशन */
+        .footer-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #eee; height: 80px; z-index: 1000; }
+        .nav-item { flex: 1; text-align: center; padding: 15px 0; color: #666; text-decoration: none; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -53,125 +48,57 @@
 <header>
     <div class="logo-box"><img src="57255.jpg"></div>
     <div class="brand-title">AK SOLUTION HUB</div>
+    <div class="brand-sub">खुर्जा, बुलंदशहर (U.P)</div>
 </header>
 
-<div id="home" class="page active-page">
-    <div class="slider">
-        <div class="slides" id="slideTrack">
-            <div class="slide"><img src="1.jpg" onerror="this.src='https://via.placeholder.com/400x200?text=Image+1'"></div>
-            <div class="slide"><img src="2.jpg" onerror="this.src='https://via.placeholder.com/400x200?text=Image+2'"></div>
-            <div class="slide"><img src="3.jpg" onerror="this.src='https://via.placeholder.com/400x200?text=Image+3'"></div>
-            <div class="slide"><img src="4.jpg" onerror="this.src='https://via.placeholder.com/400x200?text=Image+4'"></div>
-        </div>
-    </div>
+<div class="marquee-container">
+    <div class="marquee-text">AK SOLUTION HUB में आपका स्वागत है | हमारी सेवाएँ: एसी, बिजली, RO, फ्रिज, प्लंबर और भी बहुत कुछ | सुरक्षित सर्विस और उचित दाम |</div>
+</div>
 
-    <div class="grid">
-        <div class="card" onclick="openFeatures('ac')"><i class="fas fa-snowflake"></i><span>एसी</span></div>
-        <div class="card" onclick="openFeatures('elec')"><i class="fas fa-bolt"></i><span>बिजली</span></div>
-        <div class="card" onclick="openFeatures('ro')"><i class="fas fa-tint"></i><span>RO</span></div>
-        <div class="card" onclick="openFeatures('wm')"><i class="fas fa-soap"></i><span>वॉशिंग मशीन</span></div>
-        <div class="card" onclick="openFeatures('fridge')"><i class="fas fa-refrigerator"></i><span>फ्रिज</span></div>
-        <div class="card" onclick="openFeatures('plumber')"><i class="fas fa-faucet"></i><span>प्लंबर</span></div>
-        <div class="card" onclick="openFeatures('other')"><i class="fas fa-tools"></i><span>अन्य</span></div>
-    </div>
-
-    <div id="feat-box" class="feature-container">
-        <div id="feat-head" class="list-head">सर्विस लिस्ट</div>
-        <div id="feat-items"></div>
+<div class="slider-wrapper">
+    <div class="slides-container" id="slider">
+        <img class="slide-img" src="1.jpg" alt="Slide 1">
+        <img class="slide-img" src="2.jpg" alt="Slide 2">
+        <img class="slide-img" src="3.jpg" alt="Slide 3">
+        <img class="slide-img" src="4.jpg" alt="Slide 4">
     </div>
 </div>
 
-<div id="booking" class="page">
-    <div class="form-card">
-        <div class="yellow-id">Complaint ID: <span id="cId">AK-0000</span></div>
-        <h3 id="bTitle" style="color:var(--primary); text-align:center;">सर्विस बुकिंग</h3>
-        <input type="text" placeholder="अपना नाम लिखें">
-        <input type="tel" placeholder="मोबाइल नंबर">
-        <button onclick="getGPS()" style="background:#007bff; color:white; border:none; padding:10px; width:100%; border-radius:5px; margin-bottom:10px; font-weight:bold;">
-            <i class="fas fa-map-marker-alt"></i> GPS लोकेशन जोड़ें
-        </button>
-        <textarea id="addr" rows="3" placeholder="पूरा पता यहाँ लिखें..."></textarea>
-        <button class="btn-submit"><i class="fab fa-whatsapp"></i> अभी बुक करें</button>
-    </div>
+<div class="grid">
+    <div class="card"><i class="fas fa-snowflake"></i><span>एसी</span></div>
+    <div class="card"><i class="fas fa-bolt"></i><span>बिजली</span></div>
+    <div class="card"><i class="fas fa-tint"></i><span>RO</span></div>
+    <div class="card"><i class="fas fa-soap"></i><span>वॉशिंग मशीन</span></div>
+    <div class="card"><span>फ्रिज</span></div> <div class="card"><i class="fas fa-faucet"></i><span>प्लंबर</span></div>
+    <div class="card"><i class="fas fa-tools"></i><span>अन्य</span></div>
 </div>
 
-<div id="reviews" class="page"><div class="form-card"><h3>ग्राहक रिव्यू</h3><p>अभी कोई रिव्यू उपलब्ध नहीं है।</p></div></div>
-<div id="admin" class="page"><div class="form-card"><h3>एडमिन लॉगिन</h3><input type="password" placeholder="पिन डालें"><button class="btn-submit" style="background:var(--primary); margin-top:10px;">लॉगिन</button></div></div>
+<div class="voice-box">
+    <i class="fas fa-microphone"></i>
+    <div style="font-weight: 900; font-size: 18px;">ऑडियो बुकिंग (बोलकर बुक करें)</div>
+    <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">बटन दबाएं और अपनी समस्या बताएं</div>
+</div>
 
-<div class="footer">
-    <a onclick="switchPage('home')" id="n-home" class="active"><i class="fas fa-home"></i>होम</a>
-    <a onclick="switchPage('booking')" id="n-booking"><i class="fas fa-calendar-check"></i>बुकिंग</a>
-    <a onclick="switchPage('reviews')" id="n-reviews"><i class="fas fa-star"></i>रिव्यू</a>
-    <a onclick="switchPage('admin')" id="n-admin"><i class="fas fa-user-shield"></i>एडमिन</a>
+<div class="footer-nav">
+    <a class="nav-item active"><i class="fas fa-home"></i>होम</a>
+    <a class="nav-item"><i class="fas fa-calendar-alt"></i>बुकिंग</a>
+    <a class="nav-item"><i class="fas fa-star"></i>रिव्यू</a>
+    <a class="nav-item"><i class="fas fa-user-shield"></i>एडमिन</a>
 </div>
 
 <script>
-    // Rolling Slider Logic
-    let current = 0;
-    setInterval(() => {
-        current = (current + 1) % 4;
-        const track = document.getElementById('slideTrack');
-        if(track) track.style.transform = `translateX(-${current * 25}%)`;
-    }, 3000);
-
-    // 70 Services Data
-    const data = {
-        ac: ["एसी सर्विस", "गैस चार्जिंग", "एसी फिटिंग", "लीकेज रिपेयर", "PCB रिपेयर", "फैन मोटर", "कंप्रेसर चेंज", "स्टैंड फिटिंग", "केमिकल वॉश", "एसी अन-फिटिंग"],
-        elec: ["पंख रिपेयर", "नई वायरिंग", "स्विच बोर्ड", "गीजर सर्विस", "इनवर्टर सेटअप", "MCB चेंज", "झूमर फिटिंग", "LED लाइट", "मिक्सी रिपेयर", "शॉर्ट सर्किट"],
-        ro: ["RO सर्विस", "मेम्ब्रेन चेंज", "पंप रिपेयर", "RO फिटिंग", "फिल्टर चेंज", "TDS सेटिंग", "लीकेज रिपेयर", "UV लाइट", "SV वाल्व", "नया RO"],
-        wm: ["मशीन सर्विस", "मोटर रिपेयर", "ड्रेन पाइप", "गियर बॉक्स", "PCB रिपेयर", "टाइमर चेंज", "बेल्ट चेंज", "इनलेट वाल्व", "ड्रम क्लीन", "शॉक एब्जॉर्बर"],
-        fridge: ["गैस रिफिल", "थर्मास्टेट", "रिले चेंज", "कंप्रेसर", "फैन मोटर", "डोर रबड़", "फ्रीजर रिपेयर", "लीकेज", "बल्ब चेंज", "ड्रेन क्लीन"],
-        plumber: ["नल रिपेयर", "टंकी सफाई", "पाइप फिटिंग", "शावर फिटिंग", "गीजर पाइप", "टॉयलेट सीट", "वॉश बेसिन", "सिंक रिपेयर", "मोटर फिटिंग", "वाल्व चेंज"],
-        other: ["TV रिपेयर", "माइक्रोवेव", "चिमनी सर्विस", "CCTV कैमरा", "कूलर सर्विस", "गैस चूल्हा", "डोर बेल", "वॉटर हीटर", "जनरेटर", "हैंडीमैन"]
-    };
-
-    // Open 10 Features
-    function openFeatures(cat) {
-        const box = document.getElementById('feat-box');
-        const items = document.getElementById('feat-items');
-        document.getElementById('feat-head').innerText = cat.toUpperCase() + " के 10 क्रांतिकारी फीचर्स";
-        items.innerHTML = "";
-        
-        data[cat].forEach(f => {
-            // Fix: Create element and add event listener properly
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'list-item';
-            itemDiv.innerHTML = `${f} <i class="fas fa-chevron-right" style="color:#ddd;"></i>`;
-            itemDiv.onclick = function() { selectService(f); };
-            items.appendChild(itemDiv);
-        });
-        
-        box.style.display = "block";
-        window.scrollTo(0, 600);
+    // स्लाइडर चलाने के लिए जावास्क्रिप्ट
+    let index = 0;
+    const slider = document.getElementById('slider');
+    
+    function slide() {
+        index++;
+        if (index > 3) index = 0;
+        slider.style.transform = `translateX(-${index * 25}%)`;
     }
 
-    // Function to select service and jump to booking
-    function selectService(serviceName) {
-        document.getElementById('bTitle').innerText = serviceName;
-        document.getElementById('cId').innerText = "AK-" + Math.floor(1000 + Math.random()*9000);
-        switchPage('booking');
-    }
-
-    // Navigation Logic
-    function switchPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(id).classList.add('active-page');
-        document.querySelectorAll('.footer a').forEach(a => a.classList.remove('active'));
-        document.getElementById('n-' + id).classList.add('active');
-        window.scrollTo(0,0);
-    }
-
-    // GPS Location Logic
-    function getGPS() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(p => {
-                document.getElementById('addr').value = `अक्षांश: ${p.coords.latitude}, देशांतर: ${p.coords.longitude} (लोकेशन ट्रैक हो गई)`;
-                alert("GPS लोकेशन मिल गई है!");
-            }, () => {
-                alert("कृपया लोकेशन परमिशन ऑन करें।");
-            });
-        }
-    }
+    setInterval(slide, 3000); // हर 3 सेकंड में फोटो बदलेगी
 </script>
+
 </body>
 </html>
