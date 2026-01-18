@@ -49,7 +49,7 @@
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input { width: 90%; padding: 12px; margin: 10px auto; display: block; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; }
         
-        .h-item { border-bottom: 1px solid #eee; padding: 12px 0; font-size: 13px; }
+        .h-item { border-bottom: 1px solid #eee; padding: 12px 0; font-size: 13px; position: relative; }
         .status-badge { background: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
         .h-id { color: var(--primary); font-weight: bold; }
 
@@ -57,6 +57,7 @@
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         
         #bookingBar { position: fixed; bottom: 70px; width: 90%; left: 5%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1500; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .del-btn { color: var(--red); font-size: 16px; cursor: pointer; float: right; margin-left: 10px; }
     </style>
 </head>
 <body onload="hideLoader()">
@@ -96,16 +97,32 @@
         <div class="sub-item"><span>एसी सर्विस (Wet)</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="AC Service"></b></div>
         <div class="sub-item"><span>गैस रिफिलिंग</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="AC Gas"></b></div>
         <div class="sub-item"><span>एसी इंस्टॉलेशन</span><b>₹1199 <input type="checkbox" class="cb" data-p="1199" data-n="AC Install"></b></div>
-        <div class="sub-item"><span>पीसीबी रिपेयर</span><b>₹850 <input type="checkbox" class="cb" data-p="850" data-n="PCB Repair"></b></div>
-        <div class="sub-item"><span>एसी अन-इंस्टॉल</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="AC Uninstall"></b></div>
     </div>
 
     <div id="el" class="sub-box">
-        <div class="sub-item"><span>बिजली फिटिंग (Point)</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Electric Point Fitting"></b></div>
-        <div class="sub-item"><span>नया हाउस वायरिंग</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="Full House Wiring"></b></div>
-        <div class="sub-item"><span>बोर्ड रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Repair"></b></div>
+        <div class="sub-item"><span>बिजली फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Electric Point"></b></div>
+        <div class="sub-item"><span>नया हाउस वायरिंग</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="House Wiring"></b></div>
     </div>
+
+    <div id="pl" class="sub-box">
+        <div class="sub-item"><span>टंकी फिटिंग</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Tank Fitting"></b></div>
+        <div class="sub-item"><span>लीकेज रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Leakage Repair"></b></div>
     </div>
+
+    <div id="ro" class="sub-box">
+        <div class="sub-item"><span>RO सर्विस</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO Service"></b></div>
+        <div class="sub-item"><span>फिल्टर चेंज</span><b>₹850 <input type="checkbox" class="cb" data-p="850" data-n="RO Filter"></b></div>
+    </div>
+
+    <div id="fr" class="sub-box">
+        <div class="sub-item"><span>फ्रिज गैस चार्ज</span><b>₹1499 <input type="checkbox" class="cb" data-p="1499" data-n="Fridge Gas"></b></div>
+        <div class="sub-item"><span>कंप्रेसर रिपेयर</span><b>₹2500 <input type="checkbox" class="cb" data-p="2500" data-n="Fridge Comp"></b></div>
+    </div>
+
+    <div id="gy" class="sub-box">
+        <div class="sub-item"><span>गीजर सर्विस</span><b>₹349 <input type="checkbox" class="cb" data-p="349" data-n="Geyser Service"></b></div>
+    </div>
+</div>
 
 <div id="booking" class="page">
     <div class="card">
@@ -169,18 +186,16 @@
         document.getElementById('n-' + id).classList.add('active');
         
         if(id === 'booking' && !currentID) {
-            currentID = "AK-" + Math.floor(1000 + Math.random() * 9999);
+            currentID = "AK-" + Math.floor(1000 + Math.random() * 8999);
         }
         
         const bill = parseInt(document.getElementById('tBill').innerText);
         document.getElementById('bookingBar').style.display = (id === 'home' && bill > 0) ? 'block' : 'none';
-        window.scrollTo(0,0);
     }
 
     function openCat(id) {
         document.querySelectorAll('.sub-box').forEach(b => b.style.display = 'none');
-        let target = document.getElementById(id);
-        if(target) target.style.display = 'block';
+        document.getElementById(id).style.display = 'block';
     }
 
     document.addEventListener('change', (e) => {
@@ -191,7 +206,7 @@
                 items.push(i.dataset.n);
             });
             document.getElementById('tBill').innerText = total;
-            document.getElementById('bSummary').innerText = items.length > 0 ? items.join(", ") + " | कुल बिल: ₹" + total : "कोई सर्विस नहीं चुनी गई";
+            document.getElementById('bSummary').innerText = items.length > 0 ? items.join(", ") + " | ₹" + total : "कोई सर्विस नहीं चुनी गई";
             document.getElementById('bookingBar').style.display = (total > 0 && document.getElementById('home').classList.contains('active')) ? 'block' : 'none';
         }
     });
@@ -201,15 +216,14 @@
         let phone = document.getElementById('uPhone').value;
         let details = document.getElementById('bSummary').innerText;
         
-        if(!name || phone.length < 10) return alert("नाम और 10 अंकों का नंबर सही डालें");
-        if(details.includes("कोई सर्विस नहीं")) return alert("कृपया सर्विस चुनें");
-
+        if(!name || phone.length < 10) return alert("कृपया नाम और मोबाइल नंबर भरें");
+        
         let booking = { id: currentID, name: name, phone: phone, service: details, date: new Date().toLocaleString() };
         let history = JSON.parse(localStorage.getItem('ak_data') || "[]");
         history.unshift(booking);
         localStorage.setItem('ak_data', JSON.stringify(history));
 
-        let msg = `*AK SOLUTION HUB*%0AID: ${currentID}%0Aनाम: ${name}%0Aफोन: ${phone}%0Aसर्विस: ${details}`;
+        let msg = `*AK SOLUTION HUB*%0AID: ${currentID}%0Aनाम: ${name}%0Aफोन: ${phone}%0Aविवरण: ${details}`;
         window.open(`https://wa.me/919927464530?text=${msg}`);
         location.reload();
     }
@@ -217,10 +231,21 @@
     function loadData() {
         let history = JSON.parse(localStorage.getItem('ak_data') || "[]");
         let list = history.map(h => `<div class="h-item"><span class="status-badge">पेंडिंग</span><div class="h-id">${h.id}</div><div>${h.service}</div><small>${h.date}</small></div>`).join('');
-        document.getElementById('historyList').innerHTML = list || "कोई बुकिंग नहीं";
+        document.getElementById('historyList').innerHTML = list || "कोई बुकिंग नहीं मिली";
         
-        let adminList = history.map(h => `<div class="h-item"><b>${h.name}</b> (${h.phone})<br>${h.service}<br><small>${h.date}</small></div>`).join('');
+        let adminList = history.map((h, index) => `
+            <div class="h-item">
+                <i class="fas fa-trash del-btn" onclick="deleteBooking(${index})"></i>
+                <b>${h.name}</b> (${h.phone})<br>${h.service}<br><small>${h.date}</small>
+            </div>`).join('');
         document.getElementById('adminAllBookings').innerHTML = adminList || "डेटा खाली है";
+    }
+
+    function deleteBooking(index) {
+        let history = JSON.parse(localStorage.getItem('ak_data'));
+        history.splice(index, 1);
+        localStorage.setItem('ak_data', JSON.stringify(history));
+        loadData();
     }
 
     function adminLogin() {
@@ -231,7 +256,7 @@
     }
 
     function clearData() {
-        if(confirm("क्या आप वाकई डेटा डिलीट करना चाहते हैं?")) { localStorage.clear(); location.reload(); }
+        if(confirm("पूरा डेटा डिलीट करें?")) { localStorage.clear(); location.reload(); }
     }
 </script>
 </body>
