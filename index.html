@@ -43,14 +43,15 @@
         nav a { color: white; text-decoration: none; text-align: center; font-size: 11px; opacity: 0.6; cursor: pointer; }
         nav a.active { opacity: 1; color: var(--yellow); font-weight: bold; }
 
-        /* फ्लोटिंग लोगो */
         .floating-mini-logo { position: fixed; bottom: 100px; left: 15px; width: 45px; height: 45px; border-radius: 50%; background: white; border: 2px solid var(--primary); z-index: 2000; overflow: hidden; }
         .floating-mini-logo img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* बुकिंग बार और बटन */
         #bookingBar { position: fixed; bottom: 85px; width: 80%; left: 10%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1500; }
         .btn-main { width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; color: white; margin-top: 10px; }
-        input { width: 92%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; }
+        input, select { width: 92%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ccc; }
+        
+        /* Team Registration Styling */
+        .member-card { background: #f1f8ff; padding: 10px; border-radius: 8px; margin-top: 10px; border-left: 5px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -91,7 +92,7 @@
 <div id="booking" class="page">
     <div class="card" style="text-align: center;">
         <h3 style="color:var(--primary); margin-top:0;">📋 बुकिंग की जानकारी</h3>
-        <div id="noData">अभी कोई बुकिंग नहीं की गई।</div>
+        <div id="noData">आपने अभी तक कोई सर्विस नहीं चुनी है। कृपया होम पर जाकर सर्विस टिक करें।</div>
         
         <div id="bookingContent" style="display:none; text-align:left; background:#fff9c4; padding:15px; border-radius:10px;">
             <p>🆔 <b>ID:</b> <span id="rID" style="color:red; font-weight:bold;"></span></p>
@@ -100,14 +101,14 @@
             <p>🛠️ <b>सर्विस:</b> <span id="rItems"></span></p>
             <p>💰 <b>कुल बिल:</b> ₹<span id="rAmt"></span></p>
             
-            <input type="tel" id="custNum" placeholder="अपना मोबाइल नंबर डालें">
+            <label><b>कस्टमर मोबाइल नंबर:</b></label>
+            <input type="tel" id="custNum" placeholder="10 अंकों का नंबर डालें">
             
             <button onclick="getLocation()" style="background:#e3f2fd; color:#0056b3; border:1px dashed #0056b3; padding:10px; width:100%; border-radius:10px; margin-top:10px; font-weight:bold;">
                 <i class="fas fa-map-marker-alt"></i> लाइव लोकेशन (GPS) <span id="lStatus"></span>
             </button>
             
             <button onclick="sendWA()" class="btn-main" style="background:#25D366;"><i class="fab fa-whatsapp"></i> व्हाट्सएप कन्फर्म</button>
-            
             <a href="tel:9927464530" style="text-decoration:none;"><button class="btn-main" style="background:var(--primary);"><i class="fas fa-phone-alt"></i> अभी कॉल करें</button></a>
         </div>
     </div>
@@ -116,17 +117,33 @@
 <div id="review" class="page">
     <div class="card">
         <h3>⭐ कस्टमर रिव्यू</h3>
-        <textarea style="width:94%; height:80px; padding:10px; border-radius:8px;" placeholder="अपना फीडबैक यहाँ लिखें..."></textarea>
-        <button class="btn-main" style="background:var(--primary);" onclick="alert('धन्यवाद!')">रिव्यू भेजें</button>
+        <p>आपका अनुभव हमारे लिए कीमती है:</p>
+        <textarea id="revMsg" style="width:94%; height:80px; padding:10px; border-radius:8px;" placeholder="अपना फीडबैक यहाँ लिखें..."></textarea>
+        <button class="btn-main" style="background:var(--primary);" onclick="alert('धन्यवाद! आपका रिव्यू सबमिट हो गया।')">रिव्यू भेजें</button>
     </div>
 </div>
 
 <div id="admin" class="page">
-    <div class="card">
+    <div class="card" id="loginArea">
         <h3>🔒 एडमिन लॉगिन</h3>
-        <input type="password" id="aPass" placeholder="पासवर्ड डालें">
+        <input type="password" id="aPass" placeholder="पासवर्ड डालें (AK123)">
         <button class="btn-main" style="background:var(--primary);" onclick="checkAdmin()">लॉगिन</button>
-        <div id="aDash" style="display:none; margin-top:20px; border-top:1px solid #ddd; padding-top:10px;">
+    </div>
+    
+    <div id="aDash" style="display:none;">
+        <div class="card">
+            <h3 style="color:var(--primary); border-bottom:2px solid #eee;">👥 Team Registration (Kids Monk)</h3>
+            <input type="text" id="tName" placeholder="मेंबर का नाम">
+            <input type="text" id="tRole" placeholder="मेंबर का काम (Ex: AC Tech)">
+            <input type="tel" id="tPhone" placeholder="मेंबर का मोबाइल नंबर">
+            <button class="btn-main" style="background:#28a745;" onclick="regTeam()">टीम मेंबर जोड़ें</button>
+            
+            <div id="teamList" style="margin-top:15px;">
+                <div class="member-card"><b>Ravi</b> - Team Head (9927464530)</div>
+            </div>
+        </div>
+        
+        <div class="card">
             <p>कुल आज की बुकिंग: <b>12</b></p>
             <button class="btn-main" style="background:#f44336;" onclick="location.reload()">लॉगआउट</button>
         </div>
@@ -194,25 +211,43 @@
 
     function getLocation() {
         if(navigator.geolocation) {
-            document.getElementById('lStatus').innerText = "...";
+            document.getElementById('lStatus').innerText = "ढूंढ रहे हैं...";
             navigator.geolocation.getCurrentPosition(p => {
                 uLoc = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                document.getElementById('lStatus').innerText = "✅";
+                document.getElementById('lStatus').innerText = "✅ लोकेशन OK";
             });
         }
     }
 
     function sendWA() {
         let num = document.getElementById('custNum').value;
-        if(!num) { alert("नंबर डालें!"); return; }
-        let msg = `नमस्ते,%0A🆔ID: ${curID}%0A📅तारीख: ${document.getElementById('rDate').innerText}%0A⏰समय: ${document.getElementById('rTime').innerText}%0A📞नंबर: ${num}%0A✅सर्विस: ${curItems}%0A💰बिल: ₹${document.getElementById('rAmt').innerText}%0A📍GPS: ${uLoc}`;
+        if(!num) { alert("कृपया कस्टमर नंबर डालें!"); return; }
+        let msg = `*AK SOLUTION HUB*%0A🆔ID: ${curID}%0A📅तारीख: ${document.getElementById('rDate').innerText}%0A⏰समय: ${document.getElementById('rTime').innerText}%0A📞ग्राहक नंबर: ${num}%0A✅सर्विस: ${curItems}%0A💰बिल: ₹${document.getElementById('rAmt').innerText}%0A📍लोकेशन: ${uLoc}`;
         window.location.href = `https://wa.me/919927464530?text=${msg}`;
     }
 
     function checkAdmin() {
         if(document.getElementById('aPass').value === "AK123") {
+            document.getElementById('loginArea').style.display = 'none';
             document.getElementById('aDash').style.display = 'block';
         } else alert("गलत पासवर्ड!");
+    }
+
+    function regTeam() {
+        let name = document.getElementById('tName').value;
+        let role = document.getElementById('tRole').value;
+        let phone = document.getElementById('tPhone').value;
+        if(!name || !role) { alert("विवरण भरें!"); return; }
+        
+        let list = document.getElementById('teamList');
+        let card = `<div class="member-card"><b>${name}</b> - ${role} (${phone})</div>`;
+        list.innerHTML += card;
+        
+        // Clear Inputs
+        document.getElementById('tName').value = "";
+        document.getElementById('tRole').value = "";
+        document.getElementById('tPhone').value = "";
+        alert("टीम मेंबर सफलतापूर्वक रजिस्टर हुआ!");
     }
 </script>
 </body>
