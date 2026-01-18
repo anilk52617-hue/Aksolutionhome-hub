@@ -8,49 +8,41 @@
     <style>
         :root { --primary: #0056b3; --yellow: #ffcc00; --bg: #f4f7f6; --green: #25D366; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 100px; }
-        
         header { background: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .main-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto 5px; overflow: hidden; background: #fff; }
         .main-logo img { width: 100%; height: 100%; object-fit: cover; }
-        
         .marquee-box { background: var(--yellow); padding: 10px 0; font-weight: bold; overflow: hidden; white-space: nowrap; }
         .marquee-text { display: inline-block; animation: scroll-left 25s linear infinite; font-size: 14px; }
         @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        
         .slider-frame { width: 94%; height: 180px; margin: 15px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; }
         .slider-images { display: flex; width: 400%; height: 100%; animation: slide-loop 16s infinite ease-in-out; }
         .each-slide { width: 25%; height: 100%; }
         .each-slide img { width: 100%; height: 100%; object-fit: cover; }
         @keyframes slide-loop { 0%, 20% { transform: translateX(0%); } 25%, 45% { transform: translateX(-25%); } 50%, 70% { transform: translateX(-50%); } 75%, 95% { transform: translateX(-75%); } 100% { transform: translateX(0%); } }
-
         .page { display: none; padding: 10px; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 5px; }
-        .cat-btn { background: white; padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid #ddd; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cat-btn { background: white; padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid #ddd; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.3s; }
+        .cat-btn:active { transform: scale(0.9); }
         .cat-btn i { font-size: 22px; color: var(--primary); }
         .cat-btn div { font-size: 11px; font-weight: bold; margin-top: 5px; }
-
         .sub-box { display: none; background: white; margin: 15px 0; border-radius: 12px; border: 2.5px solid var(--primary); overflow: hidden; }
         .sub-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; font-weight: 500; }
-
         nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); display: flex; justify-content: space-around; padding: 12px 0; z-index: 2000; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); }
         nav a { color: white; text-decoration: none; text-align: center; font-size: 11px; opacity: 0.6; cursor: pointer; flex: 1; }
         nav a.active { opacity: 1; color: var(--yellow); font-weight: bold; }
         nav i { font-size: 18px; margin-bottom: 3px; }
-
         #bookingBar { position: fixed; bottom: 75px; width: 90%; left: 5%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1500; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
         input, textarea { width: 90%; padding: 12px; margin: 10px auto; display: block; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; }
-        
         .success-box { display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 10px; text-align: center; margin: 10px 0; border: 1px solid #c3e6cb; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="main-logo"><img src="57255.jpg"></div>
+    <div class="main-logo"><img src="57255.jpg" alt="Logo"></div>
     <div style="font-size:22px; font-weight:900; color:var(--primary);">AK SOLUTION HUB</div>
     <div style="font-size:12px; color:#666;">खुर्जा, बुलंदशहर (U.P)</div>
 </header>
@@ -81,36 +73,52 @@
         <div class="sub-item"><span>गैस रिफिलिंग</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="AC Gas"></b></div>
         <div class="sub-item"><span>एसी इंस्टालेशन</span><b>₹1199 <input type="checkbox" class="cb" data-p="1199" data-n="AC Install"></b></div>
         <div class="sub-item"><span>रिपेयर विजिट</span><b>₹299 <input type="checkbox" class="cb" data-p="299" data-n="AC Repair"></b></div>
-        <div class="sub-item"><span>एसी अन-इंस्टाल</span><b>₹599 <input type="checkbox" class="cb" data-p="599" data-n="AC Remove"></b></div>
     </div>
 
     <div id="el" class="sub-box">
         <div class="sub-item"><span>पंखा रिपेयर</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Fan Repair"></b></div>
         <div class="sub-item"><span>स्विच बोर्ड फिटिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Work"></b></div>
         <div class="sub-item"><span>इनवर्टर सेटिंग</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="Inverter"></b></div>
-        <div class="sub-item"><span>नई वायरिंग</span><b>₹99 <input type="checkbox" class="cb" data-p="99" data-n="Wiring"></b></div>
-        <div class="sub-item"><span>MCB चेंज</span><b>₹249 <input type="checkbox" class="cb" data-p="249" data-n="MCB Change"></b></div>
+    </div>
+
+    <div id="pl" class="sub-box">
+        <div class="sub-item"><span>नल फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Tap Fitting"></b></div>
+        <div class="sub-item"><span>टंकी सफाई</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Tank Cleaning"></b></div>
+        <div class="sub-item"><span>लीकेज रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Leakage"></b></div>
+    </div>
+
+    <div id="ro" class="sub-box">
+        <div class="sub-item"><span>RO सर्विस</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO Service"></b></div>
+        <div class="sub-item"><span>फिल्टर चेंज</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="RO Filter"></b></div>
+        <div class="sub-item"><span>RO इंस्टालेशन</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="RO Install"></b></div>
+    </div>
+
+    <div id="fr" class="sub-box">
+        <div class="sub-item"><span>गैस चार्जिंग</span><b>₹1499 <input type="checkbox" class="cb" data-p="1499" data-n="Fridge Gas"></b></div>
+        <div class="sub-item"><span>कंप्रेसर रिपेयर</span><b>₹2499 <input type="checkbox" class="cb" data-p="2499" data-n="Compressor"></b></div>
+        <div class="sub-item"><span>थर्मोस्टेट चेंज</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Thermostat"></b></div>
+    </div>
+
+    <div id="gy" class="sub-box">
+        <div class="sub-item"><span>गीजर सर्विस</span><b>₹349 <input type="checkbox" class="cb" data-p="349" data-n="Geyser Service"></b></div>
+        <div class="sub-item"><span>एलिमेंट चेंज</span><b>₹599 <input type="checkbox" class="cb" data-p="599" data-n="Element Change"></b></div>
+        <div class="sub-item"><span>गीजर इंस्टालेशन</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="Geyser Install"></b></div>
     </div>
 </div>
 
 <div id="booking" class="page">
     <div class="card">
         <h3 style="color:var(--primary); text-align:center;">📋 बुकिंग विवरण</h3>
-        
         <div id="sMessage" class="success-box">
             ✅ आपकी कंप्लेंट दर्ज हो गई है!<br>
             <b>Complaint ID: <span id="finalID"></span></b>
         </div>
-
         <div style="background:#eee; padding:8px; border-radius:5px; text-align:center; font-weight:bold; font-size:12px; margin-bottom:10px;">
             Current ID: <span id="tempID">AK-WAIT</span>
         </div>
-
         <p id="bSummary" style="background:#fff9c4; padding:10px; border-radius:8px; font-size:13px;">कोई सर्विस नहीं चुनी गई</p>
-        
         <input type="text" id="uName" placeholder="ग्राहक का पूरा नाम">
         <input type="tel" id="uPhone" placeholder="10 अंकों का मोबाइल नंबर">
-        
         <button onclick="sendWA()" style="width:100%; background:var(--green); color:white; padding:15px; border:none; border-radius:10px; font-weight:bold; font-size:16px;">
             <i class="fab fa-whatsapp"></i> व्हाट्सएप पर बुक करें
         </button>
@@ -118,11 +126,11 @@
 </div>
 
 <div id="review" class="page">
-    <div class="card"><h3>⭐ आपका अनुभव</h3><input type="text" placeholder="नाम"><textarea placeholder="रिव्यू..."></textarea><button onclick="alert('धन्यवाद!')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">सबमिट</button></div>
+    <div class="card"><h3>⭐ आपका अनुभव</h3><input type="text" id="rName" placeholder="नाम"><textarea id="rText" placeholder="रिव्यू..."></textarea><button onclick="alert('धन्यवाद!')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">सबमिट</button></div>
 </div>
 
 <div id="admin" class="page">
-    <div class="card"><h3>🔒 एडमिन</h3><input type="password" placeholder="कोड"><button onclick="alert('Denied')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">लॉगिन</button></div>
+    <div class="card"><h3>🔒 एडमिन</h3><input type="password" id="adminPass" placeholder="कोड"><button onclick="alert('एक्सेस डिनाइड!')" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">लॉगिन</button></div>
 </div>
 
 <div id="bookingBar">कुल बिल: ₹<span id="tBill">0</span> | <span onclick="showPage('booking')" style="text-decoration:underline; cursor:pointer;">बुक करें</span></div>
@@ -142,14 +150,10 @@
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
         document.getElementById('n-' + id).classList.add('active');
-        
         if(id === 'booking') {
-            if(!currentID) {
-                currentID = "AK-" + Math.floor(1000 + Math.random() * 9000);
-            }
+            if(!currentID) currentID = "AK-" + Math.floor(1000 + Math.random() * 9000);
             document.getElementById('tempID').innerText = currentID;
         }
-
         const bill = parseInt(document.getElementById('tBill').innerText);
         document.getElementById('bookingBar').style.display = (id === 'home' && bill > 0) ? 'block' : 'none';
     }
@@ -157,16 +161,12 @@
     function openCat(id) {
         document.querySelectorAll('.sub-box').forEach(b => b.style.display = 'none');
         let target = document.getElementById(id);
-        if(target) {
-            target.style.display = 'block';
-            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        if(target) { target.style.display = 'block'; target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     }
 
     document.addEventListener('change', (e) => {
         if(e.target.classList.contains('cb')) {
-            let total = 0;
-            let items = [];
+            let total = 0; let items = [];
             document.querySelectorAll('.cb:checked').forEach(i => {
                 total += parseInt(i.dataset.p);
                 items.push(i.dataset.n);
@@ -181,41 +181,31 @@
         let name = document.getElementById('uName').value;
         let phone = document.getElementById('uPhone').value;
         let details = document.getElementById('bSummary').innerText;
-        
-        if(name.trim() === "") return alert("कृपया ग्राहक का नाम लिखें");
-        if(phone.length < 10) return alert("कृपया 10 अंकों का सही मोबाइल नंबर डालें");
-        if(details.includes("कोई सर्विस नहीं")) return alert("कृपया सर्विस चुनें");
+        if(name.trim() === "") return alert("कृपया नाम लिखें");
+        if(phone.length < 10) return alert("सही मोबाइल नंबर डालें");
+        if(details.includes("कोई सर्विस नहीं")) return alert("सर्विस चुनें");
 
-        // GPS Location Fix
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 let lat = position.coords.latitude;
                 let lon = position.coords.longitude;
-                let gps = `https://www.google.com/maps?q=${lat},${lon}`;
-                finishBooking(name, phone, details, gps);
+                let mapsLink = `https://www.google.com/maps?q=${lat},${lon}`;
+                finishBooking(name, phone, details, mapsLink);
             }, function() {
-                finishBooking(name, phone, details, "उपलब्ध नहीं (परमिशन नहीं दी)");
+                finishBooking(name, phone, details, "उपलब्ध नहीं");
             });
         } else {
-            finishBooking(name, phone, details, "ब्राउज़र सपोर्ट नहीं करता");
+            finishBooking(name, phone, details, "सपोर्ट नहीं");
         }
     }
 
     function finishBooking(name, phone, details, gps) {
         document.getElementById('finalID').innerText = currentID;
         document.getElementById('sMessage').style.display = "block";
-
-        let msg = `*AK SOLUTION HUB - NEW BOOKING*%0A` +
-                  `------------------------------%0A` +
-                  `🆔 *Complaint ID:* ${currentID}%0A` +
-                  `👤 *Name:* ${name}%0A` +
-                  `📞 *Phone:* ${phone}%0A` +
-                  `🛠️ *Service:* ${details}%0A` +
-                  `📍 *Location:* ${gps}`;
-        
+        let msg = `*AK SOLUTION HUB - NEW BOOKING*%0A------------------------------%0A🆔 *ID:* ${currentID}%0A👤 *Name:* ${name}%0A📞 *Phone:* ${phone}%0A🛠️ *Service:* ${details}%0A📍 *Location:* ${gps}`;
         setTimeout(() => {
             window.open(`https://wa.me/919927464530?text=${msg}`, '_blank');
-            currentID = ""; // Reset for next booking
+            currentID = ""; 
         }, 1200);
     }
 </script>
