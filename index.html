@@ -9,10 +9,12 @@
         :root { --primary: #0056b3; --yellow: #ffcc00; --bg: #f4f7f6; --green: #25D366; --red: #ff3b30; --card: #ffffff; --text: #333; }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-bottom: 100px; color: var(--text); overflow-x: hidden; }
         
+        /* Loader */
         #loader { position: fixed; width: 100%; height: 100%; background: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* Header & UI */
         header { background: white; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .main-logo { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto 8px; overflow: hidden; background: #eee; }
         .main-logo img { width: 100%; height: 100%; object-fit: cover; }
@@ -21,195 +23,63 @@
         .marquee-text { display: inline-block; animation: scroll-left 25s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
         
-        .slider-frame { width: 94%; height: 180px; margin: 15px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .slider-frame { width: 94%; height: 170px; margin: 15px auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .slider-images { display: flex; width: 400%; height: 100%; animation: slide-loop 15s infinite ease-in-out; }
-        .each-slide { width: 25%; height: 100%; }
-        .each-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .each-slide { width: 25%; height: 100%; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #555; }
         @keyframes slide-loop { 0%, 20% { transform: translateX(0%); } 25%, 45% { transform: translateX(-25%); } 50%, 70% { transform: translateX(-50%); } 75%, 95% { transform: translateX(-75%); } 100% { transform: translateX(0%); } }
 
-        .page { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 10px 5px; }
-        .cat-btn { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; border: 1px solid #eee; cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.05); transition: 0.3s; }
-        .cat-btn:active { transform: scale(0.92); }
-        .cat-btn i { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
-        .cat-btn div { font-size: 11px; font-weight: bold; color: #444; }
-
-        .sub-box { display: none; background: white; margin: 15px 0; border-radius: 15px; border: 2px solid var(--primary); overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
-        .sub-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
-        .sub-item b { color: var(--red); display: flex; align-items: center; gap: 8px; }
-
+        /* Navigation */
         nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--primary); display: flex; justify-content: space-around; padding: 12px 0; z-index: 2000; border-top: 3px solid var(--yellow); }
         nav a { color: white; text-decoration: none; text-align: center; font-size: 11px; opacity: 0.7; flex: 1; transition: 0.3s; cursor: pointer; }
-        nav a.active { opacity: 1; color: var(--yellow); transform: translateY(-3px); font-weight: bold; }
+        nav a.active { opacity: 1; color: var(--yellow); font-weight: bold; transform: translateY(-2px); }
         nav i { font-size: 20px; margin-bottom: 4px; }
 
-        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        input, select { width: 90%; padding: 14px; margin: 10px auto; display: block; border-radius: 12px; border: 1px solid #ddd; font-size: 15px; outline: none; }
-        
-        .h-item { border-bottom: 1px solid #eee; padding: 15px; font-size: 13px; position: relative; border-left: 5px solid #ccc; margin-bottom: 12px; background: #fff; border-radius: 0 12px 12px 0; }
-        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; text-transform: uppercase; float: right; }
+        /* Pages & Categories */
+        .page { display: none; padding: 15px; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 5px; }
+        .cat-btn { background: white; padding: 15px 5px; border-radius: 12px; text-align: center; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .cat-btn i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
+        .cat-btn div { font-size: 11px; font-weight: bold; }
+
+        .sub-box { display: none; background: white; margin-top: 15px; border-radius: 12px; border: 1.5px solid var(--primary); overflow: hidden; }
+        .sub-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        .sub-item b { color: var(--red); display: flex; align-items: center; gap: 5px; }
+
+        /* Forms & Cards */
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        input { width: 90%; padding: 12px; margin: 10px auto; display: block; border-radius: 8px; border: 1px solid #ccc; }
+        button { width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* History & Admin Items */
+        .h-item { background: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative; }
+        .status-badge { float: right; font-size: 10px; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; font-weight: bold; }
         .st-pending { background: #fff3cd; color: #856404; }
         .st-completed { background: #d1e7dd; color: #0f5132; }
-        
-        .call-btn { position: fixed; right: 20px; bottom: 130px; background: var(--red); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 25px; z-index: 1000; box-shadow: 0 5px 20px rgba(255, 59, 48, 0.4); animation: pulse 2s infinite; text-decoration: none; }
-        .share-btn { position: fixed; right: 20px; bottom: 200px; background: var(--green); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; }
-        
-        #bookingBar { position: fixed; bottom: 85px; width: 92%; left: 4%; background: #ff9800; color: white; padding: 15px; border-radius: 15px; text-align: center; font-weight: bold; display: none; z-index: 1500; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .wa-notify { color: var(--green); cursor: pointer; font-size: 22px; margin-left: 15px; }
-        .del-btn { color: var(--red); cursor: pointer; font-size: 22px; margin-left: 15px; }
+
+        /* Floating Buttons */
+        .call-btn { position: fixed; right: 20px; bottom: 130px; background: var(--red); color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; z-index: 1000; box-shadow: 0 4px 15px rgba(255,59,48,0.3); text-decoration: none; }
+        #bookingBar { position: fixed; bottom: 85px; width: 90%; left: 5%; background: #ff9800; color: white; padding: 12px; border-radius: 10px; text-align: center; font-weight: bold; display: none; z-index: 1500; }
     </style>
 </head>
-<body onload="hideLoader()">
+<body onload="initApp()">
 
-<div id="loader"><div class="spinner"></div><p style="margin-top:15px; font-weight:bold; color:var(--primary);">AK SOLUTION HUB...</p></div>
+<div id="loader"><div class="spinner"></div><p>AK SOLUTION HUB...</p></div>
 
 <header>
-    <div class="main-logo"><img src="57255.jpg" alt="Logo"></div>
-    <div style="font-size:24px; font-weight:900; color:var(--primary); letter-spacing: 0.5px;">AK SOLUTION HUB</div>
-    <div style="font-size:12px; color:#777; font-weight: bold;">खुर्जा, बुलंदशहर (U.P)</div>
+    <div class="main-logo"><img src="57255.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/85?text=AK'"></div>
+    <div style="font-size:22px; font-weight:900; color:var(--primary);">AK SOLUTION HUB</div>
+    <div style="font-size:11px; font-weight:bold; color:#666;">खुर्जा, बुलंदशहर (U.P)</div>
 </header>
 
-<div class="marquee-box"><div class="marquee-text">⚡ AK-2026: बेहतरीन सर्विस का वादा! डिजिटल रसीद WhatsApp पर प्राप्त करें। 🛠️ विश्वसनीय काम। ⚡</div></div>
+<div class="marquee-box"><div class="marquee-text">⚡ AK-2026: बेहतरीन सर्विस! डिजिटल रसीद WhatsApp पर प्राप्त करें। 🛠️ विश्वसनीय काम। ⚡</div></div>
 
 <a href="tel:+919927464530" class="call-btn"><i class="fas fa-phone-alt"></i></a>
-<div class="share-btn" onclick="shareApp()"><i class="fas fa-share-alt"></i></div>
 
 <div id="home" class="page active">
     <div class="slider-frame">
         <div class="slider-images">
-            <div class="each-slide"><img src="img1.jpg"></div>
-            <div class="each-slide"><img src="img2.jpg"></div>
-            <div class="each-slide"><img src="img3.jpg"></div>
-            <div class="each-slide"><img src="img4.jpg"></div>
-        </div>
-    </div>
-    
-    <div class="cat-grid">
-        <div class="cat-btn" onclick="openCat('ac')"><i class="fas fa-snowflake"></i><div>एसी</div></div>
-        <div class="cat-btn" onclick="openCat('el')"><i class="fas fa-bolt"></i><div>बिजली</div></div>
-        <div class="cat-btn" onclick="openCat('pl')"><i class="fas fa-faucet"></i><div>प्लंबर</div></div>
-        <div class="cat-btn" onclick="openCat('ro')"><i class="fas fa-tint"></i><div>RO</div></div>
-        <div class="cat-btn" onclick="openCat('fr')"><i class="fas fa-icicles"></i><div>फ्रिज</div></div>
-        <div class="cat-btn" onclick="openCat('gy')"><i class="fas fa-hot-tub"></i><div>गीजर</div></div>
-    </div>
-
-    <div id="ac" class="sub-box">
-        <div class="sub-item"><span>एसी सर्विस (Wet)</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="एसी सर्विस"></b></div>
-        <div class="sub-item"><span>एसी फिटिंग</span><b>₹1499 <input type="checkbox" class="cb" data-p="1499" data-n="एसी फिटिंग"></b></div>
-    </div>
-    <div id="el" class="sub-box">
-        <div class="sub-item"><span>बोर्ड फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="बोर्ड फिटिंग"></b></div>
-        <div class="sub-item"><span>फैन रिपेयरिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="फैन रिपेयर"></b></div>
-    </div>
-    <div id="pl" class="sub-box">
-        <div class="sub-item"><span>नल रिपेयर</span><b>₹99 <input type="checkbox" class="cb" data-p="99" data-n="नल रिपेयर"></b></div>
-        <div class="sub-item"><span>पाइप फिटिंग</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="पाइप फिटिंग"></b></div>
-    </div>
-    <div id="ro" class="sub-box">
-        <div class="sub-item"><span>RO सर्विस</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO सर्विस"></b></div>
-        <div class="sub-item"><span>फिल्टर चेंज</span><b>₹799 <input type="checkbox" class="cb" data-p="799" data-n="फिल्टर चेंज"></b></div>
-    </div>
-    <div id="fr" class="sub-box">
-        <div class="sub-item"><span>फ्रिज सर्विस</span><b>₹299 <input type="checkbox" class="cb" data-p="299" data-n="फ्रिज सर्विस"></b></div>
-        <div class="sub-item"><span>गैस चार्जिंग</span><b>₹1199 <input type="checkbox" class="cb" data-p="1199" data-n="फ्रिज गैस"></b></div>
-    </div>
-    <div id="gy" class="sub-box">
-        <div class="sub-item"><span>गीजर सर्विस</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="गीजर सर्विस"></b></div>
-        <div class="sub-item"><span>गीजर फिटिंग</span><b>₹599 <input type="checkbox" class="cb" data-p="599" data-n="गीजर फिटिंग"></b></div>
-    </div>
-</div>
-
-<div id="booking" class="page">
-    <div class="card">
-        <h3 style="text-align:center; color:var(--primary);">📋 बुकिंग फॉर्म</h3>
-        <p id="bSummary" style="background:#fff9c4; padding:15px; border-radius:12px; font-size:14px; border:1px dashed #ffa000;">कोई सर्विस नहीं चुनी गई।</p>
-        <input type="text" id="uName" placeholder="अपना नाम लिखें">
-        <input type="tel" id="uPhone" placeholder="मोबाइल नंबर">
-        <button onclick="sendWA()" style="width:100%; background:var(--green); color:white; padding:16px; border:none; border-radius:12px; font-weight:bold; font-size:16px;">व्हाट्सएप पर बुक करें</button>
-    </div>
-</div>
-
-<div id="history" class="page">
-    <div class="card">
-        <h3 style="text-align:center;"><i class="fas fa-history"></i> आपकी पुरानी बुकिंग्स</h3>
-        <div id="historyList"></div>
-    </div>
-</div>
-
-<div id="admin" class="page">
-    <div class="card" id="loginForm">
-        <h3 style="text-align: center;">🔒 एडमिन लॉगिन</h3>
-        <input type="password" id="admPass" placeholder="पिन कोड दर्ज करें">
-        <button onclick="adminLogin()" style="width:100%; background:var(--primary); color:white; padding:14px; border:none; border-radius:12px; font-weight: bold;">प्रवेश करें</button>
-    </div>
-    
-    <div id="adminDashboard" style="display:none;">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:15px;">
-            <div style="background:var(--primary); color:white; padding:18px; border-radius:15px; text-align:center;">
-                <small>कुल कमाई</small><div id="admEarnings" style="font-size:22px; font-weight:bold;">₹0</div>
-            </div>
-            <div style="background:var(--green); color:white; padding:18px; border-radius:15px; text-align:center;">
-                <small>सफल काम</small><div id="admCount" style="font-size:22px; font-weight:bold;">0</div>
-            </div>
-        </div>
-        
-        <div class="card" style="padding:10px; background:#e3f2fd;">
-            <p style="margin:5px; font-weight:bold; font-size:12px;">मैन्युअल एंट्री (व्हाट्सएप ऑर्डर के लिए):</p>
-            <input type="text" id="mName" placeholder="ग्राहक का नाम" style="padding:8px; margin:5px 0;">
-            <input type="tel" id="mPhone" placeholder="नंबर" style="padding:8px; margin:5px 0;">
-            <input type="number" id="mPrice" placeholder="बिल राशि (₹)" style="padding:8px; margin:5px 0;">
-            <button onclick="addManual()" style="width:100%; background:var(--primary); color:white; padding:10px; border:none; border-radius:8px;">Add Record</button>
-        </div>
-
-        <input type="text" id="admSearch" placeholder="सर्च करें..." oninput="loadData()">
-        <div id="adminAllBookings"></div>
-    </div>
-</div>
-
-<div id="bookingBar">कुल: ₹<span id="tBill">0</span> | <span onclick="showPage('booking')" style="text-decoration:underline; cursor:pointer;">अभी बुक करें</span></div>
-
-<nav>
-    <a onclick="showPage('home')" id="n-home" class="active"><i class="fas fa-home"></i><br>होम</a>
-    <a onclick="showPage('history')" id="n-history"><i class="fas fa-history"></i><br>हिस्ट्री</a>
-    <a onclick="showPage('booking')" id="n-booking"><i class="fas fa-file-invoice"></i><br>बुकिंग</a>
-    <a onclick="showPage('admin')" id="n-admin"><i class="fas fa-lock"></i><br>एडमिन</a>
-</nav>
-
-<script>
-    let currentID = "";
-
-    function hideLoader() { setTimeout(() => { document.getElementById('loader').style.display='none'; loadData(); }, 1200); }
-
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-        document.getElementById('n-' + id).classList.add('active');
-        if(id === 'booking' && !currentID) currentID = "AK-" + Math.floor(1000 + Math.random() * 9000);
-        const bill = parseInt(document.getElementById('tBill').innerText);
-        document.getElementById('bookingBar').style.display = (id === 'home' && bill > 0) ? 'block' : 'none';
-        loadData();
-    }
-
-    function openCat(id) { 
-        document.querySelectorAll('.sub-box').forEach(b => b.style.display = 'none'); 
-        document.getElementById(id).style.display = 'block'; 
-    }
-
-    document.addEventListener('change', (e) => {
-        if(e.target.classList.contains('cb')) {
-            let total = 0, items = [];
-            document.querySelectorAll('.cb:checked').forEach(i => { total += parseInt(i.dataset.p); items.push(i.dataset.n); });
-            document.getElementById('tBill').innerText = total;
-            document.getElementById('bSummary').innerText = items.length > 0 ? items.join(", ") + " | ₹" + total : "कोई सर्विस नहीं चुनी गई।";
-            document.getElementById('bookingBar').style.display = (total > 0 && document.getElementById('home').classList.contains('active')) ? 'block' : 'none';
-        }
-    });
-
-    function sendWA() {
-        let name = document.getElementById('uName').value;
-        let phone = document.getElementById('uPhone').value;
-        let details = document.getElementById('bSummary').innerText
+            <div class="each-slide" style="background:#0056b3; color:white;">Best AC Service</div>
+            <div class="each-slide" style="background:#ffcc00; color:black
