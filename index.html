@@ -3,57 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AK SOLUTION HUB - Admin Pro</title>
+    <title>AK SOLUTION HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #0056b3; --bg: #f8fafc; --green: #2ecc71; --red: #d32f2f; --dark: #2c3e50; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 130px; padding-bottom: 100px; text-align: center; color: #333; }
-        
+        :root { --primary: #0056b3; --bg: #f4f7f9; --green: #2ecc71; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); padding-top: 130px; padding-bottom: 90px; }
+
         /* Header */
-        .header-top { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; border-bottom: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo-box { padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .logo-circle { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; background: #eee; }
-        .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .brand-text { font-weight: 900; color: var(--primary); font-size: 18px; margin-top: 5px; }
-        .ticker-bar { background: var(--primary); color: white; padding: 6px 0; font-size: 11px; font-weight: bold; }
+        .header-top { position: fixed; top: 0; width: 100%; background: white; z-index: 2000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .brand-text { font-weight: 900; color: var(--primary); font-size: 18px; padding: 10px 0; }
+        .ticker-bar { background: var(--primary); color: white; padding: 6px 0; font-size: 11px; }
 
         /* Slider */
-        .slider-box { width: 92%; height: 180px; margin: 15px auto; border-radius: 12px; overflow: hidden; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .slides { display: flex; width: 500%; height: 100%; transition: 0.8s ease-in-out; }
+        .slider-box { width: 94%; height: 160px; margin: 15px auto; border-radius: 12px; overflow: hidden; position: relative; }
+        .slides { display: flex; width: 500%; height: 100%; transition: 0.8s; }
         .slides img { width: 20%; height: 100%; object-fit: cover; }
 
-        /* Pages */
-        .page { display: none; padding: 15px; min-height: 70vh; animation: fadeIn 0.3s; }
+        /* Grid Layout */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; }
+        .card { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; }
+        .card i { font-size: 28px; color: var(--primary); margin-bottom: 8px; display: block; }
+        .card span { font-size: 11px; font-weight: bold; }
+
+        /* फीचर बॉक्स (जो नहीं खुल रहा था) */
+        .feat-box { background: white; border-radius: 15px; padding: 20px; margin: 15px; text-align: left; border: 1px solid #ddd; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .f-item { background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; border-left: 4px solid var(--primary); list-style: none; }
+
+        /* Navigation Bar */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 3000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #666; cursor: pointer; }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+
+        .page { display: none; padding: 10px; }
         .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Admin Booking Card */
-        .booking-card { background: white; border-left: 5px solid var(--primary); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
-        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .act-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; color: white; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; font-size: 13px; }
-        .btn-call { background: var(--green); }
-        .btn-wa { background: #25D366; }
-        .btn-del { background: var(--red); }
-
-        .input-box { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-        .btn-main { background: var(--primary); color: white; width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
-
-        /* Nav Bar */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 70px; z-index: 2000; }
-        .nav-item { flex: 1; font-size: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; cursor: pointer; }
-        .nav-item.active { color: var(--primary); border-top: 3px solid var(--primary); font-weight: bold; }
+        .btn-main { background: var(--green); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="header-top">
-    <div class="logo-box">
-        <div class="logo-circle"><img src="57255.jpg"></div>
-        <div class="brand-text">AK SOLUTION HUB</div>
-    </div>
-    <div class="ticker-bar">
-        <marquee>⚡ एडमिन पैनल लोड हो गया है ⚡</marquee>
-    </div>
+    <div class="brand-text">AK SOLUTION HUB</div>
+    <div class="ticker-bar"><marquee>⚡ प्रोफेशनल सर्विस 30 मिनट में ⚡ 100% संतुष्टि की गारंटी ⚡</marquee></div>
 </div>
 
 <div id="home" class="page active-page">
@@ -62,108 +54,76 @@
             <img src="1.jpg"><img src="2.jpg"><img src="3.jpg"><img src="4.jpg"><img src="5.jpg">
         </div>
     </div>
-    <p>कृपया नीचे दिए गए मेनू से विकल्प चुनें।</p>
-</div>
 
-<div id="admin" class="page">
-    <h3>एडमिन कंट्रोल रूम</h3>
-    
-    <div id="admin-login">
-        <input type="password" id="admin-pass" class="input-box" placeholder="पासवर्ड डालें">
-        <button class="btn-main" onclick="checkAdmin()">लॉगिन करें</button>
+    <div class="grid">
+        <div class="card" onclick="openDetails('ac')"><i class="fas fa-snowflake"></i><span>AC</span></div>
+        <div class="card" onclick="openDetails('elec')"><i class="fas fa-bolt"></i><span>BIJLI</span></div>
+        <div class="card" onclick="openDetails('ro')"><i class="fas fa-tint"></i><span>RO</span></div>
+        <div class="card" onclick="openDetails('wm')"><i class="fas fa-soap"></i><span>WASHING</span></div>
+        <div class="card" onclick="openDetails('fridge')"><i class="fas fa-refrigerator"></i><span>FRIDGE</span></div>
+        <div class="card" onclick="openDetails('plumber')"><i class="fas fa-faucet"></i><span>PLUMBER</span></div>
+        <div class="card" onclick="openDetails('geyser')"><i class="fas fa-hot-tub"></i><span>GEYSER</span></div>
     </div>
 
-    <div id="admin-content" style="display:none;">
-        <input type="text" id="admin-search" class="input-box" placeholder="ग्राहक का नाम या मोबाइल खोजें..." onkeyup="filterOrders()">
-        
-        <div id="order-stats" style="display:flex; justify-content:space-around; margin-bottom:15px; font-weight:bold; color:var(--primary);">
-            <span>कुल बुकिंग: <span id="count-total">0</span></span>
-        </div>
-
-        <div id="bookings-list">
-            </div>
-        
-        <button class="btn-main" style="background:var(--red); margin-top:20px;" onclick="clearData()">सब डाटा साफ़ करें</button>
+    <div id="service-details" class="feat-box">
+        <h3 id="s-name" style="color:var(--primary); margin:0;"></h3>
+        <p><b>उपलब्ध सेवाएं:</b></p>
+        <div id="s-list"></div>
+        <p><b>शुरुआती रेट:</b> <span id="s-price" style="color:var(--green); font-size:18px;"></span></p>
+        <button class="btn-main" onclick="navTo('booking')">अभी बुक करें</button>
     </div>
 </div>
+
+<div id="booking" class="page"><h3>बुकिंग फॉर्म</h3></div>
+<div id="track" class="page"><h3>ट्रैक स्टेटस</h3></div>
+<div id="review" class="page"><h3>रिव्यू</h3></div>
+<div id="admin" class="page"><h3>एडमिन लॉगिन</h3></div>
 
 <div class="nav-bar">
     <div class="nav-item active" onclick="navTo('home', this)"><i class="fas fa-home"></i><span>होम</span></div>
+    <div class="nav-item" onclick="navTo('booking', this)"><i class="fas fa-calendar-alt"></i><span>बुकिंग</span></div>
+    <div class="nav-item" onclick="navTo('track', this)"><i class="fas fa-map-marker-alt"></i><span>ट्रैक</span></div>
+    <div class="nav-item" onclick="navTo('review', this)"><i class="fas fa-star"></i><span>रिव्यू</span></div>
     <div class="nav-item" onclick="navTo('admin', this)"><i class="fas fa-user-shield"></i><span>एडमिन</span></div>
 </div>
 
 <script>
-    // एडमिन लॉगिन चेक
-    function checkAdmin() {
-        const pass = document.getElementById('admin-pass').value;
-        if(pass === "AK123") {
-            document.getElementById('admin-login').style.display = "none";
-            document.getElementById('admin-content').style.display = "block";
-            loadOrders();
-        } else {
-            alert("गलत पासवर्ड!");
-        }
+    const data = {
+        ac: { n: "AC सर्विस", p: "₹499", f: ["जेट क्लीनिंग", "गैस चार्जिंग", "इंस्टॉलेशन"] },
+        elec: { n: "बिजली रिपेयर", p: "₹199", f: ["वायरिंग", "लाइट फिटिंग", "शॉर्ट सर्किट"] },
+        ro: { n: "RO सर्विस", p: "₹399", f: ["फिल्टर बदलना", "टीडीएस चेक", "मेम्ब्रेन"] },
+        wm: { n: "वॉशिंग मशीन", p: "₹499", f: ["ड्रम क्लीनिंग", "मोटर रिपेयर", "लीकेज"] },
+        fridge: { n: "फ्रिज रिपेयर", p: "₹350", f: ["गैस रिफिल", "कंप्रेसर चेक", "कूलिंग"] },
+        plumber: { n: "प्लंबर सेवा", p: "₹99", f: ["नल रिपेयर", "टंकी सफाई", "पाइप फिटिंग"] },
+        geyser: { n: "गीजर सर्विस", p: "₹399", f: ["एलिमेंट बदलना", "थर्मोस्टेट", "इंस्टॉलेशन"] }
+    };
+
+    // फीचर खोलने का फंक्शन
+    function openDetails(id) {
+        const s = data[id];
+        const box = document.getElementById('service-details');
+        box.style.display = "block";
+        document.getElementById('s-name').innerText = s.n;
+        document.getElementById('s-price').innerText = s.p;
+        document.getElementById('s-list').innerHTML = s.f.map(item => `<div class="f-item">✔ ${item}</div>`).join('');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // बुकिंग्स लोड करना
-    function loadOrders() {
-        const list = document.getElementById('bookings-list');
-        const bks = JSON.parse(localStorage.getItem('ak_bookings') || "[]");
-        document.getElementById('count-total').innerText = bks.length;
-        
-        list.innerHTML = "";
-        bks.reverse().forEach((b, index) => {
-            list.innerHTML += `
-                <div class="booking-card">
-                    <small style="color:gray;">#${index + 1} | ${b.date}</small>
-                    <h4 style="margin:5px 0; color:var(--primary);">${b.service || "सेवा उपलब्ध नहीं"}</h4>
-                    <b>नाम:</b> ${b.name}<br>
-                    <b>फोन:</b> ${b.phone}<br>
-                    <b>पता:</b> ${b.address || b.addr}<br>
-                    
-                    <div class="action-btns">
-                        <a href="tel:${b.phone}" class="act-btn btn-call"><i class="fas fa-phone"></i> कॉल</a>
-                        <a href="https://wa.me/91${b.phone}" class="act-btn btn-wa"><i class="fab fa-whatsapp"></i> चैट</a>
-                        <a href="${b.location || b.gpsLink}" target="_blank" class="act-btn" style="background:orange;"><i class="fas fa-map-marker-alt"></i> मैप</a>
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    // सर्च फिल्टर
-    function filterOrders() {
-        const query = document.getElementById('admin-search').value.toLowerCase();
-        const cards = document.querySelectorAll('.booking-card');
-        cards.forEach(card => {
-            card.style.display = card.innerText.toLowerCase().includes(query) ? "block" : "none";
-        });
-    }
-
+    // पेज बदलने का फंक्शन
     function navTo(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        el.classList.add('active');
+        if(el) el.classList.add('active');
+        window.scrollTo(0,0);
     }
 
-    function clearData() {
-        if(confirm("क्या आप वाकई सारा डाटा डिलीट करना चाहते हैं?")) {
-            localStorage.removeItem('ak_bookings');
-            loadOrders();
-        }
-    }
-
-    // Slider Logic
-    let sIdx = 0;
+    // स्लाइडर
+    let step = 0;
     setInterval(() => {
         const s = document.getElementById('slider');
-        if(s) {
-            sIdx = (sIdx + 1) % 5;
-            s.style.transform = `translateX(-${sIdx * 20}%)`;
-        }
+        if(s) { step = (step + 1) % 5; s.style.transform = `translateX(-${step * 20}%)`; }
     }, 3000);
 </script>
-
 </body>
 </html>
