@@ -47,10 +47,11 @@
         nav i { font-size: 18px; margin-bottom: 3px; }
 
         .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        input, select { width: 90%; padding: 12px; margin: 10px auto; display: block; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; }
+        input, select { width: 95%; padding: 12px; margin: 10px auto; display: block; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; }
         
         .h-item { border-bottom: 1px solid #eee; padding: 12px 0; font-size: 13px; position: relative; }
         .status-badge { background: #fff3cd; color: #856404; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .assign-badge { background: #e8f5e9; color: #2e7d32; padding: 2px 6px; border-radius: 4px; font-size: 10px; display: inline-block; margin-top: 5px; }
         .h-id { color: var(--primary); font-weight: bold; }
 
         .call-btn { position: fixed; right: 20px; bottom: 130px; background: var(--red); color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; z-index: 1000; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); animation: pulse 2s infinite; }
@@ -58,8 +59,6 @@
         
         #bookingBar { position: fixed; bottom: 70px; width: 90%; left: 5%; background: #ff9800; color: white; padding: 12px; border-radius: 12px; text-align: center; font-weight: bold; display: none; z-index: 1500; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .del-btn { color: var(--red); font-size: 16px; cursor: pointer; float: right; margin-left: 10px; }
-        
-        /* Team Section Styles */
         .team-tag { background: #e3f2fd; color: #0d47a1; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-top: 5px; display: inline-block; }
     </style>
 </head>
@@ -73,7 +72,7 @@
     <div style="font-size:11px; color:#666;">खुर्जा, बुलंदशहर (U.P)</div>
 </header>
 
-<div class="marquee-box"><div class="marquee-text">🛠️ खुर्जा की बेस्ट होम सर्विस | 100% संतोषजनक सेवा | टीम रजिस्ट्रेशन उपलब्ध 🛠️</div></div>
+<div class="marquee-box"><div class="marquee-text">🛠️ खुर्जा की बेस्ट होम सर्विस | टीम असाइनमेंट फीचर लाइव | AK-2026 🛠️</div></div>
 
 <a href="tel:+919927464530" class="call-btn"><i class="fas fa-phone-alt"></i></a>
 
@@ -97,23 +96,24 @@
     </div>
 
     <div id="ac" class="sub-box">
-        <div class="sub-item"><span>एसी सर्विस (Wet)</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="AC Service"></b></div>
-        <div class="sub-item"><span>गैस रिफिलिंग</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="AC Gas"></b></div>
+        <div class="sub-item"><span>एसी सर्विस</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="AC Service"></b></div>
+        <div class="sub-item"><span>गैस चार्ज</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="AC Gas"></b></div>
     </div>
     <div id="el" class="sub-box">
-        <div class="sub-item"><span>बिजली फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Electric Point"></b></div>
+        <div class="sub-item"><span>हाउस वायरिंग</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="Wiring"></b></div>
     </div>
+    <div id="pl" class="sub-box">
+        <div class="sub-item"><span>नल रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Plumber"></b></div>
     </div>
+</div>
 
 <div id="booking" class="page">
     <div class="card">
         <h3 style="text-align:center; color:var(--primary);">📋 बुकिंग विवरण</h3>
         <p id="bSummary" style="background:#fff9c4; padding:12px; border-radius:8px; font-size:13px; border:1px dashed #ffa000;">कोई सर्विस नहीं चुनी गई</p>
         <input type="text" id="uName" placeholder="आपका पूरा नाम">
-        <input type="tel" id="uPhone" placeholder="मोबाइल नंबर (10 अंक)">
-        <button onclick="sendWA()" style="width:100%; background:var(--green); color:white; padding:15px; border:none; border-radius:10px; font-weight:bold; font-size:16px;">
-            <i class="fab fa-whatsapp"></i> व्हाट्सएप पर बुक करें
-        </button>
+        <input type="tel" id="uPhone" placeholder="मोबाइल नंबर">
+        <button onclick="sendWA()" style="width:100%; background:var(--green); color:white; padding:15px; border:none; border-radius:10px; font-weight:bold;">व्हाट्सएप पर बुक करें</button>
     </div>
 </div>
 
@@ -127,35 +127,28 @@
 <div id="admin" class="page">
     <div class="card" id="loginForm">
         <h3>🔒 एडमिन लॉगिन</h3>
-        <input type="password" id="admPass" placeholder="एडमिन पिन कोड">
+        <input type="password" id="admPass" placeholder="पिन कोड">
         <button onclick="adminLogin()" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">लॉगिन</button>
     </div>
     
     <div id="adminDashboard" style="display:none;">
-        <div class="card" style="border-left: 5px solid var(--primary);">
+        <div class="card">
             <h3 style="color:var(--primary);"><i class="fas fa-user-plus"></i> टीम रजिस्ट्रेशन</h3>
             <input type="text" id="tMemberName" placeholder="टेक्नीशियन का नाम">
-            <select id="tMemberSkill">
-                <option value="">हुनर चुनें</option>
-                <option value="एसी टेक्नीशियन">एसी टेक्नीशियन</option>
-                <option value="इलेक्ट्रीशियन">इलेक्ट्रीशियन</option>
-                <option value="प्लंबर">प्लंबर</option>
-                <option value="RO एक्सपर्ट">RO एक्सपर्ट</option>
-            </select>
+            <input type="text" id="tMemberSkill" placeholder="हुनर (उदा: प्लंबर)">
             <button onclick="addTeamMember()" style="width:100%; background:var(--primary); color:white; padding:10px; border:none; border-radius:8px;">मेंबर जोड़ें</button>
-            <div id="teamDisplayList" style="margin-top:15px; border-top:1px solid #eee; padding-top:10px;"></div>
+            <div id="teamDisplayList" style="margin-top:10px; font-size:12px;"></div>
         </div>
 
         <div class="card">
-            <h3 style="color:var(--primary);">📊 सभी बुकिंग्स</h3>
+            <h3 style="color:var(--primary);">📊 बुकिंग्स असाइन करें</h3>
             <div id="adminAllBookings"></div>
-            <button onclick="clearData()" style="background:var(--red); color:white; border:none; width:100%; padding:12px; margin-top:15px; border-radius:10px; font-weight:bold;">सारा डेटा डिलीट करें</button>
-            <button onclick="location.reload()" style="background:#666; color:white; border:none; width:100%; padding:10px; margin-top:10px; border-radius:10px;">लॉगआउट</button>
+            <button onclick="clearData()" style="background:var(--red); color:white; width:100%; padding:10px; border-radius:10px; margin-top:20px;">डेटा क्लियर करें</button>
         </div>
     </div>
 </div>
 
-<div id="bookingBar">कुल बिल: ₹<span id="tBill">0</span> | <span onclick="showPage('booking')" style="text-decoration:underline; cursor:pointer;">बुक करें</span></div>
+<div id="bookingBar">कुल बिल: ₹<span id="tBill">0</span> | <span onclick="showPage('booking')" style="text-decoration:underline;">बुक करें</span></div>
 
 <nav>
     <a onclick="showPage('home')" id="n-home" class="active"><i class="fas fa-home"></i><br>होम</a>
@@ -167,15 +160,112 @@
 <script>
     let currentID = "";
 
-    function hideLoader() { 
-        setTimeout(() => { 
-            document.getElementById('loader').style.display='none'; 
-            loadData(); 
-            loadTeam();
-        }, 1000); 
-    }
+    function hideLoader() { setTimeout(() => { document.getElementById('loader').style.display='none'; loadData(); loadTeam(); }, 1000); }
 
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        document.querySelectorAll('nav
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById('n-' + id).classList.add('active');
+        if(id === 'booking' && !currentID) currentID = "AK-" + Math.floor(1000 + Math.random() * 9000);
+        const bill = parseInt(document.getElementById('tBill').innerText);
+        document.getElementById('bookingBar').style.display = (id === 'home' && bill > 0) ? 'block' : 'none';
+    }
+
+    function openCat(id) {
+        document.querySelectorAll('.sub-box').forEach(b => b.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+    }
+
+    document.addEventListener('change', (e) => {
+        if(e.target.classList.contains('cb')) {
+            let total = 0, items = [];
+            document.querySelectorAll('.cb:checked').forEach(i => { total += parseInt(i.dataset.p); items.push(i.dataset.n); });
+            document.getElementById('tBill').innerText = total;
+            document.getElementById('bSummary').innerText = items.length > 0 ? items.join(", ") + " | ₹" + total : "कोई सर्विस नहीं चुनी गई";
+        }
+    });
+
+    function sendWA() {
+        let name = document.getElementById('uName').value;
+        let phone = document.getElementById('uPhone').value;
+        let details = document.getElementById('bSummary').innerText;
+        if(!name || phone.length < 10) return alert("नाम और नंबर भरें");
+        
+        let booking = { id: currentID, name: name, phone: phone, service: details, date: new Date().toLocaleString(), assigned: "असाइन नहीं" };
+        let history = JSON.parse(localStorage.getItem('ak_data') || "[]");
+        history.unshift(booking);
+        localStorage.setItem('ak_data', JSON.stringify(history));
+        window.open(`https://wa.me/919927464530?text=ID: ${currentID}%0Aनाम: ${name}%0Aसेवा: ${details}`);
+        location.reload();
+    }
+
+    function addTeamMember() {
+        let name = document.getElementById('tMemberName').value;
+        let skill = document.getElementById('tMemberSkill').value;
+        if(!name) return;
+        let team = JSON.parse(localStorage.getItem('ak_team') || "[]");
+        team.push({ name: name, skill: skill });
+        localStorage.setItem('ak_team', JSON.stringify(team));
+        loadTeam();
+    }
+
+    function loadTeam() {
+        let team = JSON.parse(localStorage.getItem('ak_team') || "[]");
+        document.getElementById('teamDisplayList').innerHTML = team.map(t => `<div><b>${t.name}</b> (${t.skill})</div>`).join('');
+    }
+
+    function loadData() {
+        let history = JSON.parse(localStorage.getItem('ak_data') || "[]");
+        let team = JSON.parse(localStorage.getItem('ak_team') || "[]");
+
+        // Customer History View
+        document.getElementById('historyList').innerHTML = history.map(h => `
+            <div class="h-item">
+                <span class="status-badge">पेंडिंग</span>
+                <div class="h-id">${h.id}</div>
+                <div>${h.service}</div>
+                <div class="assign-badge"><i class="fas fa-user-tools"></i> टीम: ${h.assigned}</div>
+            </div>
+        `).join('') || "कोई बुकिंग नहीं";
+
+        // Admin Assignment View
+        document.getElementById('adminAllBookings').innerHTML = history.map((h, i) => `
+            <div class="h-item">
+                <i class="fas fa-trash-alt del-btn" onclick="deleteBooking(${i})"></i>
+                <b>${h.name}</b> (${h.phone})<br>
+                <small>${h.service}</small><br>
+                <select onchange="assignTask(${i}, this.value)" style="width:100%; margin-top:5px; height:30px; font-size:12px;">
+                    <option>${h.assigned}</option>
+                    ${team.map(t => `<option value="${t.name}">${t.name}</option>`).join('')}
+                </select>
+            </div>
+        `).join('') || "डेटा खाली है";
+    }
+
+    function assignTask(index, val) {
+        let history = JSON.parse(localStorage.getItem('ak_data'));
+        history[index].assigned = val;
+        localStorage.setItem('ak_data', JSON.stringify(history));
+        alert("टीम असाइन कर दी गई है!");
+        loadData();
+    }
+
+    function deleteBooking(i) {
+        let history = JSON.parse(localStorage.getItem('ak_data'));
+        history.splice(i, 1);
+        localStorage.setItem('ak_data', JSON.stringify(history));
+        loadData();
+    }
+
+    function adminLogin() {
+        if(document.getElementById('admPass').value === "2026") {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+        } else { alert("गलत पिन!"); }
+    }
+
+    function clearData() { if(confirm("सारा डेटा उड़ा दें?")) { localStorage.clear(); location.reload(); } }
+</script>
+</body>
+</html>
