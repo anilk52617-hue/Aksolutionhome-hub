@@ -103,43 +103,9 @@
     <div id="el" class="sub-box">
         <div class="sub-item"><span>बिजली फिटिंग (Point)</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Electric Point Fitting"></b></div>
         <div class="sub-item"><span>नया हाउस वायरिंग</span><b>₹999 <input type="checkbox" class="cb" data-p="999" data-n="Full House Wiring"></b></div>
-        <div class="sub-item"><span>एमसीबी बॉक्स फिटिंग</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="MCB Box Fitting"></b></div>
-        <div class="sub-item"><span>बोर्ड फिटिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Fitting"></b></div>
-        <div class="sub-item"><span>पंखा रिपेयर</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Fan Repair"></b></div>
+        <div class="sub-item"><span>बोर्ड रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Board Repair"></b></div>
     </div>
-
-    <div id="pl" class="sub-box">
-        <div class="sub-item"><span>वाटर फिटिंग (CPVC)</span><b>₹1999 <input type="checkbox" class="cb" data-p="1999" data-n="Water Fitting"></b></div>
-        <div class="sub-item"><span>टंकी (Tank) फिटिंग</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="Tank Fitting"></b></div>
-        <div class="sub-item"><span>नल (Tap) फिटिंग</span><b>₹149 <input type="checkbox" class="cb" data-p="149" data-n="Tap Fitting"></b></div>
-        <div class="sub-item"><span>शावर (Shower) फिटिंग</span><b>₹249 <input type="checkbox" class="cb" data-p="249" data-n="Shower Fitting"></b></div>
-        <div class="sub-item"><span>लीकेज रिपेयर</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Leaking Repair"></b></div>
     </div>
-
-    <div id="ro" class="sub-box">
-        <div class="sub-item"><span>RO सर्विस (Wet)</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="RO Service"></b></div>
-        <div class="sub-item"><span>मेम्ब्रेन चेंज</span><b>₹1200 <input type="checkbox" class="cb" data-p="1200" data-n="Membrane Change"></b></div>
-        <div class="sub-item"><span>फिल्टर किट चेंज</span><b>₹850 <input type="checkbox" class="cb" data-p="850" data-n="Filter Kit Change"></b></div>
-        <div class="sub-item"><span>RO इंस्टॉलेशन</span><b>₹499 <input type="checkbox" class="cb" data-p="499" data-n="RO Install"></b></div>
-        <div class="sub-item"><span>पंप रिपेयर</span><b>₹950 <input type="checkbox" class="cb" data-p="950" data-n="RO Pump Repair"></b></div>
-    </div>
-
-    <div id="fr" class="sub-box">
-        <div class="sub-item"><span>फ्रिज गैस चार्ज</span><b>₹1499 <input type="checkbox" class="cb" data-p="1499" data-n="Fridge Gas"></b></div>
-        <div class="sub-item"><span>कंप्रेसर रिपेयर</span><b>₹2500 <input type="checkbox" class="cb" data-p="2500" data-n="Compressor"></b></div>
-        <div class="sub-item"><span>थर्मोस्टेट चेंज</span><b>₹450 <input type="checkbox" class="cb" data-p="450" data-n="Thermostat"></b></div>
-        <div class="sub-item"><span>फ्रिज वायरिंग</span><b>₹299 <input type="checkbox" class="cb" data-p="299" data-n="Fridge Wiring"></b></div>
-        <div class="sub-item"><span>रिले/OLP चेंज</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Relay Change"></b></div>
-    </div>
-
-    <div id="gy" class="sub-box">
-        <div class="sub-item"><span>गीजर सर्विस (Wet)</span><b>₹349 <input type="checkbox" class="cb" data-p="349" data-n="Geyser Service"></b></div>
-        <div class="sub-item"><span>एलिमेंट चेंज</span><b>₹750 <input type="checkbox" class="cb" data-p="750" data-n="Geyser Element"></b></div>
-        <div class="sub-item"><span>गीजर इंस्टॉलेशन</span><b>₹399 <input type="checkbox" class="cb" data-p="399" data-n="Geyser Install"></b></div>
-        <div class="sub-item"><span>पाइप फिटिंग</span><b>₹199 <input type="checkbox" class="cb" data-p="199" data-n="Geyser Pipe"></b></div>
-        <div class="sub-item"><span>थर्मोस्टेट रिपेयर</span><b>₹350 <input type="checkbox" class="cb" data-p="350" data-n="Geyser Thermo"></b></div>
-    </div>
-</div>
 
 <div id="booking" class="page">
     <div class="card">
@@ -164,4 +130,109 @@
     <div class="card" id="loginForm">
         <h3>🔒 एडमिन लॉगिन</h3>
         <input type="password" id="admPass" placeholder="एडमिन पिन कोड">
-        <button onclick="adminLogin()" style="width:100%; background:var(--primary); color
+        <button onclick="adminLogin()" style="width:100%; background:var(--primary); color:white; padding:12px; border:none; border-radius:10px;">लॉगिन</button>
+    </div>
+    
+    <div id="adminDashboard" style="display:none;">
+        <div class="card">
+            <h3 style="color:var(--primary);">📊 एडमिन पैनल</h3>
+            <div id="adminAllBookings"></div>
+            <button onclick="clearData()" style="background:var(--red); color:white; border:none; width:100%; padding:12px; margin-top:15px; border-radius:10px; font-weight:bold;">सारा डेटा डिलीट करें</button>
+            <button onclick="location.reload()" style="background:#666; color:white; border:none; width:100%; padding:10px; margin-top:10px; border-radius:10px;">लॉगआउट</button>
+        </div>
+    </div>
+</div>
+
+<div id="bookingBar">कुल बिल: ₹<span id="tBill">0</span> | <span onclick="showPage('booking')" style="text-decoration:underline; cursor:pointer;">बुक करें</span></div>
+
+<nav>
+    <a onclick="showPage('home')" id="n-home" class="active"><i class="fas fa-home"></i><br>होम</a>
+    <a onclick="showPage('history')" id="n-history"><i class="fas fa-history"></i><br>हिस्ट्री</a>
+    <a onclick="showPage('booking')" id="n-booking"><i class="fas fa-file-invoice"></i><br>बुकिंग</a>
+    <a onclick="showPage('admin')" id="n-admin"><i class="fas fa-lock"></i><br>एडमिन</a>
+</nav>
+
+<script>
+    let currentID = "";
+
+    function hideLoader() { 
+        setTimeout(() => { 
+            document.getElementById('loader').style.display='none'; 
+            loadData(); 
+        }, 1000); 
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        document.getElementById('n-' + id).classList.add('active');
+        
+        if(id === 'booking' && !currentID) {
+            currentID = "AK-" + Math.floor(1000 + Math.random() * 9999);
+        }
+        
+        const bill = parseInt(document.getElementById('tBill').innerText);
+        document.getElementById('bookingBar').style.display = (id === 'home' && bill > 0) ? 'block' : 'none';
+        window.scrollTo(0,0);
+    }
+
+    function openCat(id) {
+        document.querySelectorAll('.sub-box').forEach(b => b.style.display = 'none');
+        let target = document.getElementById(id);
+        if(target) target.style.display = 'block';
+    }
+
+    document.addEventListener('change', (e) => {
+        if(e.target.classList.contains('cb')) {
+            let total = 0, items = [];
+            document.querySelectorAll('.cb:checked').forEach(i => {
+                total += parseInt(i.dataset.p);
+                items.push(i.dataset.n);
+            });
+            document.getElementById('tBill').innerText = total;
+            document.getElementById('bSummary').innerText = items.length > 0 ? items.join(", ") + " | कुल बिल: ₹" + total : "कोई सर्विस नहीं चुनी गई";
+            document.getElementById('bookingBar').style.display = (total > 0 && document.getElementById('home').classList.contains('active')) ? 'block' : 'none';
+        }
+    });
+
+    function sendWA() {
+        let name = document.getElementById('uName').value;
+        let phone = document.getElementById('uPhone').value;
+        let details = document.getElementById('bSummary').innerText;
+        
+        if(!name || phone.length < 10) return alert("नाम और 10 अंकों का नंबर सही डालें");
+        if(details.includes("कोई सर्विस नहीं")) return alert("कृपया सर्विस चुनें");
+
+        let booking = { id: currentID, name: name, phone: phone, service: details, date: new Date().toLocaleString() };
+        let history = JSON.parse(localStorage.getItem('ak_data') || "[]");
+        history.unshift(booking);
+        localStorage.setItem('ak_data', JSON.stringify(history));
+
+        let msg = `*AK SOLUTION HUB*%0AID: ${currentID}%0Aनाम: ${name}%0Aफोन: ${phone}%0Aसर्विस: ${details}`;
+        window.open(`https://wa.me/919927464530?text=${msg}`);
+        location.reload();
+    }
+
+    function loadData() {
+        let history = JSON.parse(localStorage.getItem('ak_data') || "[]");
+        let list = history.map(h => `<div class="h-item"><span class="status-badge">पेंडिंग</span><div class="h-id">${h.id}</div><div>${h.service}</div><small>${h.date}</small></div>`).join('');
+        document.getElementById('historyList').innerHTML = list || "कोई बुकिंग नहीं";
+        
+        let adminList = history.map(h => `<div class="h-item"><b>${h.name}</b> (${h.phone})<br>${h.service}<br><small>${h.date}</small></div>`).join('');
+        document.getElementById('adminAllBookings').innerHTML = adminList || "डेटा खाली है";
+    }
+
+    function adminLogin() {
+        if(document.getElementById('admPass').value === "2026") {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('adminDashboard').style.display = 'block';
+        } else { alert("गलत पिन!"); }
+    }
+
+    function clearData() {
+        if(confirm("क्या आप वाकई डेटा डिलीट करना चाहते हैं?")) { localStorage.clear(); location.reload(); }
+    }
+</script>
+</body>
+</html>
