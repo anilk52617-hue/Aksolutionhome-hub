@@ -3,49 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK SOLUTION HUB - Final</title>
+    <title>AK SOLUTION HUB - Final Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --p: #0056b3; --bg: #f4f7f9; --g: #2ecc71; --w: #ffffff; --o: #e67e22; }
+        :root { --p: #0056b3; --bg: #f4f7f9; --g: #2ecc71; --w: #ffffff; --o: #e67e22; --r: #e74c3c; }
         body { margin: 0; font-family: sans-serif; background: var(--bg); padding-top: 150px; padding-bottom: 90px; }
         
-        /* Floating Call */
         .float-call { position: fixed; bottom: 100px; right: 20px; background: var(--g); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 5000; text-decoration: none; font-size: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-
-        /* Header */
         .header-top { position: fixed; top: 0; left: 0; width: 100%; background: var(--w); z-index: 4500; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo-box { padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .logo-circle { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--p); overflow: hidden; background: #eee; }
+        .logo-circle { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--p); overflow: hidden; margin: 10px auto 5px; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .brand-text { font-weight: 900; color: var(--p); font-size: 22px; margin-top: 5px; }
-        .ticker-bar { background: var(--p); color: white; padding: 6px 0; font-size: 11px; }
+        .brand-text { font-weight: 900; color: var(--p); font-size: 22px; }
+        .ticker-bar { background: var(--p); color: white; padding: 6px 0; font-size: 11px; margin-top: 5px; }
         
-        /* Slider */
         .slider-box { width: 92%; height: 175px; margin: 15px auto; border-radius: 15px; overflow: hidden; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .slides { display: flex; width: 500%; height: 100%; transition: 0.8s ease-in-out; }
+        .slides { display: flex; width: 500%; height: 100%; transition: 0.8s; }
         .slides img { width: 20%; height: 100%; object-fit: cover; }
-
-        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 12px; }
-        .card { background: var(--w); aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; transition: 0.2s; }
-        .card:active { transform: scale(0.95); background: #f9f9f9; }
+        .card { background: var(--w); aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 15px; border: 1px solid #eee; cursor: pointer; }
         .card i { font-size: 24px; color: var(--p); margin-bottom: 6px; }
-        .card span { font-size: 9px; font-weight: bold; color: #333; }
+        .card span { font-size: 9px; font-weight: bold; }
 
-        /* Detail Box */
-        .feat-box { background: white; border-radius: 15px; padding: 20px; text-align: left; display: none; margin: 15px auto; border-top: 4px solid var(--o); box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 88%; }
-        
-        /* Pages */
+        .feat-box { background: white; border-radius: 15px; padding: 20px; display: none; margin: 15px auto; border-top: 4px solid var(--o); width: 88%; text-align: left; }
         .page { display: none; padding: 15px; text-align: center; min-height: 60vh; }
         .active-page { display: block; }
+        .input-box { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 14px; }
+        .btn-main { background: var(--g); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
 
-        /* Forms */
-        .input-box { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 15px; outline: none; }
-        .btn-main { background: var(--g); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-
-        /* Bottom Nav */
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 6000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: #7f8c8d; cursor: pointer; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 6000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: #7f8c8d; cursor: pointer;}
         .nav-item.active { color: var(--p); font-weight: bold; border-top: 3.5px solid var(--p); }
     </style>
 </head>
@@ -54,11 +40,9 @@
     <a href="tel:9927464530" class="float-call"><i class="fas fa-phone-alt"></i></a>
 
     <div class="header-top">
-        <div class="logo-box">
-            <div class="logo-circle"><img src="57255.jpg"></div>
-            <div class="brand-text">AK SOLUTION HUB</div>
-        </div>
-        <div class="ticker-bar"><marquee>⚡ AK SOLUTION HUB - प्रोफेशनल होम सर्विस | 30 मिनट में एक्सप्रेस रिपेयरिंग ⚡</marquee></div>
+        <div class="logo-circle"><img src="57255.jpg"></div>
+        <div class="brand-text">AK SOLUTION HUB</div>
+        <div class="ticker-bar"><marquee>⚡ प्रोफेशनल होम सर्विस | 30 मिनट में पहुँच | अभी बुक करें ⚡</marquee></div>
     </div>
 
     <div id="home" class="page active-page">
@@ -74,8 +58,8 @@
         </div>
         <div id="service-details" class="feat-box">
             <h3 id="s-name" style="margin:0; color:var(--p);"></h3>
-            <div id="s-list" style="font-size:14px; color:#444; margin:10px 0; line-height:1.6;"></div>
-            <button class="btn-main" onclick="navTo('booking', document.getElementById('nbBtn'))" style="background:var(--p); margin-top:10px;">आगे बढ़ें</button>
+            <div id="s-list" style="font-size:14px; margin:10px 0; line-height:1.5;"></div>
+            <button class="btn-main" onclick="navTo('booking', document.getElementById('nbBtn'))" style="background:var(--p)">अभी बुक करें</button>
         </div>
     </div>
 
@@ -85,12 +69,36 @@
         <input type="tel" id="c-phone" class="input-box" placeholder="मोबाइल नंबर">
         <button onclick="getGPS()" class="input-box" id="gps-btn" style="background:#00a8ff; color:white; border:none; font-weight:bold;">📍 लाइव लोकेशन जोड़ें</button>
         <textarea id="c-addr" class="input-box" rows="3" placeholder="पूरा पता लिखें..."></textarea>
-        <button class="btn-main" onclick="sendToWA()">व्हाट्सएप पर बुकिंग भेजें</button>
+        <button class="btn-main" onclick="sendToWA()">व्हाट्सएप पर भेजें</button>
     </div>
 
-    <div id="track" class="page"><h3>ट्रैक सर्विस</h3><p>आपका एक्सपर्ट रास्ते में है। वह 30 मिनट में पहुँच जाएगा।</p></div>
-    <div id="review" class="page"><h3>रिव्यू</h3><p>⭐⭐⭐⭐⭐ - अमित (शानदार काम!)</p></div>
-    <div id="admin" class="page"><h3>एडमिन लॉगिन</h3><input type="password" class="input-box" placeholder="पासवर्ड"></div>
+    <div id="admin" class="page">
+        <div id="admin-login">
+            <h3 style="color:var(--p)">🔐 एडमिन लॉगिन</h3>
+            <input type="password" id="adm-pass" class="input-box" placeholder="पासवर्ड (AK123)">
+            <button class="btn-main" onclick="checkAdmin()" style="background:var(--p)">लॉगिन</button>
+        </div>
+        <div id="admin-dashboard" style="display:none; text-align:left;">
+            <h3 style="text-align:center; color:var(--g)">✅ एडमिन कंट्रोल</h3>
+            <div style="background:white; padding:15px; border-radius:15px; margin-bottom:15px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h4 style="margin:0 0 10px 0;">👷 टीम रजिस्ट्रेशन</h4>
+                <input type="text" id="t-name" class="input-box" placeholder="वर्कर का नाम">
+                <input type="tel" id="t-phone" class="input-box" placeholder="मोबाइल नंबर">
+                <select id="t-skill" class="input-box">
+                    <option>AC एक्सपर्ट</option><option>इलेक्ट्रीशियन</option><option>प्लंबर</option><option>RO एक्सपर्ट</option>
+                </select>
+                <button class="btn-main" onclick="addTeam()" style="padding:10px;">रजिस्टर करें</button>
+            </div>
+            <div style="background:white; padding:15px; border-radius:15px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                <h4 style="margin:0 0 10px 0;">👥 एक्टिव टीम लिस्ट</h4>
+                <div id="team-list"></div>
+            </div>
+            <button class="btn-main" onclick="location.reload()" style="background:var(--r); margin-top:20px;">लॉग आउट</button>
+        </div>
+    </div>
+
+    <div id="track" class="page"><h3>ट्रैक सर्विस</h3><p>आपका एक्सपर्ट 30 मिनट में पहुँच जाएगा।</p></div>
+    <div id="review" class="page"><h3>रिव्यू</h3><p>⭐⭐⭐⭐⭐ - अमित (बेहतरीन सर्विस!)</p></div>
 
     <div class="nav-bar">
         <div class="nav-item active" onclick="navTo('home', this)"><i class="fas fa-home"></i><span>होम</span></div>
@@ -102,24 +110,25 @@
 
     <script>
         const services = {
-            ac: { n: "AC सर्विस और रिपेयरिंग", f: "• जेट पंप सर्विस<br>• गैस रिफिलिंग<br>• पीसीबी रिपेयर<br>• इंस्टालेशन" },
-            elec: { n: "इलेक्ट्रीशियन सर्विस", f: "• हाउस वायरिंग<br>• बोर्ड रिपेयर<br>• पंखा फिटिंग<br>• एमसीबी वर्क" },
-            ro: { n: "RO वॉटर प्यूरीफायर", f: "• फिल्टर चेंज<br>• टीडीएस सेटिंग<br>• मोटर रिपेयर<br>• पाइपिंग वर्क" },
-            wm: { n: "वॉशिंग मशीन सर्विस", f: "• ड्रम क्लीनिंग<br>• मोटर रिपेयर<br>• पानी लीकेज<br>• सेंसर वर्क" },
-            fridge: { n: "फ्रिज रिपेयर सर्विस", f: "• गैस चार्जिंग<br>• कंप्रेसर रिपेयर<br>• कूलिंग प्रॉब्लम<br>• थर्मास्टेट" },
-            plumber: { n: "प्लंबर सर्विस", f: "• टैप फिटिंग<br>• टैंक सफाई<br>• पाइप लीकेज<br>• बाथरूम फिटिंग" },
-            cleaning: { n: "डीप क्लीनिंग सर्विस", f: "• सोफा क्लीन<br>• किचन क्लीन<br>• बाथरूम क्लीनिंग<br>• हाउस क्लीन" }
+            ac: { n: "AC सर्विस और रिपेयरिंग", f: "• जेट पंप सर्विसिंग • गैस रिफिलिंग • पीसीबी रिपेयर • इंस्टालेशन" },
+            elec: { n: "इलेक्ट्रीशियन सर्विस", f: "• हाउस वायरिंग • बोर्ड रिपेयर • पंखा फिटिंग • शॉर्ट सर्किट वर्क" },
+            ro: { n: "RO वॉटर प्यूरीफायर", f: "• फिल्टर चेंज • टीडीएस सेटिंग • मोटर रिपेयर • पाइपिंग वर्क" },
+            wm: { n: "वॉशिंग मशीन सर्विस", f: "• ड्रम क्लीनिंग • मोटर रिपेयर • पानी लीकेज • सेंसर वर्क" },
+            fridge: { n: "फ्रिज रिपेयर सर्विस", f: "• गैस चार्जिंग • कंप्रेसर रिपेयर • कूलिंग फिक्स • रबर चेंज" },
+            plumber: { n: "प्लंबर सर्विस", f: "• टैप फिटिंग • टैंक सफाई • पाइप लीकेज • बाथरूम वर्क" },
+            cleaning: { n: "डीप क्लीनिंग सर्विस", f: "• सोफा क्लीन • किचन क्लीन • बाथरूम क्लीनिंग • हाउस क्लीन" }
         };
 
         let currentService = "General Service";
         let gpsLink = "नहीं दी गई";
+        let teamData = [];
 
         function openDetails(id) {
             const s = services[id];
             currentService = s.n;
             document.getElementById('service-details').style.display = "block";
             document.getElementById('s-name').innerText = s.n;
-            document.getElementById('s-list').innerHTML = s.f;
+            document.getElementById('s-list').innerText = s.f;
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
@@ -136,6 +145,7 @@
                 navigator.geolocation.getCurrentPosition(p => {
                     gpsLink = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
                     document.getElementById('gps-btn').innerText = "✅ लोकेशन मिल गई";
+                    document.getElementById('gps-btn').style.background = "#2ecc71";
                 });
             }
         }
@@ -144,21 +154,52 @@
             const n = document.getElementById('c-name').value;
             const ph = document.getElementById('c-phone').value;
             const ad = document.getElementById('c-addr').value;
-            if(!n || !ph || !ad) { alert("पूरा फॉर्म भरें!"); return; }
+            if(!n || !ph || !ad) { alert("फॉर्म पूरा भरें!"); return; }
 
             const id = "AK-" + Math.floor(1000 + Math.random() * 9000);
             const now = new Date();
             const date = now.toLocaleDateString('hi-IN');
             const time = now.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
 
-            const msg = `*AK SOLUTION HUB - बुकिंग*%0A🆔 *ID:* ${id}%0A📅 *तारीख:* ${date}%0A⏰ *समय:* ${time}%0A🛠️ *सेवा:* ${currentService}%0A👤 *नाम:* ${n}%0A📞 *फोन:* ${ph}%0A🏠 *पता:* ${ad}%0A📍 *लोकेशन:* ${gpsLink}`;
+            const msg = `*AK SOLUTION HUB - बुकिंग*%0A🆔 *आईडी:* ${id}%0A📅 *तारीख:* ${date}%0A⏰ *समय:* ${time}%0A🛠️ *सेवा:* ${currentService}%0A👤 *नाम:* ${n}%0A📞 *फोन:* ${ph}%0A🏠 *पता:* ${ad}%0A📍 *लोकेशन:* ${gpsLink}`;
             window.open(`https://wa.me/919927464530?text=${msg}`);
         }
 
-        let idx = 0;
-        setInterval(() => {
+        function checkAdmin() {
+            if(document.getElementById('adm-pass').value === "AK123") {
+                document.getElementById('admin-login').style.display = "none";
+                document.getElementById('admin-dashboard').style.display = "block";
+            } else { alert("गलत पासवर्ड!"); }
+        }
+
+        function addTeam() {
+            const n = document.getElementById('t-name').value;
+            const p = document.getElementById('t-phone').value;
+            const s = document.getElementById('t-skill').value;
+            if(!n || !p) return;
+            teamData.push({n, p, s});
+            updateTeamUI();
+            document.getElementById('t-name').value = ""; document.getElementById('t-phone').value = "";
+        }
+
+        function deleteTeam(i) {
+            if(confirm("डिलीट करें?")) { teamData.splice(i, 1); updateTeamUI(); }
+        }
+
+        function updateTeamUI() {
+            const list = document.getElementById('team-list');
+            list.innerHTML = teamData.length === 0 ? "कोई मेंबर नहीं है" : "";
+            teamData.forEach((m, i) => {
+                list.innerHTML += `<div style="background:#f9f9f9; padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; border-left:4px solid var(--p);">
+                    <div><b>${m.n}</b> (${m.s})<br><a href="tel:${m.p}" style="color:var(--g); text-decoration:none;">📞 ${m.p}</a></div>
+                    <i class="fas fa-trash-alt" onclick="deleteTeam(${i})" style="color:var(--r); cursor:pointer;"></i>
+                </div>`;
+            });
+        }
+
+        let sIdx = 0; setInterval(() => {
             const s = document.getElementById('slider');
-            if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(-${idx * 20}%)`; }
+            if(s) { sIdx = (sIdx + 1) % 5; s.style.transform = `translateX(-${sIdx * 20}%)`; }
         }, 3000);
     </script>
 </body>
