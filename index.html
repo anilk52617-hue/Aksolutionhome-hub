@@ -8,57 +8,47 @@
     <style>
         :root { --primary: #005eb8; --bg: #ffffff; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: var(--bg); padding-bottom: 85px; }
+        body { background: var(--bg); padding-bottom: 90px; }
         .header { text-align: center; padding: 10px; background: #fff; border-bottom: 1px solid #ddd; }
         .logo-img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--primary); }
         .header h1 { color: var(--primary); font-size: 22px; font-weight: 800; }
         .ticker { background: var(--primary); color: #fff; padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; font-weight: bold; }
         
-        /* Fixed Rolling Slider */
+        /* Slider */
         .slider-box { width: 94%; margin: 15px auto; border-radius: 15px; overflow: hidden; height: 170px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
         .slider { display: flex; width: 500%; height: 100%; transition: transform 0.8s ease-in-out; }
         .slider img { width: 20%; height: 100%; flex-shrink: 0; object-fit: cover; }
         
-        /* Grid Layout */
+        /* Main Grid */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .box { background: #f8f9fa; border-radius: 12px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #eee; cursor: pointer; transition: 0.3s; }
-        .box:active { transform: scale(0.95); background: #eef2f7; }
-        .box i { font-size: 24px; color: var(--primary); margin-bottom: 5px; }
-        .box span { font-size: 10px; font-weight: 800; color: #333; text-align: center; text-transform: uppercase; }
+        .box { background: #f8f9fa; border-radius: 12px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #eee; cursor: pointer; transition: 0.3s; }
+        .box i { font-size: 26px; color: var(--primary); margin-bottom: 8px; }
+        .box span { font-size: 10px; font-weight: 800; color: #333; text-transform: uppercase; }
         
-        /* Navigation */
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; display: flex; height: 75px; border-top: 1px solid #eee; z-index: 10000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .nav-item { flex: 1; text-align: center; color: #666; font-size: 9px; padding-top: 15px; cursor: pointer; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        /* Navigation Bar Fixed */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; display: flex; height: 75px; border-top: 2px solid #eee; z-index: 10000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .nav-item { flex: 1; text-align: center; color: #666; font-size: 11px; padding-top: 15px; cursor: pointer; }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
         .active-nav { color: var(--primary); font-weight: bold; }
         
-        /* Pages */
-        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        /* Pages Logic */
+        .page { display: none; padding: 20px; min-height: 80vh; }
         .active-page { display: block !important; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .input { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; }
-        .btn-ok { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .input { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 10px; font-size: 14px; }
+        .btn-ok { width: 100%; padding: 15px; background: #27ae60; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
-        /* Updated Admin Panel (Screenshot Style) */
-        .admin-title { color: #005eb8; font-weight: 800; font-size: 22px; margin: 15px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .status-bar { display: flex; justify-content: space-between; gap: 6px; margin: 15px 0 20px 0; }
-        .status-btn { flex: 1; padding: 12px 2px; border: none; border-radius: 6px; color: white; font-weight: bold; font-size: 11px; cursor: pointer; text-transform: uppercase; }
-        .btn-done { background: #2ecc71; }
-        .btn-running { background: #f1c40f; }
-        .btn-pending { background: #e67e22; }
-        .btn-rejected { background: #e74c3c; }
-
+        /* Admin Section Styling */
+        .admin-title { color: #005eb8; font-weight: 800; font-size: 22px; text-align: center; margin-bottom: 20px; }
+        .status-bar { display: flex; gap: 5px; margin-bottom: 20px; }
+        .status-btn { flex: 1; padding: 12px 5px; border: none; border-radius: 6px; color: white; font-weight: bold; font-size: 10px; cursor: pointer; }
         .admin-grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .admin-card-new { background: #fff; border: 1px solid #f0f0f0; border-radius: 15px; padding: 15px 5px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 105px; }
-        .admin-card-new i { font-size: 26px; color: #005eb8; margin-bottom: 8px; }
-        .admin-card-new span { font-size: 9px; font-weight: 800; color: #333; text-transform: uppercase; }
+        .admin-card { background: #fff; border: 1px solid #eee; border-radius: 15px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* Modals */
-        .admin-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 400px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.5); z-index: 30000; border-top: 5px solid var(--primary); }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 29999; }
-        #id-card-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:300px; background:white; padding:20px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,0.5); z-index:20000; text-align:center; border: 2px solid var(--primary); }
-        #success-popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; background:white; padding:25px; border-radius:20px; box-shadow:0 0 40px rgba(0,0,0,0.4); z-index:20001; text-align:center; border-top: 5px solid #27ae60; }
+        /* Modal / Popups */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 30000; display: flex; align-items: center; justify-content: center; }
+        .admin-modal { background: white; width: 90%; max-width: 400px; padding: 25px; border-radius: 20px; border-top: 6px solid var(--primary); }
+        #success-popup { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:85%; background:white; padding:30px; border-radius:20px; z-index:20001; text-align:center; box-shadow:0 0 40px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -68,21 +58,13 @@
 
 <div id="success-popup">
     <i class="fas fa-check-circle" style="font-size:50px; color:#27ae60;"></i>
-    <h2 style="margin-top:10px;">बुकिंग सफल!</h2>
+    <h2 style="margin-top:15px;">बुकिंग सफल!</h2>
     <p id="pop-msg" style="margin:15px 0; color:#666; font-size:14px;"></p>
     <button class="btn-ok" onclick="location.reload()">ठीक है!</button>
 </div>
 
 <div id="home-page" class="page active-page">
-    <div class="slider-box">
-        <div class="slider" id="mainSlider">
-            <img src="1.jpg" alt="1">
-            <img src="2.jpg" alt="2">
-            <img src="3.jpg" alt="3">
-            <img src="4.jpg" alt="4">
-            <img src="5.jpg" alt="5">
-        </div>
-    </div>
+    <div class="slider-box"><div class="slider" id="mainSlider"><img src="1.jpg"><img src="2.jpg"><img src="3.jpg"><img src="4.jpg"><img src="5.jpg"></div></div>
     <div class="grid" id="main-grid">
         <div class="box" onclick="openSub('PLUMBER')"><i class="fas fa-faucet"></i><span>PLUMBER</span></div>
         <div class="box" onclick="openSub('ELECTRICIAN')"><i class="fas fa-bolt"></i><span>ELECTRICIAN</span></div>
@@ -97,66 +79,57 @@
 </div>
 
 <div id="booking-page" class="page">
-    <h2 id="svc-title" style="text-align:center; color:var(--primary); margin-bottom:10px;">सेवा चुनें</h2>
+    <h2 id="svc-title" style="text-align:center; color:var(--primary); margin-bottom:15px;">सेवा चुनें</h2>
     <input type="text" id="uName" class="input" placeholder="आपका नाम">
     <input type="tel" id="uPhone" class="input" placeholder="मोबाइल नंबर">
-    <textarea id="uAddr" class="input" rows="3" placeholder="पूरा पता"></textarea>
+    <textarea id="uAddr" class="input" rows="3" placeholder="पूरा पता (Madanpur, Delhi आदि)"></textarea>
     <button class="btn-ok" onclick="finalSubmit()">✅ बुकिंग: OK</button>
 </div>
 
 <div id="track-page" class="page">
     <h2 style="text-align:center; color:var(--primary);">🔍 स्टेटस ट्रैक करें</h2>
-    <input type="text" class="input" placeholder="बुकिंग ID दर्ज करें">
-    <button class="btn-ok" style="background:#005eb8;">ट्रैक करें</button>
+    <input type="text" class="input" placeholder="बुकिंग ID दर्ज करें (उदा. AK-1234)">
+    <button class="btn-ok" style="background:var(--primary);">ट्रैक करें</button>
 </div>
 
 <div id="review-page" class="page">
-    <h2 style="text-align:center; color:var(--primary);">⭐ रिव्यू दें</h2>
-    <textarea class="input" placeholder="अपना सुझाव लिखें..."></textarea>
-    <button class="btn-ok">सबमिट</button>
+    <h2 style="text-align:center; color:var(--primary);">⭐ आपका अनुभव</h2>
+    <textarea class="input" rows="4" placeholder="हमें बताएं हमारी सर्विस कैसी लगी..."></textarea>
+    <button class="btn-ok">रिव्यू भेजें</button>
 </div>
 
 <div id="admin-page" class="page">
     <div id="admin-login-box">
         <h2 style="text-align:center;"><i class="fas fa-user-shield"></i> एडमिन लॉगिन</h2>
         <input type="password" id="pin" class="input" placeholder="पिन दर्ज करें" style="text-align:center;">
-        <button class="btn-ok" style="background:#333;" onclick="checkAdmin()">खोलें</button>
+        <button class="btn-ok" style="background:#333;" onclick="checkAdmin()">पैनल खोलें</button>
     </div>
 
     <div id="admin-panel-content" style="display:none;">
-        <div class="admin-title"><i class="fas fa-tools"></i> ADMIN CONTROL</div>
+        <div class="admin-title"><i class="fas fa-tools"></i> ADMIN CONTROL Panel</div>
         <div class="status-bar">
-            <button class="status-btn btn-done" onclick="adminStatusMsg('DONE')">Done</button>
-            <button class="status-btn btn-running" onclick="adminStatusMsg('RUNNING')">Running</button>
-            <button class="status-btn btn-pending" onclick="adminStatusMsg('PENDING')">Pending</button>
-            <button class="status-btn btn-rejected" onclick="adminStatusMsg('REJECTED')">Rejected</button>
+            <button class="status-btn" style="background:#2ecc71;" onclick="adminStatusMsg('DONE')">DONE</button>
+            <button class="status-btn" style="background:#f1c40f;" onclick="adminStatusMsg('RUNNING')">RUNNING</button>
+            <button class="status-btn" style="background:#e67e22;" onclick="adminStatusMsg('PENDING')">PENDING</button>
+            <button class="status-btn" style="background:#e74c3c;" onclick="adminStatusMsg('REJECTED')">REJECT</button>
         </div>
         <div class="admin-grid-6">
-            <div class="admin-card-new" onclick="adminTeamReg()"><i class="fas fa-user-plus"></i><span>Team Reg</span></div>
-            <div class="admin-card-new" onclick="showIDForm()"><i class="fas fa-id-card"></i><span>Generate ID</span></div>
-            <div class="admin-card-new" onclick="adminAssign()"><i class="fas fa-tasks"></i><span>Assign</span></div>
-            <div class="admin-card-new" onclick="adminStatusMsg('UPDATE')"><i class="fas fa-edit"></i><span>Update</span></div>
-            <div class="admin-card-new" onclick="alert('Team List जल्द आ रहा है')"><i class="fas fa-users"></i><span>Team List</span></div>
-            <div class="admin-card-new" onclick="alert('Sheet जल्द आ रहा है')"><i class="fas fa-file-excel"></i><span>Sheet</span></div>
+            <div class="admin-card" onclick="adminTeamReg()"><i class="fas fa-user-plus" style="color:#005eb8;"></i><br><span>Team Reg</span></div>
+            <div class="admin-card" onclick="alert('Generate ID जल्द आ रहा है')"><i class="fas fa-id-card" style="color:#005eb8;"></i><br><span>ID Card</span></div>
+            <div class="admin-card" onclick="adminAssign()"><i class="fas fa-tasks" style="color:#005eb8;"></i><br><span>Assign</span></div>
+            <div class="admin-card" onclick="adminStatusMsg('UPDATE')"><i class="fas fa-edit" style="color:#005eb8;"></i><br><span>Update</span></div>
+            <div class="admin-card" onclick="alert('Team List जल्द आ रहा है')"><i class="fas fa-users" style="color:#005eb8;"></i><br><span>List</span></div>
+            <div class="admin-card" onclick="alert('Excel Sheet जल्द आ रहा है')"><i class="fas fa-file-excel" style="color:#005eb8;"></i><br><span>Sheet</span></div>
         </div>
-        <button onclick="location.reload()" style="width:100%; margin-top:20px; border:none; background:none; color:gray;">LOGOUT</button>
+        <button onclick="location.reload()" style="width:100%; margin-top:30px; border:none; background:none; color:red; font-weight:bold;">LOGOUT</button>
     </div>
-</div>
-
-<div id="id-card-modal">
-    <h2 id="id-name"></h2>
-    <p id="id-role" style="font-weight:bold; color:var(--primary);"></p>
-    <p id="id-phone"></p>
-    <hr style="margin:10px 0;">
-    <button class="btn-ok" style="padding:8px;" onclick="window.print()">PRINT</button>
-    <button class="btn-ok" style="padding:8px; background:gray;" onclick="this.parentElement.style.display='none'">CLOSE</button>
 </div>
 
 <div class="nav-bar">
     <div class="nav-item active-nav" onclick="showPage('home-page', this)"><i class="fas fa-home"></i>Home</div>
-    <div class="nav-item" onclick="showPage('booking-page', this)"><i class="fas fa-calendar-alt"></i>Booking</div>
+    <div class="nav-item" onclick="showPage('booking-page', this)"><i class="fas fa-calendar-check"></i>Booking</div>
     <div class="nav-item" onclick="showPage('track-page', this)"><i class="fas fa-map-marker-alt"></i>Track</div>
-    <div class="nav-item" onclick="showPage('review-page', this)"><i class="fas fa-star"></i>Review</div>
+    <div class="nav-item" onclick="showPage('review-page', this)"><i class="fas fa-star"></i>Reviews</div>
     <div class="nav-item" onclick="showPage('admin-page', this)"><i class="fas fa-user-shield"></i>Admin</div>
 </div>
 
@@ -186,7 +159,7 @@
         subData[cat].forEach(s => {
             html += `<div class="box" onclick="goBook('${cat} - ${s}')"><span>${s}</span></div>`;
         });
-        html += `<button onclick="location.reload()" style="grid-column: span 3; background:red; color:white; border:none; padding:12px; border-radius:10px; margin-top:10px; font-weight:bold;">वापस</button>`;
+        html += `<button onclick="location.reload()" style="grid-column: span 3; background:red; color:white; border:none; padding:12px; border-radius:10px; margin-top:10px; font-weight:bold;">वापस जाएँ</button>`;
         grid.innerHTML = html;
     }
 
@@ -198,82 +171,64 @@
     function finalSubmit() {
         const name = document.getElementById('uName').value;
         const phone = document.getElementById('uPhone').value;
+        const addr = document.getElementById('uAddr').value;
         const svc = document.getElementById('svc-title').innerText;
         if(!name || !phone) return alert("नाम और नंबर भरें!");
+        
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('hi-IN');
+        const timeStr = now.toLocaleTimeString('hi-IN', {hour: '2-digit', minute:'2-digit', hour12: true});
         const compID = "AK-" + Math.floor(1000 + Math.random() * 9000);
-        const msg = `*AK SOLUTION HUB - बुकिंग*\n🆔 ID: ${compID}\n🛠️ सेवा: ${svc}\n👤 नाम: ${name}\n📞 फोन: ${phone}`;
+
+        const msg = `*AK SOLUTION HUB - बुकिंग* \n🆔 *आईडी:* ${compID} \n📅 *तारीख:* ${dateStr} \n⏰ *समय:* ${timeStr} \n🛠️ *सेवा:* ${svc} \n👤 *नाम:* ${name} \n📞 *फोन:* ${phone} \n🏠 *पता:* ${addr} \n📍 *लोकेशन:* http://google.com/maps?q=${encodeURIComponent(addr)}`;
+
         window.open(`https://wa.me/919927464530?text=${encodeURIComponent(msg)}`);
-        document.getElementById('pop-msg').innerHTML = `बुकिंग ID: <b>${compID}</b> दर्ज हो गई है।`;
+        document.getElementById('pop-msg').innerHTML = `बुकिंग आईडी: <b>${compID}</b> दर्ज हो गई है।`;
         document.getElementById('success-popup').style.display = 'block';
     }
 
-    // Rolling Images Logic
+    // Auto Slider
     let idx = 0;
     setInterval(() => {
         const s = document.getElementById('mainSlider');
-        if(s) { 
-            idx++;
-            if(idx >= 5) idx = 0;
-            s.style.transform = `translateX(${-idx * 20}%)`; 
-        }
+        if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 20}%)`; }
     }, 3500);
 
-    // Admin Modals & Functions
+    // Admin Functions
     function openModifyForm(title, fields, defaultMsg, onSend) {
-        let overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        let modal = document.createElement('div');
-        modal.className = 'admin-modal';
-        let fieldsHtml = "";
-        fields.forEach(f => { fieldsHtml += `<input id="mod-${f.id}" class="input" placeholder="${f.label}">`; });
+        let overlay = document.createElement('div'); overlay.className = 'modal-overlay';
+        let modal = document.createElement('div'); modal.className = 'admin-modal';
+        let fieldsHtml = ""; fields.forEach(f => { fieldsHtml += `<input id="mod-${f.id}" class="input" placeholder="${f.label}">`; });
         modal.innerHTML = `<h3>${title}</h3>${fieldsHtml}<textarea id="mod-msg" class="input" rows="4">${defaultMsg}</textarea>
             <button class="btn-ok" id="mod-send">भेजें</button>
             <button onclick="this.parentElement.parentElement.remove()" style="width:100%; border:none; background:none; color:gray; margin-top:10px;">CANCEL</button>`;
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
+        overlay.appendChild(modal); document.body.appendChild(overlay);
         document.getElementById('mod-send').onclick = () => {
-            let data = {};
-            fields.forEach(f => data[f.id] = document.getElementById('mod-'+f.id).value);
-            data.msg = document.getElementById('mod-msg').value;
-            onSend(data);
-            overlay.remove();
+            let d = {}; fields.forEach(f => d[f.id] = document.getElementById('mod-'+f.id).value);
+            d.msg = document.getElementById('mod-msg').value; onSend(d); overlay.remove();
         };
     }
 
-    function checkAdmin() {
-        if(document.getElementById('pin').value === "Ak2525") {
-            document.getElementById('admin-login-box').style.display = 'none';
-            document.getElementById('admin-panel-content').style.display = 'block';
-        } else alert("गलत पिन!");
-    }
-
-    function adminTeamReg() {
-        openModifyForm("टीम रजिस्ट्रेशन", [{id:'n', label:'नाम'}, {id:'p', label:'मोबाइल'}], "AK HUB स्वागत है। OTP: ", (d) => {
-            let otp = Math.floor(1000 + Math.random() * 9000);
-            window.open(`https://wa.me/91${d.p}?text=${encodeURIComponent(d.msg + otp)}`);
-        });
-    }
+    function checkAdmin() { if(document.getElementById('pin').value === "Ak2525") { document.getElementById('admin-login-box').style.display = 'none'; document.getElementById('admin-panel-content').style.display = 'block'; } else alert("गलत पिन!"); }
 
     function adminAssign() {
-        openModifyForm("टास्क असाइन", [{id:'wn', label:'वर्कर नाम'},{id:'wp', label:'वर्कर नंबर'},{id:'cn', label:'ग्राहक नाम'},{id:'cp', label:'ग्राहक नंबर'}], "*AK HUB NEW TASK*", (d) => {
-            let text = `${d.msg}\nवर्कर: ${d.wn}\nग्राहक: ${d.cn}\nनंबर: ${d.cp}`;
-            window.open(`https://wa.me/91${d.wp}?text=${encodeURIComponent(text)}`);
+        openModifyForm("टास्क असाइन", [{id:'wn', label:'वर्कर नाम'}, {id:'wp', label:'वर्कर मोबाइल'}, {id:'cn', label:'कस्टमर नाम'}, {id:'cp', label:'कस्टमर मोबाइल'}], "*AK HUB NEW TASK*", (d) => {
+            let wMsg = `*🛠️ नया टास्क असाइन हुआ*\nवर्कर: ${d.wn}\nकस्टमर: ${d.cn}\nफोन: ${d.cp}\nतुरंत संपर्क करें!`;
+            let cMsg = `*✅ बुकिंग अपडेट*\nनमस्ते ${d.cn},\nआपका काम वर्कर *${d.wn}* को सौंपा गया है।\n📞 वर्कर नंबर: ${d.wp}`;
+            window.open(`https://wa.me/91${d.wp}?text=${encodeURIComponent(wMsg)}`);
+            setTimeout(() => { window.open(`https://wa.me/91${d.cp}?text=${encodeURIComponent(cMsg)}`); }, 2000);
         });
     }
 
     function adminStatusMsg(status) {
-        openModifyForm("स्टेटस: " + status, [{id:'bid', label:'बुकिंग ID'}, {id:'ph', label:'ग्राहक नंबर'}], "*AK HUB UPDATE*\nID: {bid}\nस्टेटस: " + status, (d) => {
-            let finalMsg = d.msg.replace('{bid}', d.bid);
-            window.open(`https://wa.me/91${d.ph}?text=${encodeURIComponent(finalMsg)}`);
+        openModifyForm("स्टेटस: " + status, [{id:'bid', label:'ID'}, {id:'ph', label:'कस्टमर फोन'}], "*AK HUB UPDATE*\nबुकिंग: {bid}\nस्टेटस: " + status, (d) => {
+            window.open(`https://wa.me/91${d.ph}?text=${encodeURIComponent(d.msg.replace('{bid}', d.bid))}`);
         });
     }
 
-    function showIDForm() {
-        openModifyForm("ID कार्ड जनरेटर", [{id:'n', label:'नाम'},{id:'r', label:'पद'},{id:'p', label:'नंबर'}], "AK HUB ID", (d) => {
-            document.getElementById('id-name').innerText = d.n;
-            document.getElementById('id-role').innerText = d.r;
-            document.getElementById('id-phone').innerText = d.p;
-            document.getElementById('id-card-modal').style.display = 'block';
+    function adminTeamReg() {
+        openModifyForm("टीम रजिस्ट्रेशन", [{id:'n', label:'नाम'}, {id:'p', label:'मोबाइल'}], "AK HUB स्वागत है। OTP: ", (d) => {
+            window.open(`https://wa.me/91${d.p}?text=${encodeURIComponent(d.msg + Math.floor(1000 + Math.random() * 9000))}`);
         });
     }
 </script>
