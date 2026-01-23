@@ -3,38 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK SOLUTION HUB</title>
+    <title>AK SOLUTION HUB - Final</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #005eb8; --bg: #ffffff; --success: #27ae60; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: var(--bg); padding-bottom: 85px; }
+        body { background: var(--bg); padding-bottom: 90px; overflow-x: hidden; }
+        
+        /* Header & Ticker */
         .header { text-align: center; padding: 10px; background: #fff; border-bottom: 1px solid #ddd; }
         .logo-img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--primary); }
         .header h1 { color: var(--primary); font-size: 22px; font-weight: 800; }
         .ticker { background: var(--primary); color: #fff; padding: 8px; overflow: hidden; white-space: nowrap; font-size: 13px; font-weight: bold; }
+        
+        /* Slider */
         .slider-box { width: 94%; margin: 15px auto; border-radius: 15px; overflow: hidden; height: 170px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .slider { display: flex; transition: 0.5s; height: 100%; }
-        .slider img { width: 100%; flex-shrink: 0; object-fit: cover; }
+        .slider { display: flex; transition: 0.5s; height: 100%; width: 500%; }
+        .slider img { width: 20%; flex-shrink: 0; object-fit: cover; }
+        
+        /* Grid Layout (Home) */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .box { background: #f8f9fa; border-radius: 12px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; }
+        .box { background: #f8f9fa; border-radius: 12px; height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; }
         .box:active { transform: scale(0.95); background: #eee; }
         .box i { font-size: 24px; color: var(--primary); margin-bottom: 5px; }
         .box span { font-size: 10px; font-weight: 800; color: #333; text-align: center; text-transform: uppercase; }
-        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; display: flex; height: 75px; border-top: 1px solid #eee; z-index: 10000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+
+        /* Admin Dashboard Styles (Final) */
+        #admin-panel-content { background: #ffffff; padding-bottom: 20px; display: none; }
+        .dashboard-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 10px; background: #fdfdfd; }
+        .stat-box { border-radius: 10px; padding: 8px 2px; text-align: center; color: white; display: flex; flex-direction: column; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05); }
+        .stat-box span { font-size: 8px; font-weight: 900; margin-bottom: 2px; letter-spacing: 0.5px; }
+        .stat-box strong { font-size: 16px; font-family: 'Arial Black', sans-serif; }
+        .bg-pending { background: #f1c40f; color: #000; }
+        .bg-running { background: #3498db; color: #fff; }
+        .bg-done    { background: #27ae60; color: #fff; }
+        .bg-reject  { background: #e74c3c; color: #fff; }
+        .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; }
+        .adm-box { background: #f8f9fa; border-radius: 15px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1.5px solid #eee; transition: 0.2s; cursor: pointer; }
+        .adm-box:active { transform: scale(0.92); background: #eef2f7; }
+        .adm-box i { font-size: 26px; color: #005eb8; margin-bottom: 6px; }
+        .adm-box span { font-size: 10px; font-weight: 800; color: #333; text-align: center; }
+        .sheet-border { border-color: #27ae60; }
+        .sheet-border i { color: #27ae60; }
+
+        /* Pages & Nav */
+        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .active-page { display: block !important; }
+        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; display: flex; height: 75px; border-top: 1px solid #eee; z-index: 10000; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
         .nav-item { flex: 1; text-align: center; color: #666; font-size: 11px; padding-top: 15px; cursor: pointer; }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
         .active-nav { color: var(--primary); font-weight: bold; }
-        .page { display: none; padding: 20px; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-        .active-page { display: block !important; }
         .input { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
         .btn-ok { width: 100%; padding: 15px; background: var(--success); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        #id-card-modal, #admin-form-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:320px; background:white; padding:20px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,0.5); z-index:30000; text-align:center; border: 2px solid var(--primary); }
-        .form-title { color: var(--primary); font-weight: bold; margin-bottom: 15px; text-transform: uppercase; }
-        .adm-status-bar { display: flex; gap: 5px; margin: 15px; }
-        .adm-btn { flex: 1; padding: 12px 2px; color: white; border: none; border-radius: 6px; font-size: 11px; font-weight: bold; text-align: center; }
-        #admin-panel-content { display: none; }
+        #admin-form-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:320px; background:white; padding:20px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,0.5); z-index:30000; text-align:center; border: 2px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -63,12 +85,11 @@
     <input type="tel" id="uPhone" class="input" placeholder="मोबाइल नंबर">
     <textarea id="uAddr" class="input" rows="3" placeholder="पूरा पता"></textarea>
     <button class="btn-ok" id="locBtn" onclick="askLocation()" style="background:#3498db;">📍 1. लोकेशन दें (GPS)</button>
-    <button class="btn-ok" id="finalBtn" onclick="finalSubmit()" style="display:none; margin-top:10px;">✅ 2. बुकिंग कन्फर्म करें</button>
+    <button class="btn-ok" id="finalBtn" onclick="finalSubmit()" style="display:none; margin-top:10px;">✅ 2. बुकिंग : OK</button>
 </div>
 
-<div id="track-page" class="page"><h2 style="text-align:center;">🔍 ट्रैक स्टेटस</h2><input type="text" id="trackId" class="input" placeholder="AK-ID दर्ज करें"><button class="btn-ok" style="background:var(--primary);" onclick="alert('खोज जारी है...')">सर्च स्टेटस</button></div>
-
-<div id="reviews-page" class="page"><h2 style="text-align:center;">⭐ रिव्यू</h2><textarea class="input" placeholder="अपना रिव्यू लिखें..." rows="4"></textarea><button class="btn-ok">सबमिट</button></div>
+<div id="track-page" class="page"> <h2 style="text-align:center;">🔍 ट्रैक स्टेटस</h2> <input type="text" id="trackId" class="input" placeholder="AK-ID दर्ज करें"> <button class="btn-ok" style="background:var(--primary);">खोजें</button> </div>
+<div id="reviews-page" class="page"> <h2 style="text-align:center;">⭐ रिव्यू सिस्टम</h2> <textarea class="input" placeholder="अपना अनुभव लिखें..." rows="5"></textarea> <button class="btn-ok">सबमिट रिव्यू</button> </div>
 
 <div id="admin-page" class="page">
     <div id="admin-login-box">
@@ -76,42 +97,34 @@
         <input type="password" id="pin" class="input" placeholder="पिन: Ak2525">
         <button class="btn-ok" style="background:#333;" onclick="checkAdmin()">डैशबोर्ड खोलें</button>
     </div>
+    
     <div id="admin-panel-content">
-        <h2 style="text-align:center; color:var(--primary); margin-bottom:10px;">🛠️ ADMIN CONTROL</h2>
-        <div class="adm-status-bar">
-            <button class="adm-btn" style="background:#27ae60;">DONE</button>
-            <button class="adm-btn" style="background:#f1c40f;">RUNNING</button>
-            <button class="adm-btn" style="background:#e67e22;">PENDING</button>
-            <button class="adm-btn" style="background:#e74c3c;">REJECTED</button>
+        <h2 style="text-align:center; color:#005eb8; padding: 15px 0 5px 0; font-size: 18px;"><i class="fas fa-user-shield"></i> ADMIN DASHBOARD</h2>
+        <div class="dashboard-stats">
+            <div class="stat-box bg-pending"><span>PENDING</span><strong>05</strong></div>
+            <div class="stat-box bg-running"><span>RUNNING</span><strong>02</strong></div>
+            <div class="stat-box bg-done"><span>DONE</span><strong>12</strong></div>
+            <div class="stat-box bg-reject"><span>REJECT</span><strong>01</strong></div>
         </div>
-        <div class="grid" style="padding:0;">
-            <div class="box" onclick="openAdmForm('REG')"><i class="fas fa-user-plus"></i><span>TEAM REG</span></div>
-            <div class="box" onclick="openAdmForm('ID')"><i class="fas fa-id-badge"></i><span>GENERATE ID</span></div>
-            <div class="box" onclick="openAdmForm('TASK')"><i class="fas fa-tasks"></i><span>ASSIGN</span></div>
-            <div class="box" onclick="location.reload()"><i class="fas fa-sync-alt"></i><span>UPDATE</span></div>
-            <div class="box" onclick="alert('Sheet का Team टैब चेक करें')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
-            <div class="box" onclick="window.open('https://script.google.com/macros/s/AKfycbwJ2nc2kHiUCr7OSA2n5rZl0ZiVJaUfUShyRTu3S68R8imvp7LbMj5SvJPx4vIl_HgV/exec')"><i class="fas fa-file-excel"></i><span>SHEET</span></div>
+        <div class="admin-grid">
+            <div class="adm-box" onclick="openAdmForm('REG')"><i class="fas fa-user-plus"></i><span>TEM REG</span></div>
+            <div class="adm-box" onclick="openAdmForm('ID')"><i class="fas fa-id-badge"></i><span>ID GENERATE</span></div>
+            <div class="adm-box" onclick="openAdmForm('TASK')"><i class="fas fa-paper-plane"></i><span>ASSIGN</span></div>
+            <div class="adm-box" onclick="alert('ओपनिंग टीम लिस्ट...')"><i class="fas fa-users-cog"></i><span>TEM LIST</span></div>
+            <div class="adm-box" onclick="alert('ओपनिंग कस्टमर लिस्ट...')"><i class="fas fa-address-book"></i><span>CUST LIST</span></div>
+            <div class="adm-box sheet-border" onclick="window.open('https://script.google.com/macros/s/AKfycbwJ2nc2kHiUCr7OSA2n5rZl0ZiVJaUfUShyRTu3S68R8imvp7LbMj5SvJPx4vIl_HgV/exec')">
+                <i class="fas fa-file-excel"></i><span>SHEET</span>
+            </div>
         </div>
     </div>
 </div>
 
 <div id="admin-form-modal">
-    <h3 class="form-title" id="form-head">जानकारी</h3>
-    <input type="text" id="fName" class="input" placeholder="नाम लिखें">
-    <input type="text" id="fRole" class="input" placeholder="पद (जैसे: RO EXPERT)">
-    <input type="tel" id="fPhone" class="input" placeholder="मोबाइल नंबर">
+    <h3 id="form-head">विवरण</h3>
+    <input type="text" id="fName" class="input" placeholder="नाम">
+    <input type="tel" id="fPhone" class="input" placeholder="नंबर">
     <button class="btn-ok" id="formSubmitBtn">कन्फर्म</button>
-    <button onclick="closeAdmForm()" style="background:none; border:none; color:gray; margin-top:10px; font-weight:bold; cursor:pointer;">कैंसिल</button>
-</div>
-
-<div id="id-card-modal">
-    <div style="background:var(--primary); color:white; padding:10px; border-radius:10px 10px 0 0; margin:-20px -20px 15px -20px;"><h3>OFFICIAL ID</h3></div>
-    <img src="57255.jpg" style="width:75px; height:75px; border-radius:50%; margin-top:10px; border:2px solid var(--primary);">
-    <h2 id="id-name" style="color:var(--primary); font-size:18px; margin-top:10px;">नाम</h2>
-    <p id="id-role" style="font-weight:bold; color:#333; font-size:13px;">पद</p>
-    <p id="id-phone" style="font-size:12px; margin:5px 0;">संपर्क</p>
-    <button class="btn-ok" style="margin-top:15px; padding:8px; font-size:12px;" onclick="window.print()">PRINT / DOWNLOAD</button>
-    <br><button onclick="document.getElementById('id-card-modal').style.display='none'" style="background:none; border:none; color:gray; margin-top:10px; font-weight:bold; cursor:pointer;">CLOSE</button>
+    <button onclick="closeAdmForm()" style="background:none; border:none; color:gray; margin-top:10px;">बंद करें</button>
 </div>
 
 <div class="nav-bar">
@@ -125,83 +138,12 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwJ2nc2kHiUCr7OSA2n5rZl0ZiVJaUfUShyRTu3S68R8imvp7LbMj5SvJPx4vIl_HgV/exec';
     let userGPS = "";
-    let currentAdmAction = "";
-
-    const subData = {
-        'PLUMBER': ['नल फिटिंग', 'लीकेज', 'टंकी सफाई', 'गीजर'],
-        'ELECTRICIAN': ['बोर्ड', 'पंख', 'लाइट', 'इनवर्टर'],
-        'RO SERVICE': ['फिल्टर', 'लीकेज', 'नया RO', 'सर्विस'],
-        'CCTV': ['नया', 'DVR', 'वायरिंग', 'रिपेयर'],
-        'AC SERVICE': ['गैस', 'सर्विसिंग', 'लीकेज', 'फिटिंग'],
-        'CARPENTER': ['ताला', 'दरवाजा', 'पॉलिश', 'बेड'],
-        'FITTING': ['बाथरूम', 'किचन', 'TV माउंट'],
-        'CLEANING': ['घर', 'सोफा', 'बाथरूम'],
-        'OTHER': ['पेंट', 'वेल्डिंग', 'तस्वीर']
-    };
 
     function showPage(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(id).classList.add('active-page');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
         if(el) el.classList.add('active-nav');
-    }
-
-    function openSub(cat) {
-        let grid = document.getElementById('main-grid');
-        let html = "";
-        subData[cat].forEach(s => { html += `<div class="box" onclick="goBook('${cat} - ${s}')"><span>${s}</span></div>`; });
-        html += `<button onclick="location.reload()" style="grid-column: span 3; background:#e74c3c; color:white; border:none; padding:12px; border-radius:10px; margin-top:10px; font-weight:bold;">वापस</button>`;
-        grid.innerHTML = html;
-        window.scrollTo(0,0);
-    }
-
-    function goBook(svc) {
-        document.getElementById('svc-title').innerText = svc;
-        showPage('booking-page', document.querySelectorAll('.nav-item')[1]);
-    }
-
-    function askLocation() {
-        if (navigator.geolocation) {
-            document.getElementById('locBtn').innerText = "लोकेशन मिल रही है...";
-            navigator.geolocation.getCurrentPosition((pos) => {
-                userGPS = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                document.getElementById('locBtn').innerText = "✅ लोकेशन प्राप्त हुई";
-                document.getElementById('finalBtn').style.display = "block";
-            });
-        }
-    }
-
-    function finalSubmit() {
-        const name = document.getElementById('uName').value;
-        const phone = document.getElementById('uPhone').value;
-        const addr = document.getElementById('uAddr').value;
-        const svc = document.getElementById('svc-title').innerText;
-        
-        if(!name || !phone || !addr) return alert("नाम और नंबर भरें!");
-        
-        const bid = "AK-" + Math.floor(1000 + Math.random() * 9000);
-        const date = new Date().toLocaleDateString('en-GB');
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-
-        // Google Sheet Send
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action:"booking", id:bid, name, phone, address:addr, service:svc, location:userGPS}) });
-
-        // EXACT OK FORMAT
-        const whatsappMsg = `*AK SOLUTION HUB*%0A` +
-            `----------------------------%0A` +
-            `*आईडी :* ${bid}%0A` +
-            `*तारीख :* ${date}%0A` +
-            `*समय :* ${time}%0A` +
-            `*सेवा :* ${svc}%0A` +
-            `*नाम :* ${name}%0A` +
-            `*फोन :* ${phone}%0A` +
-            `*पता :* ${addr}%0A` +
-            `*लोकेशन :* ${userGPS}%0A` +
-            `----------------------------%0A` +
-            `*बुकिंग : OK*`;
-
-        window.open(`https://wa.me/919927464530?text=${whatsappMsg}`);
-        alert("बुकिंग OK! ID: " + bid); location.reload();
     }
 
     function checkAdmin() {
@@ -211,39 +153,77 @@
         } else alert("गलत पिन!");
     }
 
-    function openAdmForm(action) {
-        currentAdmAction = action;
-        document.getElementById('admin-form-modal').style.display = 'block';
-        let head = document.getElementById('form-head');
-        let roleInp = document.getElementById('fRole');
-        if(action === 'REG') { head.innerText = "Team Registration"; roleInp.style.display = "none"; }
-        else if(action === 'ID') { head.innerText = "ID Card Generator"; roleInp.style.display = "block"; }
-        else { head.innerText = "Assign Task"; roleInp.style.display = "none"; }
+    function openSub(cat) {
+        let grid = document.getElementById('main-grid');
+        const subData = {'PLUMBER': ['नल रिपेयर', 'लीकेज', 'टंकी सफाई', 'गीजर'],'ELECTRICIAN': ['बोर्ड फिटिंग', 'पंख रिपेयर', 'लाइट', 'इनवर्टर'],'RO SERVICE': ['सर्विसिंग', 'फिल्टर चेंज', 'नया RO', 'लीकेज'],'CCTV': ['नया कैमरा', 'DVR चेक', 'वायरिंग', 'रिपेयर'],'AC SERVICE': ['गैस रिफिल', 'सर्विसिंग', 'लीकेज', 'एसी फिटिंग'],'CARPENTER': ['ताला रिपेयर', 'दरवाजा', 'पॉलिश', 'बेड'],'FITTING': ['बाथरूम फिटिंग', 'किचन', 'TV माउंट'],'CLEANING': ['घर की सफाई', 'सोफा', 'बाथरूम'],'OTHER': ['पेंटिंग', 'वेल्डिंग', 'तस्वीर फिटिंग']};
+        let html = `<h3 style="grid-column: span 3; text-align:center; color:var(--primary); padding:10px;">${cat} चुनें</h3>`;
+        subData[cat].forEach(s => { html += `<div class="box" onclick="goBook('${cat} - ${s}')"><span>${s}</span></div>`; });
+        html += `<button onclick="location.reload()" style="grid-column: span 3; background:#333; color:white; border:none; padding:15px; border-radius:10px; margin-top:10px;">वापस जाएं</button>`;
+        grid.innerHTML = html;
+        window.scrollTo(0,0);
+    }
 
+    function goBook(svc) { document.getElementById('svc-title').innerText = svc; showPage('booking-page', document.querySelectorAll('.nav-item')[1]); }
+    
+    function askLocation() { 
+        if (navigator.geolocation) { 
+            document.getElementById('locBtn').innerText = "प्राप्त कर रहे हैं..."; 
+            navigator.geolocation.getCurrentPosition((pos) => { 
+                userGPS = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`; 
+                document.getElementById('locBtn').innerText = "✅ लोकेशन OK"; 
+                document.getElementById('finalBtn').style.display = "block"; 
+            }); 
+        } 
+    }
+    
+    function finalSubmit() { 
+        const n = document.getElementById('uName').value; 
+        const p = document.getElementById('uPhone').value; 
+        const a = document.getElementById('uAddr').value; 
+        const s = document.getElementById('svc-title').innerText; 
+        
+        if(!n || !p || !a) return alert("कृपया सभी विवरण भरें!"); 
+        
+        const bid = "AK-" + Math.floor(1000 + Math.random() * 9000); 
+        const d = new Date();
+        const dateStr = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+
+        // गूगल शीट में डेटा भेजने के लिए (Date और Status के साथ)
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: JSON.stringify({
+                action: "booking", 
+                id: bid, 
+                date: dateStr, 
+                name: n, 
+                phone: p, 
+                address: a, 
+                service: s, 
+                location: userGPS,
+                status: "PENDING"
+            }) 
+        });
+
+        // व्हाट्सएप मैसेज
+        window.open(`https://wa.me/919927464530?text=*AK HUB*%0A*ID:* ${bid}%0A*तारीख:* ${dateStr}%0A*Svc:* ${s}%0A*Name:* ${n}%0A*Loc:* ${userGPS}`); 
+        
+        alert("बुकिंग सफल! आईडी: " + bid); 
+        location.reload(); 
+    }
+
+    function openAdmForm(action) {
+        document.getElementById('admin-form-modal').style.display = 'block';
         document.getElementById('formSubmitBtn').onclick = function() {
-            let n = document.getElementById('fName').value;
             let p = document.getElementById('fPhone').value;
-            let r = roleInp.value || "TECHNICIAN";
-            if(!n || !p) return alert("विवरण भरें!");
-            if(currentAdmAction === 'REG') window.open(`https://wa.me/91${p}?text=AK HUB में स्वागत है ${n}!`);
-            else if(currentAdmAction === 'ID') {
-                document.getElementById('id-name').innerText = n;
-                document.getElementById('id-role').innerText = r;
-                document.getElementById('id-phone').innerText = "+91 " + p;
-                document.getElementById('id-card-modal').style.display = 'block';
-            }
-            else window.open(`https://wa.me/91${p}?text=*AK TASK*%0Aनाम: ${n}%0Aकाम: ${r}`);
+            let n = document.getElementById('fName').value;
+            window.open(`https://wa.me/91${p}?text=नमस्ते ${n}, AK HUB से टास्क मिला है।`);
             closeAdmForm();
         };
     }
-
     function closeAdmForm() { document.getElementById('admin-form-modal').style.display = 'none'; }
 
-    let idx = 0;
-    setInterval(() => {
-        const s = document.getElementById('mainSlider');
-        if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 100}%)`; }
-    }, 3500);
+    let idx = 0; setInterval(() => { const s = document.getElementById('mainSlider'); if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 20}%)`; } }, 3500);
 </script>
 </body>
 </html>
