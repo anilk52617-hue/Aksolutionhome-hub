@@ -112,6 +112,9 @@
     
     <div id="admin-panel-content">
         <h2 style="text-align:center; color:#005eb8; padding: 10px 0; font-size: 18px; text-decoration: underline;">ADMIN DASHBOARD</h2>
+        
+        <input type="text" id="updId" class="input" style="border:2px solid var(--primary);" placeholder="अपडेट के लिए ID डालें (उदा: AK-1120)">
+        
         <div class="dashboard-stats">
             <div class="stat-box bg-done" onclick="updStatus('DONE')">DONE</div>
             <div class="stat-box bg-pending" onclick="updStatus('PENDING')">PENDING</div>
@@ -146,7 +149,8 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxtG7V9wqGWDQhA7nyCJSLIQTfrOVuklrDrkrO3c5eBuiJsr-cJTc2SZflp-PpxsqjY6A/exec';
+    // आपका नया और अपडेटेड Script URL यहाँ है
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAgyDoWNxQWcVXf9COj4V90WGrT9-gXIABKAjO89Sjbg4Iw9UtmtAeYzbMjEtqeDi1KQ/exec';
     let userGPS = "Link not generated";
 
     function showPage(id, el) {
@@ -192,7 +196,7 @@
         if (navigator.geolocation) { 
             document.getElementById('locBtn').innerText = "प्राप्त कर रहे हैं..."; 
             navigator.geolocation.getCurrentPosition((pos) => { 
-                userGPS = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`; 
+                userGPS = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`; 
                 document.getElementById('locBtn').innerText = "✅ लोकेशन OK"; 
                 document.getElementById('finalBtn').style.display = "block"; 
             }, () => { 
@@ -213,6 +217,7 @@
         const dStr = now.toLocaleDateString('en-GB'); 
         const tStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
+        // Google Sheet में डेटा भेजना
         fetch(scriptURL, { 
             method: 'POST', 
             mode: 'no-cors', 
@@ -227,13 +232,33 @@
     }
 
     async function trackOrder() {
-        const tid = document.getElementById('trackId').value;
+        const tid = document.getElementById('trackId').value.trim();
         if(!tid) return alert("ID दर्ज करें!");
         document.getElementById('track-result').innerHTML = "खोज रहे हैं...";
-        const res = await fetch(scriptURL + "?view=track&id=" + tid);
-        const data = await res.json();
-        if(data.status === "Not Found") document.getElementById('track-result').innerHTML = "❌ आईडी नहीं मिली!";
-        else document.getElementById('track-result').innerHTML = `<div class="result-box"><p>👤 <b>नाम:</b> ${data.name}</p><p>🛠️ <b>सेवा:</b> ${data.service}</p><p>⚡ <b>स्टेटस:</b> ${data.jobStatus}</p></div>`;
+        
+        try {
+            const res = await fetch(scriptURL + "?view=track&id=" + tid);
+            const data = await res.json();
+            if(data.status === "Not Found") document.getElementById('track-result').innerHTML = "❌ आईडी नहीं मिली!";
+            else document.getElementById('track-result').innerHTML = `<div class="result-box"><p>👤 <b>नाम:</b> ${data.name}</p><p>🛠️ <b>सेवा:</b> ${data.service}</p><p>⚡ <b>स्टेटस:</b> ${data.jobStatus}</p></div>`;
+        } catch(e) {
+            document.getElementById('track-result').innerHTML = "सर्वर एरर!";
+        }
+    }
+
+    function updStatus(st) { 
+        const targetId = document.getElementById('updId').value.trim();
+        if(!targetId) return alert("कृपया पहले बुकिंग ID दर्ज करें!");
+
+        if(!confirm(`ID: ${targetId} का स्टेटस "${st}" करें?`)) return;
+
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: JSON.stringify({action: "update_status", id: targetId, status: st}) 
+        });
+        alert("अनुरोध भेजा गया! शीट चेक करें।");
+        document.getElementById('updId').value = "";
     }
 
     function submitReview() {
@@ -262,8 +287,8 @@
         };
     }
 
-    function updStatus(st) { 
-        alert("Status: " + st + " अपडेट की सुविधा Google Sheet से डायरेक्ट है।"); 
+    function viewList(type) {
+        window.open(scriptURL + "?view=" + type);
     }
 
     function closeAdmForm() { document.getElementById('admin-form-modal').style.display = 'none'; }
