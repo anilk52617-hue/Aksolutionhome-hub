@@ -106,7 +106,7 @@
 <div id="admin-page" class="page">
     <div id="admin-login-box">
         <h2 style="text-align:center;">🔐 एडमिन लॉगिन</h2>
-        <input type="password" id="pin" class="input" placeholder="पिन: Ak2525">
+        <input type="password" id="pin" class="input" placeholder="पिन डालें">
         <button class="btn-ok" style="background:#333;" onclick="checkAdmin()">डैशबोर्ड खोलें</button>
     </div>
     
@@ -127,7 +127,7 @@
             <div class="adm-box" onclick="openAdmForm('TASK')"><span>ASSIGN</span></div>
             <div class="adm-box" style="background:#e3f2fd;" onclick="viewList('team')"><span>TEAM LIST</span></div>
             <div class="adm-box" style="background:#e8f5e9;" onclick="viewList('cust')"><span>CUST LIST</span></div>
-            <div class="adm-box" style="background:#fff3e0;" onclick="window.open(scriptURL)"><span>SHEET</span></div>
+            <div class="adm-box" style="background:#fff3e0;" onclick="window.open('https://docs.google.com/spreadsheets/d/1X_fB-YpE-FpL66t26o87YmS6vz0juf8zzj48wriHU5XEQ/edit')"><span>SHEET</span></div>
         </div>
     </div>
 </div>
@@ -149,8 +149,7 @@
 </div>
 
 <script>
-    // आपका नया और अपडेटेड Script URL यहाँ है
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAgyDoWNxQWcVXf9COj4V90WGrT9-gXIABKAjO89Sjbg4Iw9UtmtAeYzbMjEtqeDi1KQ/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwQkVpFkCXsRskajcjbIB956vz0juf8zzj48wriHU5XEQdBBfxzf8HiI-M3YaamfthrJg/exec';
     let userGPS = "Link not generated";
 
     function showPage(id, el) {
@@ -213,22 +212,16 @@
         if(!n || !p || !a) return alert("सभी विवरण भरें!"); 
         
         const bid = "AK-" + Math.floor(1000 + Math.random() * 9000); 
-        const now = new Date();
-        const dStr = now.toLocaleDateString('en-GB'); 
-        const tStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const dStr = new Date().toLocaleDateString('en-GB'); 
 
-        // Google Sheet में डेटा भेजना
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify({action: "booking", id: bid, date: dStr, time: tStr, name: n, phone: p, address: a, service: s, location: userGPS, status: "PENDING"}) 
+        const finalURL = `${scriptURL}?action=booking&date=${dStr}&id=${bid}&name=${encodeURIComponent(n)}&phone=${p}&address=${encodeURIComponent(a)}&service=${encodeURIComponent(s)}&location=${encodeURIComponent(userGPS)}&status=PENDING`;
+
+        fetch(finalURL, { mode: 'no-cors' }).then(() => {
+            const waMsg = `*AK SOLUTION HUB - बुकिंग*%0A%0A🆔 *आईडी:* ${bid}%0A📅 *तारीख:* ${dStr}%0A🛠️ *सेवा:* ${s}%0A👤 *नाम:* ${n}%0A📞 *फोन:* ${p}%0A🏠 *पता:* ${a}%0A📍 *लोकेशन:* ${userGPS}`;
+            window.open(`https://wa.me/919927464530?text=${waMsg}`); 
+            alert("बुकिंग सफल! आईडी: " + bid); 
+            location.reload(); 
         });
-
-        const waMsg = `*AK SOLUTION HUB - बुकिंग*%0A%0A🆔 *आईडी:* ${bid}%0A📅 *तारीख:* ${dStr}%0A⏰ *समय:* ${tStr}%0A🛠️ *सेवा:* ${s}%0A👤 *नाम:* ${n}%0A📞 *फोन:* ${p}%0A🏠 *पता:* ${a}%0A📍 *लोकेशन:* ${userGPS}`;
-        window.open(`https://wa.me/919927464530?text=${waMsg}`); 
-        
-        alert("बुकिंग सफल! आईडी: " + bid); 
-        location.reload(); 
     }
 
     async function trackOrder() {
@@ -237,10 +230,18 @@
         document.getElementById('track-result').innerHTML = "खोज रहे हैं...";
         
         try {
-            const res = await fetch(scriptURL + "?view=track&id=" + tid);
+            const res = await fetch(`${scriptURL}?action=track&id=${tid}`);
             const data = await res.json();
-            if(data.status === "Not Found") document.getElementById('track-result').innerHTML = "❌ आईडी नहीं मिली!";
-            else document.getElementById('track-result').innerHTML = `<div class="result-box"><p>👤 <b>नाम:</b> ${data.name}</p><p>🛠️ <b>सेवा:</b> ${data.service}</p><p>⚡ <b>स्टेटस:</b> ${data.jobStatus}</p></div>`;
+            if(data.status === "Found") {
+                document.getElementById('track-result').innerHTML = `
+                <div class="result-box">
+                    <p>👤 <b>नाम:</b> ${data.name}</p>
+                    <p>🛠️ <b>सेवा:</b> ${data.service}</p>
+                    <p>⚡ <b>स्टेटस:</b> <span style="color:var(--primary); font-weight:bold;">${data.jobStatus}</span></p>
+                </div>`;
+            } else {
+                document.getElementById('track-result').innerHTML = "❌ आईडी नहीं मिली!";
+            }
         } catch(e) {
             document.getElementById('track-result').innerHTML = "सर्वर एरर!";
         }
@@ -249,16 +250,12 @@
     function updStatus(st) { 
         const targetId = document.getElementById('updId').value.trim();
         if(!targetId) return alert("कृपया पहले बुकिंग ID दर्ज करें!");
-
         if(!confirm(`ID: ${targetId} का स्टेटस "${st}" करें?`)) return;
 
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: JSON.stringify({action: "update_status", id: targetId, status: st}) 
+        fetch(`${scriptURL}?action=updateStatus&id=${targetId}&status=${st}`, { mode: 'no-cors' }).then(() => {
+            alert("स्टेटस अपडेट अनुरोध भेजा गया!");
+            document.getElementById('updId').value = "";
         });
-        alert("अनुरोध भेजा गया! शीट चेक करें।");
-        document.getElementById('updId').value = "";
     }
 
     function submitReview() {
@@ -266,9 +263,12 @@
         const star = document.getElementById('revStar').value;
         const msg = document.getElementById('revMsg').value;
         if(!name || !msg) return alert("नाम और संदेश लिखें!");
-        fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: "add_review", name: name, star: star, message: msg}) });
-        alert("रिव्यू सबमिट हुआ!");
-        location.reload();
+        
+        const revURL = `${scriptURL}?action=booking&name=${encodeURIComponent(name)}&service=REVIEW&address=${encodeURIComponent(msg)}&status=${star}Star`;
+        fetch(revURL, { mode: 'no-cors' }).then(() => {
+            alert("रिव्यू सबमिट हुआ!");
+            location.reload();
+        });
     }
 
     function openAdmForm(action) {
@@ -282,13 +282,13 @@
                 const idMsg = `*AK SOLUTION HUB - ID CARD*%0A%0A🆔 *ID:* ${cid}%0A👤 *NAME:* ${n}%0A📞 *PHONE:* ${p}%0A✅ *STATUS:* AUTHORIZED TEAM`;
                 window.open(`https://wa.me/91${p}?text=${idMsg}`);
             }
-            fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: "admin_action", type: action, name: n, phone: p, id: cid}) });
+            fetch(`${scriptURL}?action=booking&name=${encodeURIComponent(n)}&phone=${p}&id=${cid}&service=ADMIN_${action}`, { mode: 'no-cors' });
             closeAdmForm();
         };
     }
 
     function viewList(type) {
-        window.open(scriptURL + "?view=" + type);
+        alert("यह फीचर आपकी Google Sheet में सीधे देखने के लिए है।");
     }
 
     function closeAdmForm() { document.getElementById('admin-form-modal').style.display = 'none'; }
