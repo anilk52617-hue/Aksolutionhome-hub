@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK SOLUTION HUB - Final Version 2026</title>
+    <title>AK SOLUTION HUB - Final Admin Integrated</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #005eb8; --bg: #ffffff; --success: #27ae60; }
@@ -49,7 +49,16 @@
         
         .input { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
         .btn-ok { width: 100%; padding: 15px; background: var(--success); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        #admin-form-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:320px; background:white; padding:20px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,0.5); z-index:30000; text-align:center; border: 2px solid var(--primary); }
+        
+        /* Modals */
+        #admin-form-modal, #sheet-data-modal { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:95%; max-width:400px; background:white; padding:20px; border-radius:15px; box-shadow:0 0 30px rgba(0,0,0,0.5); z-index:30000; text-align:center; border: 2px solid var(--primary); }
+        #sheet-data-modal { width: 98%; max-width: 800px; height: 85vh; overflow-y: auto; }
+        
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10px; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 6px; text-align: left; }
+        .data-table th { background: var(--primary); color: white; position: sticky; top: 0; }
+        .data-table tr:nth-child(even) { background: #f2f2f2; }
+        
         .result-box { background:#f8f9fa; padding:15px; border-radius:10px; border:2px solid var(--primary); margin-top:10px; text-align:left; }
     </style>
 </head>
@@ -93,11 +102,11 @@
     <h2 style="text-align:center;">⭐ रिव्यू सिस्टम</h2> 
     <input type="text" id="revName" class="input" placeholder="आपका नाम">
     <select id="revStar" class="input">
-        <option value="5">⭐⭐⭐⭐⭐ (बेहतरीन)</option>
-        <option value="4">⭐⭐⭐⭐ (अच्छा)</option>
-        <option value="3">⭐⭐⭐ (ठीक है)</option>
-        <option value="2">⭐⭐ (औसत)</option>
-        <option value="1">⭐ (खराब)</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="1">⭐</option>
     </select>
     <textarea id="revMsg" class="input" placeholder="अपना अनुभव लिखें..." rows="5"></textarea> 
     <button class="btn-ok" onclick="submitReview()">सबमिट रिव्यू</button> 
@@ -111,9 +120,8 @@
     </div>
     
     <div id="admin-panel-content">
-        <h2 style="text-align:center; color:#005eb8; padding: 10px 0; font-size: 18px; text-decoration: underline;">ADMIN DASHBOARD</h2>
-        
-        <input type="text" id="updId" class="input" style="border:2px solid var(--primary);" placeholder="अपडेट के लिए ID डालें (उदा: AK-1120)">
+        <h2 style="text-align:center; color:#005eb8; font-size: 18px; text-decoration: underline;">ADMIN DASHBOARD</h2>
+        <input type="text" id="updId" class="input" style="border:2px solid var(--primary);" placeholder="ID डालें (उदा: AK-1120)">
         
         <div class="dashboard-stats">
             <div class="stat-box bg-done" onclick="updStatus('DONE')">DONE</div>
@@ -125,9 +133,9 @@
             <div class="adm-box" onclick="openAdmForm('REG')"><span>TEAM REG</span></div>
             <div class="adm-box" onclick="openAdmForm('ID')"><span>ID CARD</span></div>
             <div class="adm-box" onclick="openAdmForm('TASK')"><span>ASSIGN</span></div>
-            <div class="adm-box" style="background:#e3f2fd;" onclick="viewList('team')"><span>TEAM LIST</span></div>
-            <div class="adm-box" style="background:#e8f5e9;" onclick="viewList('cust')"><span>CUST LIST</span></div>
-            <div class="adm-box" style="background:#fff3e0;" onclick="window.open('https://docs.google.com/spreadsheets/d/1X_fB-YpE-FpL66t26o87YmS6vz0juf8zzj48wriHU5XEQ/edit')"><span>SHEET</span></div>
+            <div class="adm-box" style="background:#e3f2fd;" onclick="viewList('TEAM')"><span>TEAM LIST</span></div>
+            <div class="adm-box" style="background:#e8f5e9;" onclick="viewList('AK')"><span>CUST LIST</span></div>
+            <div class="adm-box" style="background:#fff3e0;" onclick="loadFullSheet()"><span>SHEET DATA</span></div>
         </div>
     </div>
 </div>
@@ -140,6 +148,12 @@
     <button onclick="closeAdmForm()" style="background:none; border:none; color:gray; margin-top:10px; cursor:pointer;">बंद करें</button>
 </div>
 
+<div id="sheet-data-modal">
+    <h2 style="color:var(--primary); margin-bottom: 10px;">LIVE DATABASE</h2>
+    <div id="sheet-table-container" style="overflow-x: auto;">डेटा लोड हो रहा है...</div>
+    <button class="btn-ok" onclick="document.getElementById('sheet-data-modal').style.display='none'" style="background:#333; margin-top:15px;">बंद करें</button>
+</div>
+
 <div class="nav-bar">
     <div class="nav-item active-nav" onclick="showPage('home-page', this)"><i class="fas fa-home"></i>Home</div>
     <div class="nav-item" onclick="showPage('booking-page', this)"><i class="fas fa-calendar-alt"></i>Booking</div>
@@ -149,8 +163,11 @@
 </div>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwQkVpFkCXsRskajcjbIB956vz0juf8zzj48wriHU5XEQdBBfxzf8HiI-M3YaamfthrJg/exec';
+    // आपका नया लिंक यहाँ सेट कर दिया गया है
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxa_iIYrtRL9iEhn2pDaOarZRazqx_R2RUbLwFWjSPiTx4BBEt9Gq2Fr-I0sRPe_eQnug/exec';
+    
     let userGPS = "Link not generated";
+    let currentOTP = "";
 
     function showPage(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -175,7 +192,7 @@
             'CCTV': ['नया कैमरा', 'DVR चेक', 'वायरिंग', 'रिपेयर'],
             'AC SERVICE': ['गैस रिफिल', 'सर्विसिंग', 'लीकेज', 'एसी फिटिंग'],
             'CARPENTER': ['ताला रिपेयर', 'दरवाजा', 'पॉलिश', 'बेड'],
-            'FITTING': ['बाحثूम फिटिंग', 'किचन', 'TV माउंट'],
+            'FITTING': ['बाथरूम फिटिंग', 'किचन', 'TV माउंट'],
             'CLEANING': ['घर की सफाई', 'सोफा', 'बाथरूम'],
             'OTHER': ['पेंटिंग', 'वेल्डिंग', 'तस्वीर फिटिंग']
         };
@@ -198,9 +215,7 @@
                 userGPS = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`; 
                 document.getElementById('locBtn').innerText = "✅ लोकेशन OK"; 
                 document.getElementById('finalBtn').style.display = "block"; 
-            }, () => { 
-                alert("लोकेशन एक्सेस नहीं मिल सका।"); 
-            }); 
+            }, () => { alert("लोकेशन एक्सेस नहीं मिला।"); }); 
         } 
     }
     
@@ -214,10 +229,8 @@
         const bid = "AK-" + Math.floor(1000 + Math.random() * 9000); 
         const dStr = new Date().toLocaleDateString('en-GB'); 
 
-        const finalURL = `${scriptURL}?action=booking&date=${dStr}&id=${bid}&name=${encodeURIComponent(n)}&phone=${p}&address=${encodeURIComponent(a)}&service=${encodeURIComponent(s)}&location=${encodeURIComponent(userGPS)}&status=PENDING`;
-
-        fetch(finalURL, { mode: 'no-cors' }).then(() => {
-            const waMsg = `*AK SOLUTION HUB - बुकिंग*%0A%0A🆔 *आईडी:* ${bid}%0A📅 *तारीख:* ${dStr}%0A🛠️ *सेवा:* ${s}%0A👤 *नाम:* ${n}%0A📞 *फोन:* ${p}%0A🏠 *पता:* ${a}%0A📍 *लोकेशन:* ${userGPS}`;
+        fetch(`${scriptURL}?action=booking&date=${dStr}&id=${bid}&name=${encodeURIComponent(n)}&phone=${p}&address=${encodeURIComponent(a)}&service=${encodeURIComponent(s)}&location=${encodeURIComponent(userGPS)}&status=PENDING`, { mode: 'no-cors' }).then(() => {
+            const waMsg = `*AK SOLUTION HUB - बुकिंग*%0A🆔 आईडी: ${bid}%0A🛠️ सेवा: ${s}%0A👤 नाम: ${n}%0A📞 फोन: ${p}%0A🏠 पता: ${a}%0A📍 लोकेशन: ${userGPS}`;
             window.open(`https://wa.me/919927464530?text=${waMsg}`); 
             alert("बुकिंग सफल! आईडी: " + bid); 
             location.reload(); 
@@ -228,32 +241,20 @@
         const tid = document.getElementById('trackId').value.trim();
         if(!tid) return alert("ID दर्ज करें!");
         document.getElementById('track-result').innerHTML = "खोज रहे हैं...";
-        
         try {
             const res = await fetch(`${scriptURL}?action=track&id=${tid}`);
             const data = await res.json();
             if(data.status === "Found") {
-                document.getElementById('track-result').innerHTML = `
-                <div class="result-box">
-                    <p>👤 <b>नाम:</b> ${data.name}</p>
-                    <p>🛠️ <b>सेवा:</b> ${data.service}</p>
-                    <p>⚡ <b>स्टेटस:</b> <span style="color:var(--primary); font-weight:bold;">${data.jobStatus}</span></p>
-                </div>`;
-            } else {
-                document.getElementById('track-result').innerHTML = "❌ आईडी नहीं मिली!";
-            }
-        } catch(e) {
-            document.getElementById('track-result').innerHTML = "सर्वर एरर!";
-        }
+                document.getElementById('track-result').innerHTML = `<div class="result-box">👤 <b>नाम:</b> ${data.name}<br>🛠️ <b>सेवा:</b> ${data.service}<br>⚡ <b>स्टेटस:</b> <span style="color:var(--primary); font-weight:bold;">${data.jobStatus}</span></div>`;
+            } else { document.getElementById('track-result').innerHTML = "❌ आईडी नहीं मिली!"; }
+        } catch(e) { document.getElementById('track-result').innerHTML = "सर्वर एरर!"; }
     }
 
     function updStatus(st) { 
         const targetId = document.getElementById('updId').value.trim();
-        if(!targetId) return alert("कृपया पहले बुकिंग ID दर्ज करें!");
-        if(!confirm(`ID: ${targetId} का स्टेटस "${st}" करें?`)) return;
-
+        if(!targetId) return alert("ID दर्ज करें!");
         fetch(`${scriptURL}?action=updateStatus&id=${targetId}&status=${st}`, { mode: 'no-cors' }).then(() => {
-            alert("स्टेटस अपडेट अनुरोध भेजा गया!");
+            alert("स्टेटस " + st + " अपडेट किया गया!");
             document.getElementById('updId').value = "";
         });
     }
@@ -262,38 +263,106 @@
         const name = document.getElementById('revName').value;
         const star = document.getElementById('revStar').value;
         const msg = document.getElementById('revMsg').value;
-        if(!name || !msg) return alert("नाम और संदेश लिखें!");
-        
-        const revURL = `${scriptURL}?action=booking&name=${encodeURIComponent(name)}&service=REVIEW&address=${encodeURIComponent(msg)}&status=${star}Star`;
-        fetch(revURL, { mode: 'no-cors' }).then(() => {
-            alert("रिव्यू सबमिट हुआ!");
-            location.reload();
+        if(!name || !msg) return alert("विवरण भरें!");
+        fetch(`${scriptURL}?action=booking&name=${encodeURIComponent(name)}&service=REVIEW&address=${encodeURIComponent(msg)}&status=${star}Star`, { mode: 'no-cors' }).then(() => {
+            alert("शुक्रिया! रिव्यू सबमिट हुआ।"); location.reload();
         });
     }
 
     function openAdmForm(action) {
-        document.getElementById('admin-form-modal').style.display = 'block';
-        document.getElementById('form-head').innerText = action === 'REG' ? "Team Registration" : (action === 'ID' ? "ID Card Generator" : "Assign Task");
-        document.getElementById('formSubmitBtn').onclick = function() {
-            let n = document.getElementById('fName').value;
-            let p = document.getElementById('fPhone').value;
-            let cid = "AK-ID-" + Math.floor(1000 + Math.random() * 9000);
-            if(action === 'ID') {
-                const idMsg = `*AK SOLUTION HUB - ID CARD*%0A%0A🆔 *ID:* ${cid}%0A👤 *NAME:* ${n}%0A📞 *PHONE:* ${p}%0A✅ *STATUS:* AUTHORIZED TEAM`;
-                window.open(`https://wa.me/91${p}?text=${idMsg}`);
-            }
-            fetch(`${scriptURL}?action=booking&name=${encodeURIComponent(n)}&phone=${p}&id=${cid}&service=ADMIN_${action}`, { mode: 'no-cors' });
-            closeAdmForm();
-        };
+        const modal = document.getElementById('admin-form-modal');
+        const head = document.getElementById('form-head');
+        const submitBtn = document.getElementById('formSubmitBtn');
+        const fName = document.getElementById('fName');
+        const fPhone = document.getElementById('fPhone');
+
+        modal.style.display = 'block';
+        fName.value = ""; fPhone.value = ""; fPhone.style.display = "block";
+
+        if(action === 'REG') {
+            head.innerText = "Team Registration (OTP)";
+            submitBtn.innerText = "1. Send OTP";
+            submitBtn.onclick = function() {
+                if(!fPhone.value) return alert("नंबर डालें!");
+                currentOTP = Math.floor(1000 + Math.random() * 9000).toString();
+                let n = fName.value, p = fPhone.value;
+                window.open(`https://wa.me/91${p}?text=आपका AK रजिस्ट्रेशन कोड है: *${currentOTP}*`);
+                submitBtn.innerText = "2. Verify OTP";
+                fName.value = ""; fName.placeholder = "यहाँ OTP डालें"; fPhone.style.display = "none";
+                submitBtn.onclick = function() {
+                    if(fName.value === currentOTP) {
+                        let tid = "TEAM-" + Math.floor(100+Math.random()*900);
+                        fetch(`${scriptURL}?action=reg&id=${tid}&name=${encodeURIComponent(n)}&phone=${p}&service=TEAM_REG&status=VERIFIED`, {mode:'no-cors'});
+                        alert("सफल! टीम आईडी: " + tid); closeAdmForm();
+                    } else alert("गलत OTP!");
+                };
+            };
+        } 
+        else if(action === 'TASK') {
+            head.innerText = "Assign Task";
+            fName.placeholder = "कस्टमर विवरण"; fPhone.placeholder = "वर्कर व्हाट्सएप नंबर";
+            submitBtn.onclick = function() {
+                window.open(`https://wa.me/91${fPhone.value}?text=*NEW TASK ASSIGNED*%0A${fName.value}`);
+                fetch(`${scriptURL}?action=booking&name=${encodeURIComponent(fName.value)}&phone=${fPhone.value}&id=TASK&service=ASSIGN&status=ASSIGNED`, {mode:'no-cors'});
+                alert("कार्य सौंप दिया गया!"); closeAdmForm();
+            };
+        }
+        else {
+            head.innerText = "ID Card Generator";
+            submitBtn.onclick = function() {
+                let cid = "AK-ID-" + Math.floor(1000+Math.random()*9000);
+                window.open(`https://wa.me/91${fPhone.value}?text=*AK SOLUTION HUB ID*%0AID: ${cid}%0AName: ${fName.value}`);
+                fetch(`${scriptURL}?action=booking&name=${encodeURIComponent(fName.value)}&phone=${fPhone.value}&id=${cid}&service=ADMIN_ID&status=ISSUED`, {mode:'no-cors'});
+                alert("आईडी कार्ड जारी!"); closeAdmForm();
+            };
+        }
     }
 
-    function viewList(type) {
-        alert("यह फीचर आपकी Google Sheet में सीधे देखने के लिए है।");
+    async function viewList(type) {
+        alert("सूची लोड हो रही है, कृपया प्रतीक्षा करें...");
+        try {
+            const res = await fetch(`${scriptURL}?action=getList&type=${type}`);
+            const data = await res.json();
+            if(!data.length) return alert("कोई डेटा नहीं मिला!");
+            let txt = `📋 ${type} LIST:\n\n`;
+            data.forEach((item, i) => { txt += `${i+1}. ${item.name} (${item.id}) - ${item.status}\n📞 ${item.phone}\n\n`; });
+            alert(txt);
+        } catch(e) { alert("सर्वर से डेटा प्राप्त करने में विफल!"); }
+    }
+
+    async function loadFullSheet() {
+        const modal = document.getElementById('sheet-data-modal');
+        const container = document.getElementById('sheet-table-container');
+        modal.style.display = 'block';
+        container.innerHTML = "<p style='padding:20px;'>डेटा लोड हो रहा है, कृपया रुकें...</p>";
+        try {
+            const res = await fetch(`${scriptURL}?action=getList&type=`); 
+            const data = await res.json();
+            if(!data.length) { container.innerHTML = "शीट खाली है!"; return; }
+            
+            let html = `<table class="data-table">
+                <tr><th>ID</th><th>नाम</th><th>फोन</th><th>तारीख</th><th>स्टेटस</th></tr>`;
+            data.forEach(r => { 
+                html += `<tr>
+                    <td>${r.id}</td>
+                    <td>${r.name}</td>
+                    <td>${r.phone}</td>
+                    <td>${r.date || '-'}</td>
+                    <td style="font-weight:bold; color:var(--primary);">${r.status}</td>
+                </tr>`; 
+            });
+            html += `</table>`;
+            container.innerHTML = html;
+        } catch(e) { container.innerHTML = "सर्वर एरर: डेटा लोड नहीं हो सका।"; }
     }
 
     function closeAdmForm() { document.getElementById('admin-form-modal').style.display = 'none'; }
-
-    let idx = 0; setInterval(() => { const s = document.getElementById('mainSlider'); if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 20}%)`; } }, 3500);
+    
+    // Slider Logic
+    let idx = 0; setInterval(() => { 
+        const s = document.getElementById('mainSlider'); 
+        if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 20}%)`; } 
+    }, 3500);
 </script>
 </body>
 </html>
