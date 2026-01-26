@@ -19,7 +19,7 @@
         .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
         .active-page { display: block !important; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .box { background: #f8f9fa; border-radius: 12px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #eee; cursor: pointer; text-align: center; }
+        .box { background: #f8f9fa; border-radius: 12px; height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid #eee; cursor: pointer; text-align: center; position: relative; }
         .box i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
         .box span { font-size: 9px; font-weight: 800; text-transform: uppercase; }
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; height: 75px; border-top: 1px solid #eee; z-index: 1000; }
@@ -31,13 +31,14 @@
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .status-btn { padding: 14px; border: none; border-radius: 10px; color: #fff; font-weight: 800; cursor: pointer; font-size: 13px; }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; }
-        .panel-box { background: white; border-radius: 15px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; box-shadow: 4px 4px 0px #000; cursor: pointer; }
+        .panel-box { background: white; border-radius: 15px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; box-shadow: 4px 4px 0px #000; cursor: pointer; position: relative; }
         .panel-box i { font-size: 24px; color: var(--primary); margin-bottom: 5px; }
         .panel-box span { font-size: 10px; font-weight: bold; text-align: center; }
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:20000; }
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:92%; max-height: 85vh; background:white; padding:20px; border-radius:15px; border:3px solid #000; overflow-y: auto; }
         .input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #000; border-radius: 10px; font-size: 16px; outline: none; }
         .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; color: white; }
+        .alert-dot { position: absolute; top: -5px; right: -5px; background: red; width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; display: none; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
@@ -110,8 +111,11 @@
     </div>
 
     <div class="menu-grid">
+        <div class="panel-box" id="custDataBtn" onclick="fetchList('CUST')">
+            <div class="alert-dot" id="newAlert"></div>
+            <i class="fas fa-database"></i><span>CUST DATA</span>
+        </div>
         <div class="panel-box" onclick="openM('reg-modal')"><i class="fas fa-user-plus"></i><span>TEAM REG</span></div>
-        <div class="panel-box" onclick="fetchList('CUST')"><i class="fas fa-database"></i><span>CUST DATA</span></div>
         <div class="panel-box" onclick="fetchList('TEAM')"><i class="fas fa-users-cog"></i><span>TEAM LIST</span></div>
         <div class="panel-box" onclick="openM('as-modal')"><i class="fas fa-link"></i><span>ASSIGN</span></div>
         <div class="panel-box" onclick="alert('Generating ID...')"><i class="fas fa-id-card"></i><span>ID CARD</span></div>
@@ -130,7 +134,7 @@
     <h3>👷 टीम रजिस्ट्रेशन</h3>
     <input type="text" id="rName" class="input" placeholder="नाम">
     <input type="tel" id="rPhone" class="input" placeholder="व्हाट्सएप नंबर">
-    <button class="btn-action" style="background:#25d366" onclick="sendWA('REG')">WhatsApp OTP</button>
+    <button class="btn-action" style="background:#25d366" onclick="sendWA('REG')">WhatsApp भेजें</button>
     <button class="btn-action" style="background:var(--danger)" onclick="closeM('reg-modal')">बंद करें</button>
 </div></div>
 
@@ -157,74 +161,136 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxyXjEGJq0GmvcPVz7ceuYP4B9enRxXXlhhhEdwObuAEFds4AXiNFkqCsGT5zY6PBo_MQ/exec';
 
-    // --- (बाकी पुराने फंक्शन्स वैसे ही रहेंगे) ---
+    // Admin Toggle
     let clicks = 0;
     document.getElementById('adminTrigger').onclick = () => { clicks++; if(clicks === 3) { openM('login-modal'); clicks = 0; } };
-    function checkPass() { if(document.getElementById('adminPass').value === "Ak2525") { closeM('login-modal'); document.getElementById('user-view').style.display = 'none'; document.getElementById('admin-panel').style.display = 'block'; } else { alert("पासवर्ड गलत है!"); } }
+    
+    function checkPass() { 
+        if(document.getElementById('adminPass').value === "Ak2525") { 
+            closeM('login-modal'); 
+            document.getElementById('user-view').style.display = 'none'; 
+            document.getElementById('admin-panel').style.display = 'block'; 
+            checkAlerts(); // एडमिन खुलते ही नई बुकिंग चेक करें
+        } else { alert("पासवर्ड गलत है!"); } 
+    }
+
     function openM(id) { document.getElementById(id).style.display = 'block'; }
     function closeM(id) { document.getElementById(id).style.display = 'none'; }
-    function showPage(id, el) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav')); if(el) el.classList.add('active-nav'); }
+    function showPage(id, el) { 
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); 
+        document.getElementById(id).classList.add('active-page'); 
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav')); 
+        if(el) el.classList.add('active-nav'); 
+    }
 
     const svcs = { 'PLUMBER': ['नल रिपेयर', 'लीकेज', 'टंकी सफाई'], 'ELECTRICIAN': ['वायरिंग', 'पंख', 'इनवर्टर'], 'CARPENTER': ['लॉक', 'कुर्सी', 'अलमारी'], 'RO SERVICE': ['फ़िल्टर', 'मेम्ब्रेन', 'लीकेज'], 'CCTV': ['कैमरा', 'DVR', 'ऑनलाइन'], 'AC SERVICE': ['गैस', 'सर्विसिंग', 'PCB'], 'CLEANING': ['हाउस', 'सोफा', 'टंकी'], 'FITTING': ['TV स्टैंड', 'पर्दा रॉड', 'आईना'], 'OTHER': ['पेंटर', 'मिस्त्री', 'लेबर'] };
 
-    function openSub(cat) { const list = document.getElementById('mList'); document.getElementById('mTitle').innerText = cat; list.innerHTML = ""; svcs[cat].forEach(s => { const d = document.createElement('div'); d.className = 'box'; d.innerHTML = `<span>${s}</span>`; d.onclick = () => { document.getElementById('selSvc').value = cat + " - " + s; closeM('subModal'); showPage('booking-page', document.querySelectorAll('.nav-item')[1]); }; list.appendChild(d); }); openM('subModal'); }
+    function openSub(cat) { 
+        const list = document.getElementById('mList'); 
+        document.getElementById('mTitle').innerText = cat; 
+        list.innerHTML = ""; 
+        svcs[cat].forEach(s => { 
+            const d = document.createElement('div'); 
+            d.className = 'box'; d.innerHTML = `<span>${s}</span>`; 
+            d.onclick = () => { 
+                document.getElementById('selSvc').value = cat + " - " + s; 
+                closeM('subModal'); 
+                showPage('booking-page', document.querySelectorAll('.nav-item')[1]); 
+            }; 
+            list.appendChild(d); 
+        }); 
+        openM('subModal'); 
+    }
 
-    function getLoc() { navigator.geolocation.getCurrentPosition(() => { document.getElementById('locBtn').innerHTML = "✅ लोकेशन मिल गई!"; document.getElementById('locBtn').style.background = "#27ae60"; document.getElementById('finalBtn').style.display = "block"; }, () => alert("लोकेशन एक्सेस दें!")); }
+    function getLoc() { 
+        navigator.geolocation.getCurrentPosition(() => { 
+            document.getElementById('locBtn').innerHTML = "✅ लोकेशन मिल गई!"; 
+            document.getElementById('locBtn').style.background = "#27ae60"; 
+            document.getElementById('finalBtn').style.display = "block"; 
+        }, () => alert("लोकेशन एक्सेस दें!")); 
+    }
 
-    // ⚡ यहाँ बदलाव है: असली डेटा भेजने वाला फंक्शन ⚡
+    // बुकिंग डेटा सेविंग
     async function submitBooking() {
         const btn = document.getElementById('finalBtn');
-        const name = document.getElementById('uName').value;
-        const phone = document.getElementById('uPhone').value;
-        const addr = document.getElementById('uAddr').value;
+        const name = document.getElementById('uName').value.trim();
+        const phone = document.getElementById('uPhone').value.trim();
+        const addr = document.getElementById('uAddr').value.trim();
         const svc = document.getElementById('selSvc').value;
-
         if(!name || !phone || !addr) return alert("सारी जानकारी भरें!");
-
         btn.innerHTML = "भेज रहे हैं... ⏳";
         btn.disabled = true;
-
         try {
-            // गूगल स्क्रिप्ट को डेटा भेजना
-            await fetch(`${scriptURL}?action=addBooking&name=${encodeURIComponent(name)}&phone=${phone}&address=${encodeURIComponent(addr)}&service=${encodeURIComponent(svc)}`);
-            alert("शुक्रिया! आपकी बुकिंग AK-HUB में सफलतापूर्वक दर्ज हो गई है।");
+            await fetch(`${scriptURL}?action=addBooking&name=${encodeURIComponent(name)}&phone=${phone}&address=${encodeURIComponent(addr)}&service=${encodeURIComponent(svc)}`, {mode: 'no-cors'});
+            alert("शुक्रिया! आपकी बुकिंग दर्ज हो गई है।");
             location.reload();
-        } catch (e) {
-            alert("बुकिंग हो गई! (नेटवर्क थोड़ा धीमा है)।");
-            location.reload();
-        }
+        } catch (e) { alert("बुकिंग कन्फर्म!"); location.reload(); }
     }
 
-    async function trackJob() {
-        const id = document.getElementById('tId').value.trim();
-        if(!id) return alert("ID भरें");
-        const res = await fetch(`${scriptURL}?action=track&id=${id}`);
-        const d = await res.json();
-        document.getElementById('tRes').style.display = "block";
-        document.getElementById('tName').innerText = d.name || "कस्टमर";
-        document.getElementById('tStat').innerText = d.currentStatus || "रिकॉर्ड नहीं मिला";
-    }
-
-    async function updateStatus(s) {
-        const id = document.getElementById('targetId').value;
-        if(!id) return alert("कस्टमर ID डालें");
-        await fetch(`${scriptURL}?action=updateStatus&id=${id}&status=${s}`);
-        alert("अपडेट किया गया: " + s);
+    // रेड अलर्ट चेक करने के लिए
+    async function checkAlerts() {
+        try {
+            const res = await fetch(`${scriptURL}?action=readBookings`);
+            const data = await res.json();
+            const hasPending = data.some(b => b.status === 'PENDING');
+            if(hasPending) {
+                document.getElementById('newAlert').style.display = 'block';
+                document.getElementById('custDataBtn').style.border = '2px solid red';
+            }
+        } catch(e) {}
     }
 
     async function fetchList(type) {
         openM('list-modal');
         const body = document.getElementById('l-body');
-        document.getElementById('l-title').innerText = type === 'CUST' ? "ग्राहक डेटा" : "टीम डेटा";
+        document.getElementById('l-title').innerText = type === 'CUST' ? "ग्राहक डेटा (PENDING लाल हैं)" : "टीम डेटा";
         body.innerHTML = "लोड हो रहा है...";
+        if(type === 'CUST') {
+            document.getElementById('newAlert').style.display = 'none';
+            document.getElementById('custDataBtn').style.border = '2px solid #000';
+        }
         const action = type === 'CUST' ? 'readBookings' : 'readTeam';
         const res = await fetch(`${scriptURL}?action=${action}`);
         const data = await res.json();
         body.innerHTML = "";
-        data.forEach(item => { body.innerHTML += `<div style="padding:10px; border-bottom:1px solid #ccc;"><b>${item.name}</b> (${item.id}) - ${item.service}</div>`; });
+        data.reverse().forEach(item => {
+            const isP = item.status === 'PENDING';
+            body.innerHTML += `<div style="padding:10px; border-bottom:1px solid #ccc; background:${isP ? '#fff0f0' : '#fff'};">
+                <b style="color:${isP ? 'red' : 'green'};">●</b> <b>${item.name}</b> (${item.id})<br>
+                <small>${item.service} | ${item.status}</small>
+            </div>`;
+        });
     }
 
-    function sendWA(type) { let p, msg; if(type === 'REG') { p = document.getElementById('rPhone').value; msg = `AK SOLUTION: नमस्ते, आपका रजिस्ट्रेशन शुरू हो गया है।`; } else { p = document.getElementById('asPh').value; let cid = document.getElementById('asC').value; msg = `🔔 नया काम! कस्टमर ID: ${cid}. - AK HUB`; } if(!p) return alert("नंबर भरें"); window.open(`https://api.whatsapp.com/send?phone=91${p}&text=${encodeURIComponent(msg)}`, '_blank'); }
+    function sendWA(type) {
+        let p, msg;
+        if(type === 'REG') {
+            p = document.getElementById('rPhone').value.trim();
+            msg = `AK SOLUTION: नमस्ते, आपका रजिस्ट्रेशन शुरू हो गया है।`;
+        } else {
+            p = document.getElementById('asPh').value.trim();
+            let cid = document.getElementById('asC').value.trim();
+            msg = `🔔 नया काम! कस्टमर ID: ${cid}. - AK HUB`;
+        }
+        if(!p || p.length < 10) return alert("सही नंबर डालें");
+        let finalP = p.length === 10 ? "91" + p : p;
+        window.location.href = `https://wa.me/${finalP}?text=${encodeURIComponent(msg)}`;
+    }
+
+    async function trackJob() {
+        const id = document.getElementById('tId').value.trim();
+        const res = await fetch(`${scriptURL}?action=track&id=${id}`);
+        const d = await res.json();
+        document.getElementById('tRes').style.display = "block";
+        document.getElementById('tName').innerText = d.name || "N/A";
+        document.getElementById('tStat').innerText = d.currentStatus || "No Record";
+    }
+
+    async function updateStatus(s) {
+        const id = document.getElementById('targetId').value;
+        await fetch(`${scriptURL}?action=updateStatus&id=${id}&status=${s}`, {mode: 'no-cors'});
+        alert("Status: " + s);
+    }
 
     let sIdx = 0; setInterval(() => { const s = document.getElementById('mainSlider'); if(s) { sIdx = (sIdx + 1) % 5; s.style.transform = `translateX(${-sIdx * 20}%)`; } }, 3500);
 </script>
