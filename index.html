@@ -161,6 +161,11 @@
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxyXjEGJq0GmvcPVz7ceuYP4B9enRxXXlhhhEdwObuAEFds4AXiNFkqCsGT5zY6PBo_MQ/exec';
 
+    // यूनिक आईडी बनाने का फंक्शन
+    function generateCustID() {
+        return "AK-" + Math.floor(1000 + Math.random() * 9000);
+    }
+
     // Admin Toggle
     let clicks = 0;
     document.getElementById('adminTrigger').onclick = () => { clicks++; if(clicks === 3) { openM('login-modal'); clicks = 0; } };
@@ -170,7 +175,7 @@
             closeM('login-modal'); 
             document.getElementById('user-view').style.display = 'none'; 
             document.getElementById('admin-panel').style.display = 'block'; 
-            checkAlerts(); // एडमिन खुलते ही नई बुकिंग चेक करें
+            checkAlerts();
         } else { alert("पासवर्ड गलत है!"); } 
     }
 
@@ -210,24 +215,35 @@
         }, () => alert("लोकेशन एक्सेस दें!")); 
     }
 
-    // बुकिंग डेटा सेविंग
+    // ⚡ यूनिक आईडी और व्हाट्सएप अलर्ट के साथ बुकिंग फंक्शन ⚡
     async function submitBooking() {
         const btn = document.getElementById('finalBtn');
         const name = document.getElementById('uName').value.trim();
         const phone = document.getElementById('uPhone').value.trim();
         const addr = document.getElementById('uAddr').value.trim();
         const svc = document.getElementById('selSvc').value;
+        
         if(!name || !phone || !addr) return alert("सारी जानकारी भरें!");
+        
+        const custID = generateCustID(); // आईडी जनरेट हुई
         btn.innerHTML = "भेज रहे हैं... ⏳";
         btn.disabled = true;
+
+        // 1. गूगल शीट में डेटा भेजना
         try {
-            await fetch(`${scriptURL}?action=addBooking&name=${encodeURIComponent(name)}&phone=${phone}&address=${encodeURIComponent(addr)}&service=${encodeURIComponent(svc)}`, {mode: 'no-cors'});
-            alert("शुक्रिया! आपकी बुकिंग दर्ज हो गई है।");
-            location.reload();
-        } catch (e) { alert("बुकिंग कन्फर्म!"); location.reload(); }
+            await fetch(`${scriptURL}?action=addBooking&id=${custID}&name=${encodeURIComponent(name)}&phone=${phone}&address=${encodeURIComponent(addr)}&service=${encodeURIComponent(svc)}`, {mode: 'no-cors'});
+        } catch (e) { console.log("Sheet Saved"); }
+
+        // 2. एडमिन को व्हाट्सएप मैसेज भेजना
+        const adminWA = "919927464530"; // आपका नंबर
+        const waMsg = `*नयी बुकिंग - AK HUB*%0A------------------%0A*ID:* ${custID}%0A*नाम:* ${name}%0A*मोबाइल:* ${phone}%0A*सर्विस:* ${svc}%0A*पता:* ${addr}`;
+        
+        alert("आपकी बुकिंग ID: " + custID + "\nकृपया इसे व्हाट्सएप पर साझा करें।");
+        
+        // सीधे व्हाट्सएप पर ले जाना
+        window.location.href = `https://wa.me/${adminWA}?text=${waMsg}`;
     }
 
-    // रेड अलर्ट चेक करने के लिए
     async function checkAlerts() {
         try {
             const res = await fetch(`${scriptURL}?action=readBookings`);
@@ -243,7 +259,7 @@
     async function fetchList(type) {
         openM('list-modal');
         const body = document.getElementById('l-body');
-        document.getElementById('l-title').innerText = type === 'CUST' ? "ग्राहक डेटा (PENDING लाल हैं)" : "टीम डेटा";
+        document.getElementById('l-title').innerText = type === 'CUST' ? "ग्राहक डेटा" : "टीम डेटा";
         body.innerHTML = "लोड हो रहा है...";
         if(type === 'CUST') {
             document.getElementById('newAlert').style.display = 'none';
@@ -257,7 +273,7 @@
             const isP = item.status === 'PENDING';
             body.innerHTML += `<div style="padding:10px; border-bottom:1px solid #ccc; background:${isP ? '#fff0f0' : '#fff'};">
                 <b style="color:${isP ? 'red' : 'green'};">●</b> <b>${item.name}</b> (${item.id})<br>
-                <small>${item.service} | ${item.status}</small>
+                <small>${item.service} | ${item.status || 'PENDING'}</small>
             </div>`;
         });
     }
@@ -279,6 +295,7 @@
 
     async function trackJob() {
         const id = document.getElementById('tId').value.trim();
+        if(!id) return alert("ID भरें");
         const res = await fetch(`${scriptURL}?action=track&id=${id}`);
         const d = await res.json();
         document.getElementById('tRes').style.display = "block";
@@ -288,8 +305,9 @@
 
     async function updateStatus(s) {
         const id = document.getElementById('targetId').value;
+        if(!id) return alert("ID डालें");
         await fetch(`${scriptURL}?action=updateStatus&id=${id}&status=${s}`, {mode: 'no-cors'});
-        alert("Status: " + s);
+        alert("Status Update: " + s);
     }
 
     let sIdx = 0; setInterval(() => { const s = document.getElementById('mainSlider'); if(s) { sIdx = (sIdx + 1) % 5; s.style.transform = `translateX(${-sIdx * 20}%)`; } }, 3500);
