@@ -26,15 +26,6 @@
         .box i { font-size: 26px; color: var(--primary); margin-bottom: 5px; }
         .box span { font-size: 10px; font-weight: 700; color: #333; text-transform: uppercase; }
         
-        /* Admin Grid (Fixed) */
-        .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
-        .menu-box { background: #fff; padding: 18px 5px; border-radius: 12px; text-align: center; border: 1.5px solid #333; cursor: pointer; }
-        .menu-box i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
-        .menu-box span { display: block; font-size: 10px; font-weight: bold; }
-
-        .status-bar { display: flex; overflow-x: auto; gap: 8px; margin-bottom: 15px; padding: 5px; scrollbar-width: none; }
-        .stat-tag { background: #fff; padding: 8px 15px; border-radius: 20px; font-size: 10px; border: 1px solid #ddd; white-space: nowrap; font-weight: bold; }
-
         /* Pages */
         .page { display: none; padding: 15px; animation: fadeIn 0.3s; }
         .active-page { display: block; }
@@ -79,57 +70,26 @@
     <input type="text" id="uName" class="input" placeholder="आपका पूरा नाम">
     <input type="tel" id="uPhone" class="input" placeholder="मोबाइल नंबर">
     <textarea id="uAddr" class="input" rows="3" placeholder="मकान नंबर, गली, मोहल्ला, शहर"></textarea>
-    <button id="locBtn" onclick="askLocation()" class="btn-main" style="background:#3498db;"><i class="fas fa-map-marker-alt"></i> लोकेशन वेरिफाई करें</button>
-    <button id="finalBtn" onclick="finalSubmit()" class="btn-main" style="display:none; background:var(--success); margin-top:10px;">✅ बुकिंग कन्फर्म करें</button>
+    <button id="locBtn" onclick="askLocation()" class="btn-main" style="background:#3498db; margin-bottom:10px;"><i class="fas fa-map-marker-alt"></i> लोकेशन वेरिफाई करें</button>
+    <button id="finalBtn" onclick="finalSubmit()" class="btn-main" style="background:var(--success);">✅ व्हाट्सएप पर बुकिंग भेजें</button>
 </div>
 
-<div id="track-page" class="page">
-    <h3 style="text-align:center;">स्टेटस ट्रैक</h3>
-    <input type="text" id="trackId" class="input" placeholder="ID डालें (AK-1001)">
-    <button onclick="trackService()" class="btn-main" style="background:var(--primary);">ट्रैक करें</button>
-    <div id="track-res" style="margin-top:20px;"></div>
-</div>
-
-<div id="admin-page" class="page">
-    <div id="adm-login">
-        <input type="password" id="pin" class="input" placeholder="एडमिन पिन (Ak2525)">
-        <button onclick="checkAdmin()" class="btn-main" style="background:var(--dark);">लॉगिन</button>
-    </div>
-    <div id="adm-content" style="display:none;">
-        <div class="status-bar">
-            <div class="stat-tag" style="color:green;">Done</div>
-            <div class="stat-tag" style="color:blue;">Running</div>
-            <div class="stat-tag" style="color:orange;">Pending</div>
-            <div class="stat-tag">Recd.</div>
-            <div class="stat-tag">Booking</div>
-        </div>
-        <div class="admin-grid">
-            <div class="menu-box" onclick="document.getElementById('team-reg-modal').style.display='block'"><i class="fas fa-user-plus"></i><span>Team Reg.</span></div>
-            <div class="menu-box"><i class="fas fa-fingerprint"></i><span>ID Generate</span></div>
-            <div class="menu-box" onclick="document.getElementById('assign-modal').style.display='block'"><i class="fas fa-link"></i><span>Assign</span></div>
-            <div class="menu-box" onclick="openSheet()"><i class="fas fa-users-cog" style="color:green;"></i><span>Team List</span></div>
-            <div class="menu-box" onclick="openSheet()"><i class="fas fa-folder-open" style="color:blue;"></i><span>Cust. Data</span></div>
-            <div class="menu-box" onclick="openSheet()"><i class="fas fa-database" style="color:black;"></i><span>Full Data</span></div>
-        </div>
+<div id="sub-svc-modal" class="modal">
+    <div class="modal-content">
+        <h3 id="parent-name" style="text-align:center; color:var(--primary);"></h3>
+        <hr style="margin:10px 0;">
+        <div id="sub-list" class="grid" style="grid-template-columns:1fr 1fr;"></div>
+        <button onclick="document.getElementById('sub-svc-modal').style.display='none'" class="btn-main" style="background:#eee; color:black; margin-top:10px;">बंद करें</button>
     </div>
 </div>
-
-<div id="sub-svc-modal" class="modal"><div class="modal-content"><h3 id="parent-name" style="text-align:center; color:var(--primary);"></h3><hr style="margin:10px 0;"><div id="sub-list" class="grid" style="grid-template-columns:1fr 1fr;"></div><button onclick="document.getElementById('sub-svc-modal').style.display='none'" class="btn-main" style="background:#eee; color:black; margin-top:10px;">बंद करें</button></div></div>
-
-<div id="team-reg-modal" class="modal"><div class="modal-content"><h3>👷 टीम रजिस्ट्रेशन</h3><input type="text" id="tName" class="input" placeholder="नाम"><input type="tel" id="tPhone" class="input" placeholder="व्हाट्सएप नंबर"><button onclick="alert('Saved!')" class="btn-main" style="background:var(--success);">सेव करें</button><button onclick="document.getElementById('team-reg-modal').style.display='none'" style="width:100%; background:none; border:none; color:red; margin-top:10px;">बंद करें</button></div></div>
-
-<div id="assign-modal" class="modal"><div class="modal-content"><h3>🔗 असाइन टास्क</h3><input type="text" id="as-cid" class="input" placeholder="Cust ID"><input type="text" id="as-tid" class="input" placeholder="Team ID"><button onclick="alert('Assigned!')" class="btn-main" style="background:var(--primary);">असाइन</button><button onclick="document.getElementById('assign-modal').style.display='none'" style="width:100%; background:none; border:none; color:red; margin-top:10px;">बंद करें</button></div></div>
 
 <nav class="nav-bar">
     <div class="nav-item active-nav" onclick="showPage('home-page', this)"><i class="fas fa-home"></i>Home</div>
     <div class="nav-item" onclick="showPage('booking-page', this)"><i class="fas fa-calendar-check"></i>Booking</div>
-    <div class="nav-item" onclick="showPage('track-page', this)"><i class="fas fa-search-location"></i>Track</div>
-    <div class="nav-item" onclick="showPage('admin-page', this)"><i class="fas fa-user-shield"></i>Admin</div>
+    <div class="nav-item" onclick="alert('Tracking coming soon!')"><i class="fas fa-search-location"></i>Track</div>
 </nav>
 
 <script>
-    const scriptURL = 'YOUR_APPS_SCRIPT_URL';
-
     const subServices = {
         'PLUMBER': ['नल रिपेयर', 'टंकी सफाई', 'नई फिटिंग', 'लीकेज', 'गीजर वर्क', 'सिंक जाम', 'पाइप लाइन', 'कमोड फिटिंग', 'पंप मोटर'],
         'ELECTRICIAN': ['पंख रिपेयर', 'वायरिंग', 'बोर्ड फिटिंग', 'MCB चेंज', 'इनवर्टर', 'शॉर्ट सर्किट', 'लाइट फिटिंग', 'गीजर लाइन', 'मोटर वाइंडिंग'],
@@ -141,6 +101,8 @@
         'AC SERVICE': ['एसी सर्विस', 'गैस चार्ज', 'इंस्टॉलेशन', 'PCB रिपेयर', 'अन-इंस्टॉल', 'लीकेज चेक', 'फैन मोटर', 'कंप्रेसर', 'कैपेसिटर'],
         'OTHER': ['पेंटर', 'मिस्त्री', 'वेल्डिंग', 'टाइल वर्क', 'पत्थर घिसाई', 'पुट्टी वर्क', 'वॉटरप्रूफिंग', 'दीवार तोड़ना', 'कंक्रीट वर्क']
     };
+
+    let userLocation = "Not Provided";
 
     function showPage(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -165,11 +127,52 @@
         document.getElementById('sub-svc-modal').style.display='block';
     }
 
-    function checkAdmin() { if(document.getElementById('pin').value === "Ak2525") { document.getElementById('adm-login').style.display='none'; document.getElementById('adm-content').style.display='block'; } }
-    function askLocation() { navigator.geolocation.getCurrentPosition(() => { document.getElementById('locBtn').innerText = "✅ लोकेशन वेरिफाई"; document.getElementById('finalBtn').style.display = "block"; }); }
-    function openSheet() { window.open('https://docs.google.com/spreadsheets/', '_blank'); }
+    function askLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos) => {
+                userLocation = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                document.getElementById('locBtn').innerHTML = "✅ लोकेशन वेरिफाई हो गई";
+                document.getElementById('locBtn').style.background = "#27ae60";
+            }, () => {
+                alert("लोकेशन एक्सेस नहीं मिली। आप मैन्युअल पता भरें।");
+            });
+        }
+    }
 
-    let idx = 0; setInterval(() => { const s = document.getElementById('mainSlider'); if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 20}%)`; } }, 3000);
+    function finalSubmit() {
+        const name = document.getElementById('uName').value;
+        const phone = document.getElementById('uPhone').value;
+        const addr = document.getElementById('uAddr').value;
+        const service = document.getElementById('svc-title').innerText;
+
+        if(!name || !phone || !addr) {
+            alert("कृपया नाम, मोबाइल और पता जरूर भरें!");
+            return;
+        }
+
+        const myNumber = "919927464530"; 
+        
+        // WhatsApp Message Formatting
+        const message = `*🛠️ नई बुकिंग: AK SOLUTION HUB* %0A` +
+                        `-------------------------------%0A` +
+                        `*ग्राहक:* ${name}%0A` +
+                        `*मोबाइल:* ${phone}%0A` +
+                        `*सर्विस:* ${service}%0A` +
+                        `*पता:* ${addr}%0A` +
+                        `*लोकेशन लिंक:* ${userLocation}%0A` +
+                        `-------------------------------%0A` +
+                        `_यह मैसेज ऐप से भेजा गया है_`;
+
+        const whatsappURL = `https://wa.me/${myNumber}?text=${message}`;
+        window.open(whatsappURL, '_blank');
+    }
+
+    // Slider Logic
+    let idx = 0; 
+    setInterval(() => { 
+        const s = document.getElementById('mainSlider'); 
+        if(s) { idx = (idx + 1) % 5; s.style.transform = `translateX(${-idx * 20}%)`; } 
+    }, 3000);
 </script>
 </body>
 </html>
