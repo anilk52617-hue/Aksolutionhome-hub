@@ -12,30 +12,21 @@
         body { background: #f4f7f6; color: var(--dark); padding-bottom: 30px; text-align: center; }
         .header { background: #fff; padding: 15px; border-bottom: 4px solid var(--primary); font-weight: bold; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         #dashboard { padding: 15px; max-width: 500px; margin: auto; }
-        
-        /* 6 Indicators */
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
         .ind-box { background: white; padding: 12px 5px; border-radius: 12px; border: 2px solid #000; box-shadow: 3px 3px 0px #000; cursor: pointer; }
         .ind-box span { font-size: 10px; font-weight: 900; color: #555; display: block; text-transform: uppercase; }
         .ind-box b { font-size: 20px; color: var(--primary); }
-
-        /* ID Status Machine */
         .status-panel { background: white; padding: 15px; border-radius: 15px; border: 2px solid #000; margin-bottom: 20px; box-shadow: 5px 5px 0px #000; }
         .input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #000; border-radius: 10px; font-size: 16px; text-align:center; font-weight:bold; outline: none; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .status-btn { padding: 14px; border: 2px solid #000; border-radius: 10px; color: #fff; font-weight: 800; cursor: pointer; font-size: 13px; }
-
-        /* Bottom Menu */
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .panel-box { background: white; border-radius: 15px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; box-shadow: 4px 4px 0px #000; cursor: pointer; }
         .panel-box i { font-size: 26px; color: var(--primary); margin-bottom: 5px; }
         .panel-box span { font-size: 10px; font-weight: 900; text-align: center; }
-
-        /* Modal Design */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; }
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:92%; max-height: 90vh; background:white; padding:20px; border-radius:20px; border:3px solid #000; overflow-y: auto; text-align: center; }
         .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; color: white; font-size: 16px; }
-        
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
     </style>
 </head>
@@ -43,24 +34,24 @@
 
 <div id="loader">
     <i class="fas fa-cog fa-spin fa-3x" style="color:var(--primary);"></i>
-    <p style="margin-top:10px; font-weight:bold;">डेटा कनेक्ट किया जा रहा है...</p>
+    <p style="margin-top:10px; font-weight:bold;">AK सिस्टम सिंक हो रहा है...</p>
 </div>
 
 <div class="header"><h2>AK MASTER ADMIN</h2></div>
 
 <div id="dashboard">
     <div class="indicator-grid">
-        <div class="ind-box"><span>बुकिंग</span><b id="count-book">0</b></div>
+        <div class="ind-box"><span>कुल बुकिंग</span><b id="count-book">0</b></div>
         <div class="ind-box" style="border-color:var(--success)"><span>डन</span><b id="count-done">0</b></div>
         <div class="ind-box" style="border-color:var(--running)"><span>रनिंग</span><b id="count-run">0</b></div>
         <div class="ind-box" style="border-color:var(--warning)"><span>पेंडिंग</span><b id="count-pend">0</b></div>
         <div class="ind-box" style="border-color:var(--danger)"><span>रिजेक्ट</span><b id="count-rej">0</b></div>
-        <div class="ind-box" style="background:#fff3cd"><span>टीम</span><b id="count-team">0</b></div>
+        <div class="ind-box" style="background:#fff3cd"><span>कुल टीम</span><b id="count-team">0</b></div>
     </div>
 
     <div class="status-panel">
         <h4 style="text-align:center;">📊 आईडी स्टेटस मशीन</h4>
-        <input type="text" id="targetId" class="input" placeholder="C-ID (उदा: AK-101)">
+        <input type="text" id="targetId" class="input" placeholder="Customer ID (उदा: AK-101)">
         <div class="grid-2">
             <button class="status-btn" style="background:var(--success)" onclick="updateStatus('Done')">DONE</button>
             <button class="status-btn" style="background:var(--warning); color:#000;" onclick="updateStatus('Pending')">PENDING</button>
@@ -72,10 +63,21 @@
     <div class="menu-grid">
         <div class="panel-box" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>TEAM REG</span></div>
         <div class="panel-box" onclick="loadList('TEAM')"><i class="fas fa-users-cog"></i><span>TEAM LIST</span></div>
-        <div class="panel-box" onclick="openP('as-p')"><i class="fas fa-link"></i><span>ASSIGN</span></div>
+        <div class="panel-box" onclick="openP('as-p')"><i class="fas fa-link"></i><span>ASSIGN WORK</span></div>
         <div class="panel-box" onclick="loadList('CUST')"><i class="fas fa-database"></i><span>CUST DATA</span></div>
         <div class="panel-box" onclick="openP('id-p')"><i class="fas fa-id-card"></i><span>ID CARD</span></div>
         <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync"></i><span>REFRESH</span></div>
+    </div>
+</div>
+
+<div id="as-p" class="modal">
+    <div class="modal-content">
+        <h3 style="color:var(--primary); margin-bottom:15px;">काम असाइन करें (Exchange)</h3>
+        <input type="text" id="as-cid" class="input" placeholder="कस्टमर ID (AK-XXXX)">
+        <input type="text" id="as-tid" class="input" placeholder="टीम ID (T-XXXX)">
+        <p style="font-size:12px; color:gray; margin-bottom:10px;">नोट: असाइन करने पर स्टेटस 'Running' हो जाएगा और व्हाट्सएप खुलेगा।</p>
+        <button class="btn-action" style="background:var(--primary)" onclick="assignWork()">असाइन करें और मैसेज भेजें</button>
+        <button class="btn-action" style="background:#666" onclick="closeP('as-p')">रद्द करें</button>
     </div>
 </div>
 
@@ -85,14 +87,14 @@
         <div id="otp-1">
             <input type="text" id="reg-name" class="input" placeholder="नाम">
             <input type="text" id="reg-father" class="input" placeholder="पिता का नाम">
-            <input type="number" id="reg-phone" class="input" placeholder="व्हाट्सएप (91...)">
-            <input type="text" id="reg-service" class="input" placeholder="सर्विस">
+            <input type="number" id="reg-phone" class="input" placeholder="WhatsApp (91...)">
+            <input type="text" id="reg-service" class="input" placeholder="सर्विस (उदा: PLUMBER)">
             <button class="btn-action" style="background:var(--primary)" onclick="sendOTP()">WhatsApp OTP भेजें</button>
         </div>
         <div id="otp-2" style="display:none;">
             <p style="color:green; font-weight:bold;">OTP व्हाट्सएप पर भेज दिया गया है</p>
-            <input type="number" id="otp-input" class="input" placeholder="OTP कोड">
-            <button class="btn-action" style="background:var(--success)" onclick="verifyOTP()">वेरिफाई और रजिस्टर</button>
+            <input type="number" id="otp-input" class="input" placeholder="4 अंको का कोड">
+            <button class="btn-action" style="background:var(--success)" onclick="verifyOTP()">कन्फर्म और रजिस्टर</button>
         </div>
         <button class="btn-action" style="background:#666" onclick="closeP('reg-p')">बंद करें</button>
     </div>
@@ -103,7 +105,7 @@
         <div id="id-card-render" style="width:100%; height:420px; border:2px solid #000; border-radius:15px; background:#fff; position:relative; overflow:hidden;">
             <div style="background:var(--primary); color:#fff; padding:10px; font-weight:bold;">AK SOLUTION HUB</div>
             <div style="text-align:center; margin-top:15px;">
-                <img id="v-img" src="https://via.placeholder.com/100" style="width:100px; height:100px; border-radius:10px; border:1px solid #000;">
+                <img id="v-img" src="1.jpg" style="width:100px; height:100px; border-radius:10px; border:1px solid #000;">
                 <h2 id="v-name" style="margin-top:10px;">---</h2>
                 <h4 id="v-id" style="color:red;">ID: T-XXXX</h4>
                 <span id="v-svc" style="background:#eee; padding:3px 10px; border-radius:20px; font-size:12px;">EXPERT</span>
@@ -113,7 +115,7 @@
                 <p style="font-size:10px; font-weight:bold;">AK SOLUTION HUB<br>MOHIT APPROVED</p>
             </div>
         </div>
-        <input type="text" id="id-load-id" class="input" placeholder="T-ID डालें">
+        <input type="text" id="id-load-id" class="input" placeholder="T-ID (उदा: T-1001)">
         <button class="btn-action" style="background:var(--dark)" onclick="loadID()">LOAD ID</button>
         <button class="btn-action" style="background:var(--success)" onclick="saveID()">DOWNLOAD PHOTO</button>
         <button class="btn-action" style="background:#666" onclick="closeP('id-p')">CLOSE</button>
@@ -122,14 +124,14 @@
 
 <div id="list-p" class="modal">
     <div class="modal-content" style="width:98%;">
-        <h3 id="lt">लिस्ट</h3>
+        <h3 id="lt">डेटा लिस्ट</h3>
         <div id="lb" style="margin-top:10px; overflow-x:auto;"></div>
         <button class="btn-action" style="background:var(--danger)" onclick="closeP('list-p')">वापस</button>
     </div>
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmh2ezhk9TFSaQtL5gaSf4GLUvIIY9bAqRqtGDwQmJjNinl_1UTBIg5joRlsX6uJu18Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9woLHyC1l2QR0NEb-hrUaA603p1BaWyoe1m0r3GRw1X-s34t-8EIGQDzxh9VXRukSDA/exec";
     let curOTP, tempS;
 
     window.onload = syncCounts;
@@ -148,14 +150,38 @@
             document.getElementById('count-pend').innerText = d.pend;
             document.getElementById('count-rej').innerText = d.rej;
             document.getElementById('count-team').innerText = d.team;
-        } catch(e) { console.log("Error"); }
+        } catch(e) { console.log("Sync Error"); }
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    async function assignWork() {
+        const cid = document.getElementById('as-cid').value.toUpperCase();
+        const tid = document.getElementById('as-tid').value.toUpperCase();
+        
+        if(!cid || !tid) return alert("कृपया दोनों ID भरें!");
+        
+        document.getElementById('loader').style.display = 'flex';
+        
+        try {
+            // 1. शीट में स्टेटस को 'Running' करना
+            await fetch(`${SCRIPT_URL}?action=updateStatus&id=${cid}&status=Running`, {mode:'no-cors'});
+            
+            // 2. एक्सचेंज मैसेज तैयार करना
+            const exchangeMsg = `*AK SOLUTION HUB - WORK ASSIGNED*%0A%0A🛠️ *FOR TEAM:*%0AHello, Work Assigned!%0A*Customer ID:* ${cid}%0A*Status:* Running%0A%0A👤 *FOR CUSTOMER:*%0Aआपके काम के लिए हमारी टीम के सदस्य (ID: ${tid}) निकल चुके हैं।%0A%0A_Powered by AK Solution Hub_`;
+            
+            window.open(`https://wa.me/?text=${exchangeMsg}`, '_blank');
+            
+            alert("असाइनमेंट सफल! व्हाट्सएप मैसेज शेयर करें।");
+            closeP('as-p');
+            syncCounts();
+        } catch(e) { alert("Error!"); }
         document.getElementById('loader').style.display = 'none';
     }
 
     function sendOTP() {
         const n = document.getElementById('reg-name').value;
         const p = document.getElementById('reg-phone').value;
-        if(!n || !p) return alert("नाम और नंबर भरें");
+        if(!n || !p) return alert("नाम और नंबर अनिवार्य हैं");
         curOTP = Math.floor(1000 + Math.random() * 9000);
         tempS = { name:n, phone:p, father:document.getElementById('reg-father').value, service:document.getElementById('reg-service').value };
         window.open(`https://wa.me/${p}?text=AK%20SOLUTION%20HUB%20OTP:%20${curOTP}`, '_blank');
@@ -164,38 +190,41 @@
     }
 
     async function verifyOTP() {
-        if(document.getElementById('otp-input').value != curOTP) return alert("Wrong OTP");
+        if(document.getElementById('otp-input').value != curOTP) return alert("गलत OTP");
         document.getElementById('loader').style.display = 'flex';
         const params = new URLSearchParams({ action: 'addTeam', ...tempS });
         await fetch(`${SCRIPT_URL}?${params.toString()}`, {mode:'no-cors'});
-        alert("Success! Staff Registered.");
+        alert("स्टाफ रजिस्टर हो गया!");
         closeP('reg-p');
         syncCounts();
     }
 
     async function updateStatus(st) {
-        let id = document.getElementById('targetId').value;
-        if(!id) return alert("ID??");
+        let id = document.getElementById('targetId').value.toUpperCase();
+        if(!id) return alert("ID भरें");
         document.getElementById('loader').style.display = 'flex';
         await fetch(`${SCRIPT_URL}?action=updateStatus&id=${id}&status=${st}`, {mode:'no-cors'});
-        alert("OK!");
+        alert("स्टेटस अपडेट हो गया!");
         syncCounts();
     }
 
     async function loadList(type) {
         document.getElementById('loader').style.display = 'flex';
-        let res = await fetch(`${SCRIPT_URL}?action=getList&type=${type}`);
-        let data = await res.json();
-        let h = "<table border='1' style='width:100%; border-collapse:collapse;'><tr><th>ID</th><th>Name</th><th>Status</th></tr>";
-        data.forEach(r => { h += `<tr><td>${r.ID}</td><td>${r.Name}</td><td>${r.Status || r.Service}</td></tr>`; });
-        document.getElementById('lb').innerHTML = h + "</table>";
-        document.getElementById('lt').innerText = type + " LIST";
-        openP('list-p');
+        try {
+            let res = await fetch(`${SCRIPT_URL}?action=getList&type=${type}`);
+            let data = await res.json();
+            let h = "<table border='1' style='width:100%; border-collapse:collapse; background:white;'><tr><th style='padding:8px;'>ID</th><th style='padding:8px;'>Name</th><th style='padding:8px;'>Status/Svc</th></tr>";
+            data.forEach(r => { h += `<tr><td style='padding:8px;'>${r.ID}</td><td style='padding:8px;'>${r.Name}</td><td style='padding:8px;'>${r.Status || r.Service}</td></tr>`; });
+            document.getElementById('lb').innerHTML = h + "</table>";
+            document.getElementById('lt').innerText = type + " LIST";
+            openP('list-p');
+        } catch(e) { alert("Data load error"); }
         document.getElementById('loader').style.display = 'none';
     }
 
     async function loadID() {
-        let tid = document.getElementById('id-load-id').value;
+        let tid = document.getElementById('id-load-id').value.toUpperCase();
+        if(!tid) return alert("ID भरें");
         document.getElementById('loader').style.display = 'flex';
         let res = await fetch(`${SCRIPT_URL}?action=getList&type=TEAM`);
         let data = await res.json();
@@ -204,14 +233,14 @@
             document.getElementById('v-name').innerText = s.Name;
             document.getElementById('v-id').innerText = "ID: " + s.ID;
             document.getElementById('v-svc').innerText = s.Service || "EXPERT";
-        } else { alert("Not Found"); }
+        } else { alert("स्टाफ नहीं मिला!"); }
         document.getElementById('loader').style.display = 'none';
     }
 
     function saveID() {
         html2canvas(document.getElementById('id-card-render')).then(c => {
             let l = document.createElement('a');
-            l.download = 'ID_CARD.png';
+            l.download = 'AK_ID_CARD.png';
             l.href = c.toDataURL();
             l.click();
         });

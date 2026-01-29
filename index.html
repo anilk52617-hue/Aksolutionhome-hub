@@ -23,20 +23,20 @@
         .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .banner img { width: 100%; display: block; }
 
-        /* Grid - White Card Style */
+        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; background: var(--bg); }
         .box { background: #fff; border-radius: 15px; padding: 20px 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; }
         .box i { font-size: 32px; color: var(--primary); margin-bottom: 10px; display: block; }
         .box span { font-size: 11px; font-weight: 800; color: #333; }
 
-        /* Bracket Style Inputs */
+        /* Inputs */
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-page { display: block; }
         .input-box { width: 100%; padding: 16px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; margin-bottom: 15px; outline: none; text-align: center; transition: 0.3s; }
         .input-box:focus { border-color: var(--primary); background: #f0f7ff; }
         .main-btn { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,94,184,0.3); }
 
-        /* Bottom Nav */
+        /* Nav */
         .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 1000; }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 12px; cursor: pointer; }
         .nav-item.active { color: var(--primary); border-top: 4px solid var(--primary); font-weight: bold; }
@@ -109,7 +109,8 @@
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmh2ezhk9TFSaQtL5gaSf4GLUvIIY9bAqRqtGDwQmJjNinl_1UTBIg5joRlsX6uJu18Q/exec";
+    // आपकी दी हुई नई Script URL यहाँ अपडेट कर दी गई है
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9woLHyC1l2QR0NEb-hrUaA603p1BaWyoe1m0r3GRw1X-s34t-8EIGQDzxh9VXRukSDA/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
 
@@ -127,7 +128,6 @@
 
     const icons = {'PLUMBER':'faucet','ELECTRICIAN':'bolt','CARPENTER':'hammer','RO SERVICE':'tint','CCTV':'video','AC SERVICE':'snowflake','CLEANING':'broom','FITTING':'tools','OTHER':'plus-circle'};
 
-    // Build Grid
     const grid = document.getElementById('mainGrid');
     Object.keys(services).forEach(s => {
         grid.innerHTML += `<div class="box" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}"></i><span>${s}</span></div>`;
@@ -180,14 +180,13 @@
         if(!name || !phone || !addr) return alert("कृपया सभी जानकारी भरें!");
         document.getElementById('loader').style.display = 'flex';
         
+        // स्क्रिप्ट में सीरियल ID जनरेशन होने तक रैंडम ID (बाद में स्क्रिप्ट खुद हैंडल करेगी)
         const id = "AK-" + Math.floor(1000 + Math.random() * 9000);
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            // गूगल शीट में डेटा सेव करना
             await fetch(`${SCRIPT_URL}?Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`, {mode: 'no-cors'});
             
-            // व्हाट्सएप मैसेज भेजना
             const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ Service: ${svc}%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A🏠 Address: ${addr}%0A📍 Location: ${userGPS}`;
             window.open(`https://wa.me/919927464530?text=${msg}`);
             
@@ -199,7 +198,6 @@
         }
     }
 
-    // --- मास्टर एडमिन एक्सेस ---
     function adminCheck() {
         tapCount++;
         if(tapCount === 3) { 
@@ -213,7 +211,6 @@
         const pass = document.getElementById('adminPass').value;
         if(pass === "Ak2525") { 
             alert("✅ लॉगिन सफल!"); 
-            // एडमिन पैनल फाइल पर रीडायरेक्ट
             window.location.href = "admin.html"; 
         } else { 
             alert("❌ गलत पासवर्ड!"); 
