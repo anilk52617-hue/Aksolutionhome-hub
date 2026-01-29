@@ -5,310 +5,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AK MASTER ADMIN - PRO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f1c40f; --dark: #1a1a1a; --running: #3498db; }
+        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f1c40f; --dark: #000; --running: #3498db; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: #f0f2f5; color: var(--dark); padding-bottom: 30px; }
+        body { background: #f4f7f6; color: var(--dark); padding-bottom: 30px; text-align: center; }
+        .header { background: #fff; padding: 15px; border-bottom: 4px solid var(--primary); font-weight: bold; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        #dashboard { padding: 15px; max-width: 500px; margin: auto; }
         
-        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--primary); z-index:100000; display:flex; justify-content:center; align-items:center; }
-        .login-card { background:white; padding:30px; border-radius:20px; width:90%; max-width:350px; text-align:center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-
-        .header { background: #fff; padding: 15px; text-align: center; border-bottom: 4px solid var(--primary); font-weight: bold; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        #admin-content { display:none; padding: 15px; max-width: 500px; margin: auto; }
-        
+        /* 6 Indicators */
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .ind-box { background: white; padding: 12px 5px; border-radius: 12px; border: 2px solid #000; text-align: center; box-shadow: 4px 4px 0px #000; cursor: pointer; transition: 0.2s; }
-        .ind-box:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; }
-        .ind-box b { font-size: 18px; color: var(--primary); display: block; }
-        .ind-box span { font-size: 9px; font-weight: 900; color: #555; text-transform: uppercase; }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 12px; border: 2px solid #000; box-shadow: 3px 3px 0px #000; cursor: pointer; }
+        .ind-box span { font-size: 10px; font-weight: 900; color: #555; display: block; text-transform: uppercase; }
+        .ind-box b { font-size: 20px; color: var(--primary); }
 
+        /* ID Status Machine */
         .status-panel { background: white; padding: 15px; border-radius: 15px; border: 2px solid #000; margin-bottom: 20px; box-shadow: 5px 5px 0px #000; }
-        .input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #000; border-radius: 10px; font-size: 15px; font-weight: bold; text-align: center; outline: none; }
+        .input { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #000; border-radius: 10px; font-size: 16px; text-align:center; font-weight:bold; outline: none; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .status-btn { padding: 14px; border: 2px solid #000; border-radius: 10px; color: #fff; font-weight: 800; cursor: pointer; font-size: 13px; }
+
+        /* Bottom Menu */
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .panel-box { background: white; border-radius: 15px; height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; box-shadow: 4px 4px 0px #000; cursor: pointer; }
+        .panel-box i { font-size: 26px; color: var(--primary); margin-bottom: 5px; }
+        .panel-box span { font-size: 10px; font-weight: 900; text-align: center; }
+
+        /* Modal Design */
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; }
+        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:92%; max-height: 90vh; background:white; padding:20px; border-radius:20px; border:3px solid #000; overflow-y: auto; text-align: center; }
+        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; margin-top: 10px; cursor: pointer; color: white; font-size: 16px; }
         
-        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .panel-box { background: white; border-radius: 15px; height: 85px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #000; box-shadow: 3px 3px 0px #000; cursor: pointer; }
-        .panel-box i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
-        .panel-box span { font-size: 9px; font-weight: 900; }
-
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; overflow-y: auto; }
-        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:92%; background:white; padding:20px; border-radius:20px; border:3px solid #000; }
-        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid #000; font-weight: bold; margin-top: 10px; cursor: pointer; color: white; border-bottom: 5px solid rgba(0,0,0,0.2); }
-
-        /* ID CARD DESIGN */
-        #id-card-view { width: 260px; margin: auto; background: white; border: 2px solid #000; border-radius: 15px; overflow: hidden; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .card-header { background: linear-gradient(90deg, #f1c40f 50%, #005eb8 50%); height: 50px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; text-shadow: 1px 1px 2px #000; }
-        .card-photo { width: 90px; height: 90px; background: #eee; border-radius: 50%; margin: -25px auto 10px; border: 3px solid white; overflow: hidden; cursor: pointer; position: relative; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .card-info { padding: 10px; text-align: center; font-size: 12px; }
-        .card-footer { background: #000; color: white; font-size: 10px; padding: 6px; text-align: center; }
-
-        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:1000000; justify-content:center; align-items:center; flex-direction: column; font-weight:bold; }
-        .data-card { background: #f9f9f9; padding: 12px; border: 2px solid #eee; border-radius: 12px; margin-bottom: 10px; font-size: 12px; border-left: 5px solid var(--primary); }
+        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
     </style>
 </head>
 <body>
 
 <div id="loader">
-    <i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i>
-    <p style="margin-top:10px;">डेटा लोड हो रहा है...</p>
+    <i class="fas fa-cog fa-spin fa-3x" style="color:var(--primary);"></i>
+    <p style="margin-top:10px; font-weight:bold;">डेटा कनेक्ट किया जा रहा है...</p>
 </div>
 
-<div id="login-screen">
-    <div class="login-card">
-        <i class="fas fa-user-shield fa-4x" style="color:var(--primary); margin-bottom:15px;"></i>
-        <h2 style="margin-bottom:15px;">AK MASTER ADMIN</h2>
-        <input type="password" id="passKey" class="input" placeholder="सुरक्षा पिन डालें">
-        <button class="btn-action" style="background:var(--primary)" onclick="checkLogin()">डैशबोर्ड खोलें</button>
-    </div>
-</div>
+<div class="header"><h2>AK MASTER ADMIN</h2></div>
 
-<div id="admin-content">
-    <div class="header"><h2>AK MASTER DASHBOARD</h2></div>
-
-    <div class="indicator-grid" id="counts-div">
+<div id="dashboard">
+    <div class="indicator-grid">
         <div class="ind-box"><span>बुकिंग</span><b id="count-book">0</b></div>
         <div class="ind-box" style="border-color:var(--success)"><span>डन</span><b id="count-done">0</b></div>
         <div class="ind-box" style="border-color:var(--running)"><span>रनिंग</span><b id="count-run">0</b></div>
         <div class="ind-box" style="border-color:var(--warning)"><span>पेंडिंग</span><b id="count-pend">0</b></div>
         <div class="ind-box" style="border-color:var(--danger)"><span>रिजेक्ट</span><b id="count-rej">0</b></div>
-        <div class="ind-box" style="background:#fff3cd"><span>टीम्स</span><b id="count-team">0</b></div>
+        <div class="ind-box" style="background:#fff3cd"><span>टीम</span><b id="count-team">0</b></div>
     </div>
 
     <div class="status-panel">
-        <p style="font-size:12px; font-weight:bold; margin-bottom:5px; color:#555;">क्विक अपडेट (C-ID डालें):</p>
-        <input type="text" id="targetId" class="input" placeholder="उदा: AK-8899">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button class="btn-action" style="background:var(--success)" onclick="updateStatus('DONE')">DONE</button>
-            <button class="btn-action" style="background:var(--danger)" onclick="updateStatus('REJECT')">REJECT</button>
+        <h4 style="text-align:center;">📊 आईडी स्टेटस मशीन</h4>
+        <input type="text" id="targetId" class="input" placeholder="C-ID (उदा: AK-101)">
+        <div class="grid-2">
+            <button class="status-btn" style="background:var(--success)" onclick="updateStatus('Done')">DONE</button>
+            <button class="status-btn" style="background:var(--warning); color:#000;" onclick="updateStatus('Pending')">PENDING</button>
+            <button class="status-btn" style="background:var(--running)" onclick="updateStatus('Running')">RUNNING</button>
+            <button class="status-btn" style="background:var(--danger)" onclick="updateStatus('Reject')">REJECT</button>
         </div>
     </div>
 
     <div class="menu-grid">
-        <div class="panel-box" onclick="openModal('reg-p')"><i class="fas fa-user-plus"></i><span>TEAM REG</span></div>
-        <div class="panel-box" onclick="openModal('id-card-p')"><i class="fas fa-id-card"></i><span>ID CARD</span></div>
-        <div class="panel-box" onclick="openModal('assign-p')"><i class="fas fa-link"></i><span>ASSIGN</span></div>
-        <div class="panel-box" onclick="fetchList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
-        <div class="panel-box" onclick="fetchList('CUST')"><i class="fas fa-database"></i><span>CUST DATA</span></div>
-        <div class="panel-box" onclick="location.reload()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
+        <div class="panel-box" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>TEAM REG</span></div>
+        <div class="panel-box" onclick="loadList('TEAM')"><i class="fas fa-users-cog"></i><span>TEAM LIST</span></div>
+        <div class="panel-box" onclick="openP('as-p')"><i class="fas fa-link"></i><span>ASSIGN</span></div>
+        <div class="panel-box" onclick="loadList('CUST')"><i class="fas fa-database"></i><span>CUST DATA</span></div>
+        <div class="panel-box" onclick="openP('id-p')"><i class="fas fa-id-card"></i><span>ID CARD</span></div>
+        <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync"></i><span>REFRESH</span></div>
     </div>
 </div>
 
 <div id="reg-p" class="modal">
     <div class="modal-content">
-        <h3 style="text-align:center; color:var(--primary);"><i class="fas fa-user-plus"></i> नया टीम मेंबर</h3>
-        <input type="text" id="tName" class="input" placeholder="पूरा नाम">
-        <input type="text" id="tFather" class="input" placeholder="पिता का नाम">
-        <input type="tel" id="tPhone" class="input" placeholder="व्हाट्सएप नंबर">
-        <textarea id="tAddr" class="input" placeholder="पूरा पता" rows="2"></textarea>
-        <button class="btn-action" style="background:var(--success)" onclick="submitTeam()">रजिस्टर करें</button>
-        <button class="btn-action" style="background:var(--dark)" onclick="closeModal('reg-p')">कैंसिल</button>
+        <h3 style="color:var(--primary); margin-bottom:15px;">नया टीम रजिस्ट्रेशन</h3>
+        <div id="otp-1">
+            <input type="text" id="reg-name" class="input" placeholder="नाम">
+            <input type="text" id="reg-father" class="input" placeholder="पिता का नाम">
+            <input type="number" id="reg-phone" class="input" placeholder="व्हाट्सएप (91...)">
+            <input type="text" id="reg-service" class="input" placeholder="सर्विस">
+            <button class="btn-action" style="background:var(--primary)" onclick="sendOTP()">WhatsApp OTP भेजें</button>
+        </div>
+        <div id="otp-2" style="display:none;">
+            <p style="color:green; font-weight:bold;">OTP व्हाट्सएप पर भेज दिया गया है</p>
+            <input type="number" id="otp-input" class="input" placeholder="OTP कोड">
+            <button class="btn-action" style="background:var(--success)" onclick="verifyOTP()">वेरिफाई और रजिस्टर</button>
+        </div>
+        <button class="btn-action" style="background:#666" onclick="closeP('reg-p')">बंद करें</button>
     </div>
 </div>
 
-<div id="id-card-p" class="modal">
-    <div class="modal-content">
-        <h3>आईडी कार्ड जनरेटर</h3>
-        <input type="text" id="searchTID" class="input" placeholder="टीम ID डालें">
-        <button class="btn-action" style="background:var(--primary)" onclick="loadIdCard()">डेटा निकालें</button>
-        
-        <div id="id-card-view" style="display:none; margin-top:20px;">
-            <div class="card-header">AK HUB OFFICIAL</div>
-            <div class="card-photo" onclick="document.getElementById('fileInp').click()">
-                <img id="previewImg" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
-                <i id="cam" class="fas fa-camera" style="margin: 30px 32px; font-size:25px; color:#aaa;"></i>
+<div id="id-p" class="modal">
+    <div class="modal-content" style="max-width:400px;">
+        <div id="id-card-render" style="width:100%; height:420px; border:2px solid #000; border-radius:15px; background:#fff; position:relative; overflow:hidden;">
+            <div style="background:var(--primary); color:#fff; padding:10px; font-weight:bold;">AK SOLUTION HUB</div>
+            <div style="text-align:center; margin-top:15px;">
+                <img id="v-img" src="https://via.placeholder.com/100" style="width:100px; height:100px; border-radius:10px; border:1px solid #000;">
+                <h2 id="v-name" style="margin-top:10px;">---</h2>
+                <h4 id="v-id" style="color:red;">ID: T-XXXX</h4>
+                <span id="v-svc" style="background:#eee; padding:3px 10px; border-radius:20px; font-size:12px;">EXPERT</span>
             </div>
-            <input type="file" id="fileInp" accept="image/*" hidden onchange="showImg(event)">
-            <div class="card-info">
-                <h3 id="cName" style="text-transform:uppercase;">NAME</h3>
-                <p id="cID" style="color:red; font-weight:bold; margin:5px 0;">AK-T000</p>
-                <p id="cFather">Father: ---</p>
-                <p id="cPhone">Phone: ---</p>
-            </div>
-            <div class="card-footer">
-                <marquee scrollamount="2">AKSOLUTION HUB - विश्वसनीय सेवा और सुरक्षा</marquee>
+            <div style="position:absolute; bottom:15px; width:100%; display:flex; justify-content:space-around; align-items:center;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=AKSH" style="width:50px;">
+                <p style="font-size:10px; font-weight:bold;">AK SOLUTION HUB<br>MOHIT APPROVED</p>
             </div>
         </div>
-        <button class="btn-action" style="background:var(--dark)" onclick="closeModal('id-card-p')">बंद करें</button>
-    </div>
-</div>
-
-<div id="assign-p" class="modal">
-    <div class="modal-content">
-        <h3 style="color:var(--running); text-align:center;"><i class="fas fa-link"></i> काम असाइन करें</h3>
-        <input type="text" id="asCID" class="input" placeholder="ग्राहक ID (C-ID)">
-        <input type="text" id="asTID" class="input" placeholder="टीम ID (T-ID)">
-        <div style="background:#e8f4fd; padding:10px; border-radius:10px; font-size:11px; margin:10px 0;">
-            * असाइन करते ही स्टेटस <b>RUNNING</b> हो जाएगा।
-        </div>
-        <button class="btn-action" style="background:var(--success)" onclick="submitAssign()">असाइन और मैसेज भेजें</button>
-        <button class="btn-action" style="background:var(--dark)" onclick="closeModal('assign-p')">बंद करें</button>
+        <input type="text" id="id-load-id" class="input" placeholder="T-ID डालें">
+        <button class="btn-action" style="background:var(--dark)" onclick="loadID()">LOAD ID</button>
+        <button class="btn-action" style="background:var(--success)" onclick="saveID()">DOWNLOAD PHOTO</button>
+        <button class="btn-action" style="background:#666" onclick="closeP('id-p')">CLOSE</button>
     </div>
 </div>
 
 <div id="list-p" class="modal">
-    <div class="modal-content">
-        <h3 id="list-title" style="text-align:center; margin-bottom:10px;">डेटा लिस्ट</h3>
-        <input type="text" id="searchBar" class="input" placeholder="यहाँ सर्च करें..." onkeyup="searchList()">
-        <div id="list-body" style="margin-top:10px; max-height: 350px; overflow-y: auto; padding-right:5px;"></div>
-        <button class="btn-action" style="background:var(--danger)" onclick="closeModal('list-p')">बंद करें</button>
+    <div class="modal-content" style="width:98%;">
+        <h3 id="lt">लिस्ट</h3>
+        <div id="lb" style="margin-top:10px; overflow-x:auto;"></div>
+        <button class="btn-action" style="background:var(--danger)" onclick="closeP('list-p')">वापस</button>
     </div>
 </div>
 
 <script>
-    // आपकी नई Script URL
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxRmjB3e9NAHO5m8cwUzb3HGz3j873ZVKUoFhmP4LicDc9qN7_tZzZsGT-pg1-4OstMBA/exec';
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmh2ezhk9TFSaQtL5gaSf4GLUvIIY9bAqRqtGDwQmJjNinl_1UTBIg5joRlsX6uJu18Q/exec";
+    let curOTP, tempS;
 
-    function checkLogin() {
-        if(document.getElementById('passKey').value === "Ak2525") {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('admin-content').style.display = 'block';
-            loadDashboard();
-        } else { alert("गलत पासवर्ड!"); }
-    }
+    window.onload = syncCounts;
 
-    function openModal(id) { document.getElementById(id).style.display = 'block'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function toggleLoader(v) { document.getElementById('loader').style.display = v ? 'flex' : 'none'; }
+    function openP(id) { document.getElementById(id).style.display = "block"; }
+    function closeP(id) { document.getElementById(id).style.display = "none"; }
 
-    async function loadDashboard() {
-        toggleLoader(true);
+    async function syncCounts() {
+        document.getElementById('loader').style.display = 'flex';
         try {
-            const res = await fetch(scriptURL + "?action=readBookings");
-            const data = await res.json();
-            document.getElementById('count-book').innerText = data.length;
-            document.getElementById('count-done').innerText = data.filter(i => i.Status === 'DONE').length;
-            document.getElementById('count-run').innerText = data.filter(i => i.Status === 'RUNNING').length;
-            document.getElementById('count-pend').innerText = data.filter(i => i.Status === 'PENDING').length;
-            document.getElementById('count-rej').innerText = data.filter(i => i.Status === 'REJECT').length;
-            
-            const tRes = await fetch(scriptURL + "?action=readTeam");
-            const tData = await tRes.json();
-            document.getElementById('count-team').innerText = tData.length;
-        } catch(e) { console.error("Dashboard Load Error"); }
-        toggleLoader(false);
+            let res = await fetch(SCRIPT_URL + "?action=getCounts");
+            let d = await res.json();
+            document.getElementById('count-book').innerText = d.total;
+            document.getElementById('count-done').innerText = d.done;
+            document.getElementById('count-run').innerText = d.run;
+            document.getElementById('count-pend').innerText = d.pend;
+            document.getElementById('count-rej').innerText = d.rej;
+            document.getElementById('count-team').innerText = d.team;
+        } catch(e) { console.log("Error"); }
+        document.getElementById('loader').style.display = 'none';
     }
 
-    async function submitTeam() {
-        const name = document.getElementById('tName').value.trim();
-        const phone = document.getElementById('tPhone').value.trim();
-        const father = document.getElementById('tFather').value.trim();
-        const addr = document.getElementById('tAddr').value.trim();
-
-        if(!name || !phone) return alert("कृपया नाम और फोन दर्ज करें!");
-
-        const uID = "AK-T" + Math.floor(1000 + Math.random() * 9000);
-        toggleLoader(true);
-        try {
-            await fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ action: 'regTeam', id: uID, name, father, phone, address: addr })
-            });
-            const msg = `*AK HUB - टीम रजिस्ट्रेशन*%0A🆔 यूनिक आईडी: ${uID}%0A👤 नाम: ${name}%0A📞 फोन: ${phone}%0A👴 पिता: ${father}`;
-            window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
-            alert("टीम मेंबर रजिस्टर हो गया है! ID: " + uID);
-            location.reload();
-        } catch(e) { alert("Error saving team!"); }
-        toggleLoader(false);
+    function sendOTP() {
+        const n = document.getElementById('reg-name').value;
+        const p = document.getElementById('reg-phone').value;
+        if(!n || !p) return alert("नाम और नंबर भरें");
+        curOTP = Math.floor(1000 + Math.random() * 9000);
+        tempS = { name:n, phone:p, father:document.getElementById('reg-father').value, service:document.getElementById('reg-service').value };
+        window.open(`https://wa.me/${p}?text=AK%20SOLUTION%20HUB%20OTP:%20${curOTP}`, '_blank');
+        document.getElementById('otp-1').style.display = 'none';
+        document.getElementById('otp-2').style.display = 'block';
     }
 
-    async function loadIdCard() {
-        const tid = document.getElementById('searchTID').value.trim().toUpperCase();
-        if(!tid) return alert("टीम ID दर्ज करें!");
-        toggleLoader(true);
-        try {
-            const res = await fetch(scriptURL + "?action=readTeam");
-            const data = await res.json();
-            const user = data.find(i => i.ID === tid);
-            if(user) {
-                document.getElementById('cName').innerText = user.Name;
-                document.getElementById('cID').innerText = "ID: " + user.ID;
-                document.getElementById('cFather').innerText = "Father: " + user.Father;
-                document.getElementById('cPhone').innerText = "Phone: " + user.Phone;
-                document.getElementById('id-card-view').style.display = 'block';
-            } else { alert("यह ID डेटाबेस में नहीं मिली!"); }
-        } catch(e) { alert("Fetch Error!"); }
-        toggleLoader(false);
+    async function verifyOTP() {
+        if(document.getElementById('otp-input').value != curOTP) return alert("Wrong OTP");
+        document.getElementById('loader').style.display = 'flex';
+        const params = new URLSearchParams({ action: 'addTeam', ...tempS });
+        await fetch(`${SCRIPT_URL}?${params.toString()}`, {mode:'no-cors'});
+        alert("Success! Staff Registered.");
+        closeP('reg-p');
+        syncCounts();
     }
 
-    function showImg(e) {
-        const reader = new FileReader();
-        reader.onload = () => {
-            const img = document.getElementById('previewImg');
-            img.src = reader.result;
-            img.style.display = 'block';
-            document.getElementById('cam').style.display = 'none';
-        }
-        reader.readAsDataURL(e.target.files[0]);
+    async function updateStatus(st) {
+        let id = document.getElementById('targetId').value;
+        if(!id) return alert("ID??");
+        document.getElementById('loader').style.display = 'flex';
+        await fetch(`${SCRIPT_URL}?action=updateStatus&id=${id}&status=${st}`, {mode:'no-cors'});
+        alert("OK!");
+        syncCounts();
     }
 
-    async function submitAssign() {
-        const cid = document.getElementById('asCID').value.trim().toUpperCase();
-        const tid = document.getElementById('asTID').value.trim().toUpperCase();
-        if(!cid || !tid) return alert("C-ID और T-ID दोनों भरें!");
-
-        toggleLoader(true);
-        try {
-            await fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ action: 'updateStatus', id: cid, status: 'RUNNING', assignTo: tid })
-            });
-            const msg = `*AK HUB - नया काम असाइन*%0A------------------%0A📌 Job ID: ${cid}%0A👷 Team ID: ${tid}%0A📊 Status: RUNNING%0A------------------%0Aतुरंत कस्टमर से संपर्क करें।`;
-            window.open(`https://wa.me/?text=${msg}`, '_blank');
-            alert("सफलतापूर्वक असाइन किया गया!");
-            location.reload();
-        } catch(e) { alert("Error updating status!"); }
-        toggleLoader(false);
+    async function loadList(type) {
+        document.getElementById('loader').style.display = 'flex';
+        let res = await fetch(`${SCRIPT_URL}?action=getList&type=${type}`);
+        let data = await res.json();
+        let h = "<table border='1' style='width:100%; border-collapse:collapse;'><tr><th>ID</th><th>Name</th><th>Status</th></tr>";
+        data.forEach(r => { h += `<tr><td>${r.ID}</td><td>${r.Name}</td><td>${r.Status || r.Service}</td></tr>`; });
+        document.getElementById('lb').innerHTML = h + "</table>";
+        document.getElementById('lt').innerText = type + " LIST";
+        openP('list-p');
+        document.getElementById('loader').style.display = 'none';
     }
 
-    async function updateStatus(s) {
-        const id = document.getElementById('targetId').value.trim().toUpperCase();
-        if(!id) return alert("ग्राहक ID (C-ID) डालें!");
-        toggleLoader(true);
-        try {
-            await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'updateStatus', id, status: s }) });
-            alert("स्टेटस " + s + " पर अपडेट हो गया!");
-            loadDashboard();
-            document.getElementById('targetId').value = "";
-        } catch(e) { alert("Update Error!"); }
-        toggleLoader(false);
+    async function loadID() {
+        let tid = document.getElementById('id-load-id').value;
+        document.getElementById('loader').style.display = 'flex';
+        let res = await fetch(`${SCRIPT_URL}?action=getList&type=TEAM`);
+        let data = await res.json();
+        let s = data.find(x => x.ID == tid);
+        if(s) {
+            document.getElementById('v-name').innerText = s.Name;
+            document.getElementById('v-id').innerText = "ID: " + s.ID;
+            document.getElementById('v-svc').innerText = s.Service || "EXPERT";
+        } else { alert("Not Found"); }
+        document.getElementById('loader').style.display = 'none';
     }
 
-    async function fetchList(type) {
-        toggleLoader(true);
-        openModal('list-p');
-        document.getElementById('list-title').innerText = (type === 'TEAM') ? "टीम डेटा लिस्ट" : "कस्टमर डेटा लिस्ट";
-        const body = document.getElementById('list-body');
-        const action = (type === 'TEAM') ? "readTeam" : "readBookings";
-        try {
-            const res = await fetch(scriptURL + "?action=" + action);
-            const data = await res.json();
-            body.innerHTML = data.reverse().map(i => `
-                <div class="data-card">
-                    <b>ID:</b> ${i.ID} | <b>Status:</b> <span style="color:${getStatusColor(i.Status)}">${i.Status || 'Active'}</span><br>
-                    <b>Name:</b> ${i.Name}<br>
-                    <b>Phone:</b> ${i.Phone}<br>
-                    <b>Details:</b> ${i.Service || i.Father || 'N/A'}
-                </div>
-            `).join('');
-        } catch(e) { body.innerHTML = "डेटा लोड करने में समस्या आई।"; }
-        toggleLoader(false);
-    }
-
-    function getStatusColor(s) {
-        if(s === 'DONE') return 'var(--success)';
-        if(s === 'RUNNING') return 'var(--running)';
-        if(s === 'REJECT') return 'var(--danger)';
-        if(s === 'PENDING') return 'var(--warning)';
-        return '#000';
-    }
-
-    function searchList() {
-        let filter = document.getElementById('searchBar').value.toUpperCase();
-        let cards = document.getElementsByClassName('data-card');
-        for (let i = 0; i < cards.length; i++) {
-            cards[i].style.display = cards[i].innerText.toUpperCase().indexOf(filter) > -1 ? "" : "none";
-        }
+    function saveID() {
+        html2canvas(document.getElementById('id-card-render')).then(c => {
+            let l = document.createElement('a');
+            l.download = 'ID_CARD.png';
+            l.href = c.toDataURL();
+            l.click();
+        });
     }
 </script>
 </body>
