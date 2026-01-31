@@ -11,43 +11,39 @@
         body { background: #fff; padding-bottom: 80px; text-align: center; overflow-x: hidden; }
 
         /* Header */
-        .header { padding: 15px; background: #fff; }
+        .header { padding: 15px; background: #fff; position: sticky; top:0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .logo-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); padding: 3px; cursor: pointer; object-fit: cover; }
         .brand-title { color: var(--primary); font-size: 24px; font-weight: bold; margin: 5px 0; }
         .call-btn { background: #27ae60; color: white; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 18px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
 
         /* Ticker */
-        .ticker { background: var(--primary); color: #fff; padding: 8px; font-size: 14px; }
+        .ticker { background: var(--primary); color: #fff; padding: 8px; font-size: 14px; overflow: hidden; }
 
-        /* Banner */
-        .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .banner img { width: 100%; display: block; }
+        /* Banner Slider (Rolling) */
+        .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: 180px; position: relative; }
+        .banner img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .banner img.active { display: block; animation: fade 0.8s; }
 
-        /* Grid */
+        @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
+
+        /* Grid & Other Styles */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; background: var(--bg); }
         .box { background: #fff; border-radius: 15px; padding: 20px 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; }
         .box i { font-size: 32px; color: var(--primary); margin-bottom: 10px; display: block; }
         .box span { font-size: 11px; font-weight: 800; color: #333; }
 
-        /* Inputs */
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-page { display: block; }
-        .input-box { width: 100%; padding: 16px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; margin-bottom: 15px; outline: none; text-align: center; transition: 0.3s; }
-        .input-box:focus { border-color: var(--primary); background: #f0f7ff; }
-        .main-btn { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,94,184,0.3); }
+        .input-box { width: 100%; padding: 16px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; margin-bottom: 15px; text-align: center; }
+        .main-btn { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
 
-        /* Nav */
         .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 1000; }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 12px; cursor: pointer; }
         .nav-item.active { color: var(--primary); border-top: 4px solid var(--primary); font-weight: bold; }
-        .nav-item i { font-size: 22px; margin-bottom: 4px; }
 
-        /* Modals */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
-        .modal-content { background:#fff; width:88%; margin:20% auto; border-radius:25px; padding:25px; max-height: 75vh; overflow-y: auto; position: relative; }
-
+        .modal-content { background:#fff; width:88%; margin:20% auto; border-radius:25px; padding:25px; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -55,7 +51,7 @@
 <div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><br><p>डेटा सुरक्षित किया जा रहा है...</p></div>
 
 <div class="header">
-    <img src="1.jpg" class="logo-img" onclick="adminCheck()">
+    <img src="57255.jpg" class="logo-img" onclick="adminCheck()" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
     <div class="brand-title">AK SOLUTION HUB</div>
     <a href="tel:9927464530" class="call-btn"><i class="fas fa-phone-alt"></i> अभी कॉल करें</a>
 </div>
@@ -63,7 +59,13 @@
 <div class="ticker"><marquee>🚀 बेस्ट होम सर्विस | प्लंबर | इलेक्ट्रीशियन | आरओ | सीसीटीवी | संपर्क: 9927464530</marquee></div>
 
 <div id="home" class="page active-page">
-    <div class="banner"><img src="1.jpg"></div>
+    <div class="banner" id="bannerSlider">
+        <img src="1.jpg" class="active">
+        <img src="2.jpg">
+        <img src="3.jpg">
+        <img src="4.jpg">
+        <img src="5.jpg">
+    </div>
     <div class="grid" id="mainGrid"></div>
 </div>
 
@@ -91,28 +93,36 @@
 </div>
 
 <div id="adminModal" class="modal">
-    <div class="modal-content" style="border: 3px solid var(--primary);">
-        <i class="fas fa-user-shield" style="font-size:45px; color:var(--primary); margin-bottom:15px;"></i>
-        <h3 style="margin-bottom:20px; color:var(--primary);">मास्टर एडमिन लॉगिन</h3>
-        <input type="password" id="adminPass" class="input-box" placeholder="पासवर्ड डालें" style="border-color:var(--primary); font-size: 20px;">
+    <div class="modal-content">
+        <h3 style="color:var(--primary);">एडमिन लॉगिन</h3><br>
+        <input type="password" id="adminPass" class="input-box" placeholder="पासवर्ड">
         <button class="main-btn" onclick="verifyAdmin()">प्रवेश करें</button>
-        <p onclick="closeAdmin()" style="margin-top:20px; color:red; cursor:pointer; font-weight:bold;">रद्द करें</p>
+        <p onclick="closeAdmin()" style="color:red; margin-top:15px; cursor:pointer;">बंद करें</p>
     </div>
 </div>
 
 <div id="subModal" class="modal">
     <div class="modal-content">
-        <h3 id="mTitle" style="color:var(--primary); margin-bottom:15px; border-bottom: 2px solid var(--primary); padding-bottom:10px;"></h3>
+        <h3 id="mTitle" style="color:var(--primary); margin-bottom:15px;"></h3>
         <div id="mList" class="grid" style="grid-template-columns: 1fr 1fr; background:none;"></div>
-        <button onclick="closeSub()" style="width:100%; padding:12px; background:#444; color:#fff; border:none; border-radius:12px; margin-top:15px; font-weight:bold;">वापस</button>
+        <button onclick="closeSub()" class="main-btn" style="background:#444;">वापस</button>
     </div>
 </div>
 
 <script>
-    // आपकी दी हुई नई Script URL यहाँ अपडेट कर दी गई है
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9woLHyC1l2QR0NEb-hrUaA603p1BaWyoe1m0r3GRw1X-s34t-8EIGQDzxh9VXRukSDA/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
+
+    // Rolling Banner Logic
+    let currentImg = 0;
+    const imgs = document.querySelectorAll('#bannerSlider img');
+    function startSlider() {
+        imgs[currentImg].classList.remove('active');
+        currentImg = (currentImg + 1) % imgs.length;
+        imgs[currentImg].classList.add('active');
+    }
+    setInterval(startSlider, 3000); // हर 3 सेकंड में इमेज बदलेगी
 
     const services = {
         'PLUMBER': ['नल रिपेयर', 'टंकी सफाई', 'लीकेज', 'नई फिटिंग', 'गीजर', 'सिंक', 'मोटर', 'टॉयलेट', 'अन्य'],
@@ -180,7 +190,6 @@
         if(!name || !phone || !addr) return alert("कृपया सभी जानकारी भरें!");
         document.getElementById('loader').style.display = 'flex';
         
-        // स्क्रिप्ट में सीरियल ID जनरेशन होने तक रैंडम ID (बाद में स्क्रिप्ट खुद हैंडल करेगी)
         const id = "AK-" + Math.floor(1000 + Math.random() * 9000);
         const date = new Date().toLocaleDateString('en-GB');
 
@@ -190,32 +199,23 @@
             const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ Service: ${svc}%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A🏠 Address: ${addr}%0A📍 Location: ${userGPS}`;
             window.open(`https://wa.me/919927464530?text=${msg}`);
             
-            alert("✅ बुकिंग सफल! आपकी ID है: " + id);
+            alert("✅ बुकिंग सफल! ID: " + id);
             location.reload();
         } catch(e) { 
-            alert("Error! डेटा सेव नहीं हो पाया।"); 
+            alert("Error!"); 
             document.getElementById('loader').style.display = 'none'; 
         }
     }
 
     function adminCheck() {
         tapCount++;
-        if(tapCount === 3) { 
-            document.getElementById('adminModal').style.display = 'block'; 
-            tapCount = 0; 
-        }
+        if(tapCount === 3) { document.getElementById('adminModal').style.display = 'block'; tapCount = 0; }
         setTimeout(() => tapCount = 0, 2000);
     }
 
     function verifyAdmin() {
-        const pass = document.getElementById('adminPass').value;
-        if(pass === "Ak2525") { 
-            alert("✅ लॉगिन सफल!"); 
-            window.location.href = "admin.html"; 
-        } else { 
-            alert("❌ गलत पासवर्ड!"); 
-            document.getElementById('adminPass').value = "";
-        }
+        if(document.getElementById('adminPass').value === "Ak2525") { window.location.href = "admin.html"; } 
+        else { alert("गलत पासवर्ड!"); }
     }
 
     function closeSub() { document.getElementById('subModal').style.display = 'none'; }
