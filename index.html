@@ -9,41 +9,30 @@
         :root { --primary: #005eb8; --success: #27ae60; --bg: #f4f7fa; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         body { background: #fff; padding-bottom: 80px; text-align: center; overflow-x: hidden; }
-
-        /* Header */
         .header { padding: 15px; background: #fff; position: sticky; top:0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .logo-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); padding: 3px; cursor: pointer; object-fit: cover; }
         .brand-title { color: var(--primary); font-size: 24px; font-weight: bold; margin: 5px 0; }
         .call-btn { background: #27ae60; color: white; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 18px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
-
-        /* Ticker */
         .ticker { background: var(--primary); color: #fff; padding: 8px; font-size: 14px; overflow: hidden; }
-
-        /* Banner Slider (Rolling) */
         .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: 180px; position: relative; }
         .banner img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .banner img.active { display: block; animation: fade 0.8s; }
-
         @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
-
-        /* Grid & Other Styles */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; background: var(--bg); }
         .box { background: #fff; border-radius: 15px; padding: 20px 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; }
         .box i { font-size: 32px; color: var(--primary); margin-bottom: 10px; display: block; }
         .box span { font-size: 11px; font-weight: 800; color: #333; }
-
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-page { display: block; }
         .input-box { width: 100%; padding: 16px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; margin-bottom: 15px; text-align: center; }
         .main-btn { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
-
         .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 1000; }
         .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 12px; cursor: pointer; }
         .nav-item.active { color: var(--primary); border-top: 4px solid var(--primary); font-weight: bold; }
-
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { background:#fff; width:88%; margin:20% auto; border-radius:25px; padding:25px; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
+        .status-result { margin-top: 20px; padding: 15px; border-radius: 15px; background: #f9f9f9; border: 1px dashed var(--primary); display: none; }
     </style>
 </head>
 <body>
@@ -82,7 +71,15 @@
 <div id="track" class="page">
     <h2 style="margin-bottom:20px; color:var(--primary);">स्टेटस ट्रैक</h2>
     <input type="text" id="trackInput" class="input-box" placeholder="बुकिंग ID डालें (AK-XXXX)">
-    <button class="main-btn" onclick="alert('खोज रहे हैं...')">अभी चेक करें</button>
+    <button class="main-btn" onclick="trackStatus()">अभी चेक करें</button>
+    <div id="statusResult" class="status-result"></div>
+</div>
+
+<div id="review" class="page">
+    <h2 style="color:var(--primary); margin-bottom:20px;">कस्टमर फीडबैक</h2>
+    <p>हमारे बारे में अपनी राय दें:</p><br>
+    <textarea class="input-box" placeholder="आपका अनुभव यहाँ लिखें..." rows="4"></textarea>
+    <button class="main-btn" onclick="alert('धन्यवाद! आपका रिव्यू सुरक्षित कर लिया गया है।')">रिव्यू भेजें</button>
 </div>
 
 <div class="nav">
@@ -110,34 +107,38 @@
 </div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9woLHyC1l2QR0NEb-hrUaA603p1BaWyoe1m0r3GRw1X-s34t-8EIGQDzxh9VXRukSDA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
 
-    // Rolling Banner Logic
+    // Slider Logic
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
     function startSlider() {
-        imgs[currentImg].classList.remove('active');
-        currentImg = (currentImg + 1) % imgs.length;
-        imgs[currentImg].classList.add('active');
+        if(imgs.length > 0) {
+            imgs[currentImg].classList.remove('active');
+            currentImg = (currentImg + 1) % imgs.length;
+            imgs[currentImg].classList.add('active');
+        }
     }
-    setInterval(startSlider, 3000); // हर 3 सेकंड में इमेज बदलेगी
+    setInterval(startSlider, 3000);
 
+    // Services Data
     const services = {
-        'PLUMBER': ['नल रिपेयर', 'टंकी सफाई', 'लीकेज', 'नई फिटिंग', 'गीजर', 'सिंक', 'मोटर', 'टॉयलेट', 'अन्य'],
-        'ELECTRICIAN': ['पंख', 'वायरिंग', 'बोर्ड', 'इनवर्टर', 'MCB', 'लाइट', 'कूलर', 'झूमर', 'अन्य'],
+        'PLUMBER': ['नल रिपेयर', 'टंकी सफाई', 'लीकेज', 'Fit', 'Geyser', 'सिंक', 'मोटर', 'टॉयलेट', 'अन्य'],
+        'ELECTRICIAN': ['पंख', 'वायरिंग', 'बोर्ड', 'Inverter', 'MCB', 'लाइट', 'कूलर', 'झूमर', 'अन्य'],
         'CARPENTER': ['लॉक', 'अलमारी', 'बेड', 'दरवाजा', 'दराज', 'पॉलिश', 'कुर्सी', 'किचन', 'अन्य'],
-        'RO SERVICE': ['फ़िल्टर', 'मेम्ब्रेन', 'पंप', 'लीकेज', 'TDS', 'सर्विस', 'इंस्टॉल', 'अनइंस्टॉल', 'अन्य'],
-        'CCTV': ['फिटिंग', 'DVR', 'ऑनलाइन', 'वायरिंग', 'HDD', 'पॉवर', 'BNC', 'शिफ्टिंग', 'अन्य'],
-        'AC SERVICE': ['सर्विस', 'गैस', 'इंस्टॉल', 'रिमूवल', 'PCB', 'लीकेज', 'Window', 'Split', 'अन्य'],
-        'CLEANING': ['डीप क्लीन', 'बाथरूम', 'सोफा', 'किचन', 'टंकी', 'कार', 'पेस्ट', 'फ्लोर', 'अन्य'],
-        'FITTING': ['TV स्टैंड', 'पर्दा रॉड', 'आईना', 'फोटो', 'सेट', 'झूला', 'नेम प्लेट', 'स्टैंड', 'अन्य'],
-        'OTHER': ['पेंटर', 'राजमिस्त्री', 'वेल्डिंग', 'टाइल', 'ग्लास', 'गार्डन', 'हेल्पर', 'इंटीरियर', 'अन्य']
+        'RO SERVICE': ['फ़िल्टर', 'मेम्ब्रेन', 'पंप', 'लीकेज', 'TDS', 'सर्विस', 'Install', 'अन्य'],
+        'CCTV': ['फिटिंग', 'DVR', 'ऑनलाइन', 'वायरिंग', 'HDD', 'पॉवर', 'BNC', 'Shift', 'अन्य'],
+        'AC SERVICE': ['सर्विस', 'गैस', 'Install', 'PCB', 'लीकेज', 'Split', 'अन्य'],
+        'CLEANING': ['Deep Clean', 'बाथरूम', 'सोफा', 'किचन', 'टंकी', 'पेस्ट', 'अन्य'],
+        'FITTING': ['TV Stand', 'पर्दा रॉड', 'आईना', 'फोटो', 'नेम प्लेट', 'अन्य'],
+        'OTHER': ['पेंटर', 'राजमिस्त्री', 'वेल्डिंग', 'टाइल', 'गार्डन', 'हेल्पर', 'अन्य']
     };
 
     const icons = {'PLUMBER':'faucet','ELECTRICIAN':'bolt','CARPENTER':'hammer','RO SERVICE':'tint','CCTV':'video','AC SERVICE':'snowflake','CLEANING':'broom','FITTING':'tools','OTHER':'plus-circle'};
 
+    // Main Grid Rendering
     const grid = document.getElementById('mainGrid');
     Object.keys(services).forEach(s => {
         grid.innerHTML += `<div class="box" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}"></i><span>${s}</span></div>`;
@@ -194,17 +195,38 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            await fetch(`${SCRIPT_URL}?Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`, {mode: 'no-cors'});
+            await fetch(SCRIPT_URL + "?Date=" + encodeURIComponent(date) + "&ID=" + id + "&Name=" + encodeURIComponent(name) + "&Phone=" + phone + "&Address=" + encodeURIComponent(addr) + "&Service=" + encodeURIComponent(svc) + "&GPS=" + encodeURIComponent(userGPS) + "&Status=Pending", {mode: 'no-cors'});
             
-            const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ Service: ${svc}%0A👤 Name: ${name}%0A📞 Phone: ${phone}%0A🏠 Address: ${addr}%0A📍 Location: ${userGPS}`;
-            window.open(`https://wa.me/919927464530?text=${msg}`);
+            const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ Service: ${encodeURIComponent(svc)}%0A👤 Name: ${encodeURIComponent(name)}%0A📞 Phone: ${phone}%0A📍 Location: ${encodeURIComponent(userGPS)}`;
+            window.open("https://wa.me/919927464530?text=" + msg);
             
             alert("✅ बुकिंग सफल! ID: " + id);
             location.reload();
         } catch(e) { 
-            alert("Error!"); 
+            alert("डेटा भेजने में त्रुटि!"); 
             document.getElementById('loader').style.display = 'none'; 
         }
+    }
+
+    async function trackStatus() {
+        let inputId = document.getElementById('trackInput').value.toUpperCase();
+        if(!inputId) return alert("ID भरें!");
+        
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            let res = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
+            let data = await res.json();
+            let found = data.find(item => item.ID === inputId);
+            
+            let resDiv = document.getElementById('statusResult');
+            resDiv.style.display = 'block';
+            if(found) {
+                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Status:</b> <span style="color:var(--primary)">${found.Status}</span>`;
+            } else {
+                resDiv.innerHTML = `<span style="color:red;">ID नहीं मिली!</span>`;
+            }
+        } catch(e) { alert("ट्रैकिंग में समस्या आई"); }
+        document.getElementById('loader').style.display = 'none';
     }
 
     function adminCheck() {

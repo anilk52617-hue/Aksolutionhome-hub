@@ -10,52 +10,34 @@
         :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; --glass: rgba(255, 255, 255, 0.95); }
         * { box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; margin: 0; padding: 0; }
         body { background: #eef2f7; color: #333; padding-bottom: 50px; }
-        
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .header h2 { font-size: 22px; letter-spacing: 1px; }
-
         #dashboard { padding: 15px; max-width: 600px; margin: auto; }
-
-        /* Indicators */
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
         .ind-box { background: white; padding: 15px 5px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid #ddd; text-align: center; }
-        .ind-box:active { transform: scale(0.95); }
         .ind-box span { font-size: 10px; font-weight: bold; color: #888; display: block; text-transform: uppercase; }
         .ind-box b { font-size: 22px; color: var(--dark); }
-
-        /* Status Machine */
         .status-panel { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .input { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #dde; border-radius: 12px; font-size: 16px; text-align: center; background: #f9fbff; transition: 0.3s; }
-        .input:focus { border-color: var(--primary); outline: none; background: #fff; }
-        
+        .input { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #dde; border-radius: 12px; font-size: 16px; text-align: center; background: #f9fbff; }
         .grid-status { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .status-btn { padding: 12px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; }
-        .status-btn:active { transform: scale(0.9); }
-
-        /* Menu Grid */
+        .status-btn { padding: 12px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s; }
+        .status-btn:active { transform: scale(0.95); }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .panel-box { background: white; border-radius: 18px; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #f0f0f0; }
+        .panel-box { background: white; border-radius: 18px; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; }
         .panel-box i { font-size: 28px; color: var(--primary); margin-bottom: 8px; }
         .panel-box span { font-size: 11px; font-weight: 700; color: var(--dark); }
-
-        /* Modals */
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; backdrop-filter: blur(8px); }
-        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 85vh; background:white; padding:25px; border-radius:25px; overflow-y: auto; }
-        
-        /* List Styling */
-        .data-card { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 12px; text-align: left; border-left: 5px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 85vh; background:white; padding:25px; border-radius:25px; overflow-y: auto; text-align: center; }
+        .data-card { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
         .card-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
         .tag { padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: bold; color: white; }
-
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--glass); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
+        .free-staff-card { background: #e8f5e9; padding: 15px; margin-bottom: 10px; border-radius: 12px; border: 2px solid #27ae60; cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-align: left; }
     </style>
 </head>
 <body>
 
-<div id="loader">
-    <i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i>
-    <p style="margin-top:15px; font-weight:bold; letter-spacing:1px;">AK SYSTEM SYNCING...</p>
-</div>
+<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><p style="margin-top:10px;">AK SYSTEM SYNCING...</p></div>
 
 <div class="header">
     <h2>AK MASTER ADMIN PRO</h2>
@@ -73,8 +55,8 @@
     </div>
 
     <div class="status-panel">
-        <h4 style="margin-bottom:10px; color:var(--dark);"><i class="fas fa-bolt"></i> Quick Status Update</h4>
-        <input type="text" id="targetId" class="input" placeholder="Enter Customer ID (AK-XXXX)">
+        <h4><i class="fas fa-bolt"></i> क्विक अपडेट</h4>
+        <input type="text" id="targetId" class="input" placeholder="Enter ID (AK-XXXX)">
         <div class="grid-status">
             <button class="status-btn" style="background:var(--success)" onclick="updateStatus('Done')">DONE</button>
             <button class="status-btn" style="background:var(--running)" onclick="updateStatus('Running')">RUNNING</button>
@@ -95,69 +77,28 @@
 
 <div id="as-p" class="modal">
     <div class="modal-content">
-        <h3 style="color:var(--primary); margin-bottom:15px;">Work Assignment</h3>
-        <input type="text" id="as-cid" class="input" placeholder="Customer ID (AK-XXXX)">
-        <input type="text" id="as-tid" class="input" placeholder="Team Member ID (T-XXXX)">
-        <button class="status-btn" style="background:var(--primary); width: 100%; padding: 15px; font-size: 16px;" onclick="assignWork()">Confirm & Notify Team</button>
-        <button class="status-btn" style="background:#666; width: 100%; margin-top: 10px;" onclick="closeP('as-p')">Cancel</button>
+        <h3>Manual Assignment</h3>
+        <input type="text" id="as-cid" class="input" placeholder="Customer ID">
+        <input type="text" id="as-tid" class="input" placeholder="Team ID">
+        <button class="status-btn" style="background:var(--primary); width:100%;" onclick="assignWork()">Confirm & Notify</button>
+        <button onclick="closeP('as-p')" style="width:100%; margin-top:10px; border:none; background:none; color:red;">Cancel</button>
     </div>
 </div>
 
 <div id="list-p" class="modal">
-    <div class="modal-content" style="width:96%; padding: 15px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h3 id="lt" style="color:var(--primary);">Data List</h3>
-            <i class="fas fa-times-circle" style="font-size:24px; color:var(--danger);" onclick="closeP('list-p')"></i>
-        </div>
-        <div id="lb"></div>
-    </div>
-</div>
-
-<div id="reg-p" class="modal">
     <div class="modal-content">
-        <h3 style="color:var(--primary); margin-bottom:15px;">Team Registration</h3>
-        <div id="otp-1">
-            <input type="text" id="reg-name" class="input" placeholder="Full Name">
-            <input type="number" id="reg-phone" class="input" placeholder="WhatsApp Number">
-            <input type="text" id="reg-service" class="input" placeholder="Service (e.g. RO, PLUMBER)">
-            <button class="status-btn" style="background:var(--primary); width:100%; padding:15px;" onclick="sendOTP()">Send WhatsApp OTP</button>
-        </div>
-        <div id="otp-2" style="display:none;">
-            <p style="color:var(--success); font-weight:bold; margin-bottom:10px;">OTP Sent to WhatsApp!</p>
-            <input type="number" id="otp-input" class="input" placeholder="Enter 4 Digit Code">
-            <button class="status-btn" style="background:var(--success); width:100%; padding:15px;" onclick="verifyOTP()">Verify & Register</button>
-        </div>
-        <button class="status-btn" style="background:#666; width:100%; margin-top:10px;" onclick="closeP('reg-p')">Close</button>
+        <h3 id="lt" style="color:var(--primary); margin-bottom:15px;">Data List</h3>
+        <div id="lb"></div>
+        <button onclick="closeP('list-p')" style="width:100%; margin-top:20px; background:var(--dark); color:white; padding:12px; border-radius:10px; border:none;">Close</button>
     </div>
 </div>
 
-<div id="id-p" class="modal">
-    <div class="modal-content" style="max-width:400px; text-align: center;">
-        <input type="file" id="id-photo-input" accept="image/*" style="display:none;" onchange="previewIDPhoto(event)">
-        <button class="status-btn" style="background:var(--primary); margin-bottom:10px;" onclick="document.getElementById('id-photo-input').click()"><i class="fas fa-camera"></i> Select Staff Photo</button>
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><div id="otp-1"><input type="text" id="reg-name" class="input" placeholder="Full Name"><input type="number" id="reg-phone" class="input" placeholder="WhatsApp Number"><input type="text" id="reg-service" class="input" placeholder="Service"><button class="status-btn" style="background:var(--primary); width:100%;" onclick="sendOTP()">Send OTP</button></div><div id="otp-2" style="display:none;"><input type="number" id="otp-input" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%;" onclick="verifyOTP()">Verify</button></div><button onclick="closeP('reg-p')" style="margin-top:10px; border:none;">Close</button></div></div>
 
-        <div id="id-card-render" style="width:280px; height:400px; margin:auto; border-radius:15px; background:linear-gradient(145deg, #ffffff, #f0f0f0); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border:1px solid #ddd; overflow:hidden; position:relative;">
-            <div style="background:var(--primary); padding:15px; color:white; font-weight:bold; font-size:14px;">AK SOLUTION HUB</div>
-            <div style="padding:20px;">
-                <img id="v-img" src="https://via.placeholder.com/150" style="width:110px; height:110px; border-radius:50%; border:3px solid var(--primary); object-fit:cover;">
-                <h2 id="v-name" style="margin-top:10px; font-size:18px;">STAFF NAME</h2>
-                <p id="v-id" style="color:var(--danger); font-weight:bold; font-size:14px;">ID: T-0000</p>
-                <div id="v-svc" style="display:inline-block; background:var(--primary); color:white; padding:4px 15px; border-radius:20px; font-size:10px; margin-top:10px;">EXPERT</div>
-            </div>
-            <div style="position:absolute; bottom:15px; width:100%; border-top:1px dashed #ccc; padding-top:10px; display:flex; justify-content:space-around; align-items:center;">
-                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=AKSH" style="width:45px;">
-                 <div style="font-size:8px; font-weight:bold; text-align:left;">MOHIT SINGH<br>DIRECTOR APPROVED</div>
-            </div>
-        </div>
-        <input type="text" id="id-load-id" class="input" style="margin-top:20px;" placeholder="T-ID (e.g. T-101)">
-        <button class="status-btn" style="background:var(--dark); width:100%;" onclick="loadID()">LOAD DATA</button>
-        <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px;" onclick="saveID()">DOWNLOAD ID CARD</button>
-        <button class="status-btn" style="background:#666; width:100%; margin-top:10px;" onclick="closeP('id-p')">CLOSE</button>
-    </div>
-</div>
+<div id="id-p" class="modal"><div class="modal-content"><input type="file" id="id-photo-input" accept="image/*" style="display:none;" onchange="previewIDPhoto(event)"><button onclick="document.getElementById('id-photo-input').click()" style="margin-bottom:10px;">Select Photo</button><div id="id-card-render" style="width:280px; height:380px; margin:auto; background:white; border:1px solid #ddd; border-radius:15px; overflow:hidden; position:relative;"><div style="background:var(--primary); color:white; padding:10px;">AK SOLUTION HUB</div><img id="v-img" src="https://via.placeholder.com/100" style="width:100px; height:100px; border-radius:50%; margin-top:20px; border:2px solid var(--primary); object-fit:cover;"><h2 id="v-name">NAME</h2><p id="v-id">ID: T-0000</p><div id="v-svc" style="background:var(--primary); color:white; display:inline-block; padding:2px 10px; border-radius:10px; font-size:12px;">EXPERT</div></div><input type="text" id="id-load-id" class="input" placeholder="Enter T-ID"><button class="status-btn" style="background:var(--dark); width:100%;" onclick="loadID()">LOAD DATA</button><button class="status-btn" style="background:var(--success); width:100%; margin-top:10px;" onclick="saveID()">DOWNLOAD</button><button onclick="closeP('id-p')" style="margin-top:10px; border:none;">CLOSE</button></div></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw9woLHyC1l2QR0NEb-hrUaA603p1BaWyoe1m0r3GRw1X-s34t-8EIGQDzxh9VXRukSDA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
     let curOTP, tempS;
 
     window.onload = syncCounts;
@@ -165,7 +106,6 @@
     function openP(id) { document.getElementById(id).style.display = "block"; }
     function closeP(id) { document.getElementById(id).style.display = "none"; }
 
-    // Dashboard Sync
     async function syncCounts() {
         document.getElementById('loader').style.display = 'flex';
         try {
@@ -181,63 +121,98 @@
         document.getElementById('loader').style.display = 'none';
     }
 
-    // Assign Logic
-    async function assignWork() {
-        const cid = document.getElementById('as-cid').value.toUpperCase();
-        const tid = document.getElementById('as-tid').value.toUpperCase();
-        if(!cid || !tid) return alert("Enter Both IDs");
-        document.getElementById('loader').style.display = 'flex';
-        try {
-            await fetch(`${SCRIPT_URL}?action=updateStatus&id=${cid}&status=Running`, {mode:'no-cors'});
-            window.open(`https://wa.me/?text=*AK%20SOLUTION%20HUB%20-%20WORK%20ASSIGNED*%0A%0A🛠️%20TEAM%20ID:%20${tid}%0A👤%20CUST%20ID:%20${cid}`, '_blank');
-            closeP('as-p'); syncCounts();
-        } catch(e) { alert("Error"); }
-        document.getElementById('loader').style.display = 'none';
-    }
-
-    // Stable List Loading
+    // LIST LOAD WITH SMART BUTTON LOGIC
     async function loadList(type) {
         document.getElementById('loader').style.display = 'flex';
         try {
-            let res = await fetch(`${SCRIPT_URL}?action=getList&type=${type}`);
+            let res = await fetch(SCRIPT_URL + "?action=getList&type=" + type);
             let data = await res.json();
             let html = "";
             data.forEach(item => {
-                let stColor = item.Status === 'Done' ? 'var(--success)' : (item.Status === 'Running' ? 'var(--running)' : 'var(--warning)');
-                html += `<div class="data-card" style="border-left-color:${stColor}">
-                    <div class="card-row"><b>${item.Name}</b><span class="tag" style="background:${stColor}">${item.Status || item.Service}</span></div>
-                    <div class="card-row" style="font-size:12px; color:#666;"><span>ID: ${item.ID}</span><span>${item.Phone || ''}</span></div>
-                    <div style="margin-top:10px; display:flex; gap:10px;">
-                        <a href="tel:${item.Phone}" style="flex:1; background:#eee; text-align:center; padding:5px; border-radius:5px; color:var(--dark); text-decoration:none; font-size:12px;"><i class="fas fa-phone"></i> Call</a>
-                        <a href="https://wa.me/91${item.Phone}" style="flex:1; background:#e2fbe2; text-align:center; padding:5px; border-radius:5px; color:green; text-decoration:none; font-size:12px;"><i class="fab fa-whatsapp"></i> Chat</a>
-                    </div>
-                </div>`;
+                let col = "var(--warning)";
+                if(item.Status === 'Done') col = "var(--success)";
+                if(item.Status === 'Running') col = "var(--running)";
+                if(item.Status === 'Reject') col = "var(--danger)";
+
+                html += `<div class="data-card" style="border-left-color:${col}">
+                            <div class="card-row"><b>${item.Name}</b><span class="tag" style="background:${col}">${item.Status || 'Pending'}</span></div>
+                            <div style="font-size:12px;">ID: ${item.ID} | ${item.Phone}</div>`;
+
+                if(type === 'CUST') {
+                    if(item.Status === 'Running') {
+                        html += `<div style="margin-top:10px; color:var(--running); font-weight:bold; text-align:center; background:#e3f2fd; padding:8px; border-radius:8px; font-size:11px;">COMPLIMENT ASSIGNED</div>`;
+                    } else if(item.Status !== 'Done' && item.Status !== 'Reject') {
+                        html += `<button onclick="showFreeTeamOnly('${item.ID}')" style="margin-top:10px; background:var(--primary); color:white; border:none; padding:8px; border-radius:8px; font-size:12px; cursor:pointer; width:100%;">SELECT FREE TEAM</button>`;
+                    }
+                }
+                html += `</div>`;
             });
-            document.getElementById('lb').innerHTML = html || "<p>No Data Found</p>";
-            document.getElementById('lt').innerText = type + " RECORDS";
+            document.getElementById('lb').innerHTML = html || "No Data Found";
+            document.getElementById('lt').innerText = type === 'CUST' ? "CUSTOMERS LIST" : "TEAM LIST";
             openP('list-p');
-        } catch(e) { alert("Failed"); }
+        } catch(e) { alert("Failed to Load"); }
         document.getElementById('loader').style.display = 'none';
     }
 
-    // Status Update
+    // DIRECT FREE TEAM LIST
+    async function showFreeTeamOnly(custId) {
+        closeP('list-p');
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            let res = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
+            let data = await res.json();
+            let freeStaff = data.filter(s => s.Status === 'Free');
+
+            if(freeStaff.length === 0) {
+                alert("⚠️ अभी कोई टीम मेंबर Free नहीं है!");
+                loadList('CUST');
+                return;
+            }
+
+            let html = `<p style="margin-bottom:15px; color:var(--primary); font-weight:bold;">Assigning to Cust: ${custId}</p>`;
+            freeStaff.forEach(s => {
+                html += `<div class="free-staff-card" onclick="finalDirectAssign('${custId}', '${s.ID}', '${s.Name}')">
+                            <div><b>${s.Name}</b><br><small>${s.Service}</small></div>
+                            <b style="color:#27ae60;">${s.ID} <i class="fas fa-chevron-right"></i></b>
+                         </div>`;
+            });
+            document.getElementById('lb').innerHTML = html;
+            document.getElementById('lt').innerText = "CHOOSE FREE TEAM";
+            openP('list-p');
+        } catch(e) { alert("Error!"); }
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    async function finalDirectAssign(custId, teamId, teamName) {
+        if(!confirm(`${teamName} को काम सौंपें?`)) return;
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            await fetch(SCRIPT_URL + "?action=updateStatus&id=" + custId + "&status=Running", {mode:'no-cors'});
+            let msg = `*AK SOLUTION HUB*%0A✅ *NEW WORK ASSIGNED*%0A--------------------%0A👤 *Cust ID:* ${custId}%0A👷 *Assign To:* ${teamName} (${teamId})`;
+            window.open(`https://wa.me/?text=${msg}`);
+            closeP('list-p');
+            syncCounts();
+        } catch(e) { alert("Error!"); }
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    // Other Standard Functions
     async function updateStatus(st) {
         let id = document.getElementById('targetId').value.toUpperCase();
         if(!id) return alert("Enter ID");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(`${SCRIPT_URL}?action=updateStatus&id=${id}&status=${st}`, {mode:'no-cors'});
-        alert("Updated!"); syncCounts();
+        await fetch(SCRIPT_URL + "?action=updateStatus&id=" + id + "&status=" + st, {mode:'no-cors'});
+        alert("Updated!"); 
+        syncCounts();
         document.getElementById('targetId').value = "";
+        document.getElementById('loader').style.display = 'none';
     }
 
-    // OTP Registration
     function sendOTP() {
-        const n = document.getElementById('reg-name').value;
-        const p = document.getElementById('reg-phone').value;
-        if(!n || !p) return alert("Fill all fields");
+        tempS = { name: document.getElementById('reg-name').value, phone: document.getElementById('reg-phone').value, service: document.getElementById('reg-service').value };
+        if(!tempS.name || !tempS.phone) return alert("Fill all fields");
         curOTP = Math.floor(1000 + Math.random() * 9000);
-        tempS = { name:n, phone:p, service:document.getElementById('reg-service').value };
-        window.open(`https://wa.me/91${p}?text=Your%20OTP:%20${curOTP}`, '_blank');
+        window.open("https://wa.me/91" + tempS.phone + "?text=Your OTP: " + curOTP);
         document.getElementById('otp-1').style.display = 'none';
         document.getElementById('otp-2').style.display = 'block';
     }
@@ -245,39 +220,42 @@
     async function verifyOTP() {
         if(document.getElementById('otp-input').value != curOTP) return alert("Wrong OTP");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(`${SCRIPT_URL}?action=addTeam&name=${tempS.name}&phone=${tempS.phone}&service=${tempS.service}`, {mode:'no-cors'});
+        await fetch(SCRIPT_URL + "?action=addTeam&name=" + encodeURIComponent(tempS.name) + "&phone=" + tempS.phone + "&service=" + encodeURIComponent(tempS.service), {mode:'no-cors'});
         alert("Success!"); closeP('reg-p'); syncCounts();
     }
 
-    // ID Card Photo & Load
     function previewIDPhoto(event) {
-        const reader = new FileReader();
-        reader.onload = () => document.getElementById('v-img').src = reader.result;
+        let reader = new FileReader();
+        reader.onload = function(){ document.getElementById('v-img').src = reader.result; }
         reader.readAsDataURL(event.target.files[0]);
     }
 
     async function loadID() {
         let tid = document.getElementById('id-load-id').value.toUpperCase();
-        if(!tid) return alert("Enter ID");
-        document.getElementById('loader').style.display = 'flex';
-        let res = await fetch(`${SCRIPT_URL}?action=getList&type=TEAM`);
+        let res = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
         let data = await res.json();
         let s = data.find(x => x.ID == tid);
         if(s) {
             document.getElementById('v-name').innerText = s.Name;
             document.getElementById('v-id').innerText = "ID: " + s.ID;
-            document.getElementById('v-svc').innerText = s.Service || "EXPERT";
+            document.getElementById('v-svc').innerText = s.Service;
         } else { alert("Not Found"); }
-        document.getElementById('loader').style.display = 'none';
     }
 
     function saveID() {
         html2canvas(document.getElementById('id-card-render')).then(c => {
-            let l = document.createElement('a');
-            l.download = 'STAFF_ID.png';
-            l.href = c.toDataURL();
-            l.click();
+            let a = document.createElement('a');
+            a.download = 'ID_CARD.png'; a.href = c.toDataURL(); a.click();
         });
+    }
+
+    async function assignWork() {
+        let cid = document.getElementById('as-cid').value.toUpperCase();
+        let tid = document.getElementById('as-tid').value.toUpperCase();
+        await fetch(SCRIPT_URL + "?action=updateStatus&id=" + cid + "&status=Running", {mode:'no-cors'});
+        window.open("https://wa.me/?text=Work Assigned to " + tid + " for Cust " + cid);
+        closeP('as-p');
+        syncCounts();
     }
 </script>
 </body>
