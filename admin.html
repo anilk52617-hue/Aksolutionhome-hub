@@ -77,7 +77,7 @@
 
 <div id="as-p" class="modal">
     <div class="modal-content">
-        <h3>Manual Assignment</h3>
+        <h3>Work Assignment</h3>
         <input type="text" id="as-cid" class="input" placeholder="Customer ID">
         <input type="text" id="as-tid" class="input" placeholder="Team ID">
         <button class="status-btn" style="background:var(--primary); width:100%;" onclick="assignWork()">Confirm & Notify</button>
@@ -121,7 +121,6 @@
         document.getElementById('loader').style.display = 'none';
     }
 
-    // LIST LOAD WITH SMART BUTTON LOGIC
     async function loadList(type) {
         document.getElementById('loader').style.display = 'flex';
         try {
@@ -129,20 +128,21 @@
             let data = await res.json();
             let html = "";
             data.forEach(item => {
+                let st = item.Status || (type === 'TEAM' ? 'Free' : 'Pending');
                 let col = "var(--warning)";
-                if(item.Status === 'Done') col = "var(--success)";
-                if(item.Status === 'Running') col = "var(--running)";
-                if(item.Status === 'Reject') col = "var(--danger)";
+                if(st === 'Done' || st === 'Free') col = "var(--success)";
+                if(st === 'Running') col = "var(--running)";
+                if(st === 'Reject') col = "var(--danger)";
 
                 html += `<div class="data-card" style="border-left-color:${col}">
-                            <div class="card-row"><b>${item.Name}</b><span class="tag" style="background:${col}">${item.Status || 'Pending'}</span></div>
-                            <div style="font-size:12px;">ID: ${item.ID} | ${item.Phone}</div>`;
+                            <div class="card-row"><b>${item.Name || 'No Name'}</b><span class="tag" style="background:${col}">${st}</span></div>
+                            <div style="font-size:12px;">ID: ${item.ID} | ${item.Phone || 'N/A'}</div>`;
 
                 if(type === 'CUST') {
-                    if(item.Status === 'Running') {
-                        html += `<div style="margin-top:10px; color:var(--running); font-weight:bold; text-align:center; background:#e3f2fd; padding:8px; border-radius:8px; font-size:11px;">COMPLIMENT ASSIGNED</div>`;
-                    } else if(item.Status !== 'Done' && item.Status !== 'Reject') {
-                        html += `<button onclick="showFreeTeamOnly('${item.ID}')" style="margin-top:10px; background:var(--primary); color:white; border:none; padding:8px; border-radius:8px; font-size:12px; cursor:pointer; width:100%;">SELECT FREE TEAM</button>`;
+                    if(st === 'Running') {
+                        html += `<div style="margin-top:10px; color:var(--running); font-weight:bold; text-align:center; background:#e3f2fd; padding:8px; border-radius:8px; font-size:11px;">WORK IN PROGRESS</div>`;
+                    } else if(st !== 'Done' && st !== 'Reject') {
+                        html += `<button onclick="showFreeTeamOnly('${item.ID}')" style="margin-top:10px; background:var(--primary); color:white; border:none; padding:8px; border-radius:8px; font-size:12px; cursor:pointer; width:100%;">ASSIGN TO TEAM</button>`;
                     }
                 }
                 html += `</div>`;
@@ -150,36 +150,37 @@
             document.getElementById('lb').innerHTML = html || "No Data Found";
             document.getElementById('lt').innerText = type === 'CUST' ? "CUSTOMERS LIST" : "TEAM LIST";
             openP('list-p');
-        } catch(e) { alert("Failed to Load"); }
+        } catch(e) { alert("Failed to Load List"); }
         document.getElementById('loader').style.display = 'none';
     }
 
-    // DIRECT FREE TEAM LIST
     async function showFreeTeamOnly(custId) {
         closeP('list-p');
         document.getElementById('loader').style.display = 'flex';
         try {
             let res = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
             let data = await res.json();
-            let freeStaff = data.filter(s => s.Status === 'Free');
+            
+            // फ़िल्टर: अगर स्टेटस 'Free' है या खाली है, तो ही लिस्ट में दिखाओ
+            let freeStaff = data.filter(s => !s.Status || s.Status.trim() === "" || s.Status.toLowerCase() === 'free');
 
             if(freeStaff.length === 0) {
-                alert("⚠️ अभी कोई टीम मेंबर Free नहीं है!");
+                alert("⚠️ अभी कोई टीम मेंबर उपलब्ध (Free) नहीं है!");
                 loadList('CUST');
                 return;
             }
 
-            let html = `<p style="margin-bottom:15px; color:var(--primary); font-weight:bold;">Assigning to Cust: ${custId}</p>`;
+            let html = `<p style="margin-bottom:15px; color:var(--primary); font-weight:bold;">Cust ID: ${custId} के लिए टीम चुनें:</p>`;
             freeStaff.forEach(s => {
                 html += `<div class="free-staff-card" onclick="finalDirectAssign('${custId}', '${s.ID}', '${s.Name}')">
-                            <div><b>${s.Name}</b><br><small>${s.Service}</small></div>
-                            <b style="color:#27ae60;">${s.ID} <i class="fas fa-chevron-right"></i></b>
+                            <div><b>${s.Name}</b><br><small>${s.Service || 'General'}</small></div>
+                            <b style="color:#27ae60;">Available <i class="fas fa-check-circle"></i></b>
                          </div>`;
             });
             document.getElementById('lb').innerHTML = html;
-            document.getElementById('lt').innerText = "CHOOSE FREE TEAM";
+            document.getElementById('lt').innerText = "SELECT TEAM MEMBER";
             openP('list-p');
-        } catch(e) { alert("Error!"); }
+        } catch(e) { alert("Error fetching team list!"); }
         document.getElementById('loader').style.display = 'none';
     }
 
@@ -187,41 +188,44 @@
         if(!confirm(`${teamName} को काम सौंपें?`)) return;
         document.getElementById('loader').style.display = 'flex';
         try {
+            // गूगल शीट अपडेट करें
             await fetch(SCRIPT_URL + "?action=updateStatus&id=" + custId + "&status=Running", {mode:'no-cors'});
+            
             let msg = `*AK SOLUTION HUB*%0A✅ *NEW WORK ASSIGNED*%0A--------------------%0A👤 *Cust ID:* ${custId}%0A👷 *Assign To:* ${teamName} (${teamId})`;
             window.open(`https://wa.me/?text=${msg}`);
+            
             closeP('list-p');
             syncCounts();
-        } catch(e) { alert("Error!"); }
+        } catch(e) { alert("Assignment Error!"); }
         document.getElementById('loader').style.display = 'none';
     }
 
-    // Other Standard Functions
     async function updateStatus(st) {
         let id = document.getElementById('targetId').value.toUpperCase();
         if(!id) return alert("Enter ID");
         document.getElementById('loader').style.display = 'flex';
         await fetch(SCRIPT_URL + "?action=updateStatus&id=" + id + "&status=" + st, {mode:'no-cors'});
-        alert("Updated!"); 
+        alert("Status Updated Successfully!"); 
         syncCounts();
         document.getElementById('targetId').value = "";
         document.getElementById('loader').style.display = 'none';
     }
 
+    // --- standard support functions ---
     function sendOTP() {
         tempS = { name: document.getElementById('reg-name').value, phone: document.getElementById('reg-phone').value, service: document.getElementById('reg-service').value };
-        if(!tempS.name || !tempS.phone) return alert("Fill all fields");
+        if(!tempS.name || !tempS.phone) return alert("All fields are required");
         curOTP = Math.floor(1000 + Math.random() * 9000);
-        window.open("https://wa.me/91" + tempS.phone + "?text=Your OTP: " + curOTP);
+        window.open("https://wa.me/91" + tempS.phone + "?text=AK Verification Code: " + curOTP);
         document.getElementById('otp-1').style.display = 'none';
         document.getElementById('otp-2').style.display = 'block';
     }
 
     async function verifyOTP() {
-        if(document.getElementById('otp-input').value != curOTP) return alert("Wrong OTP");
+        if(document.getElementById('otp-input').value != curOTP) return alert("Incorrect OTP");
         document.getElementById('loader').style.display = 'flex';
         await fetch(SCRIPT_URL + "?action=addTeam&name=" + encodeURIComponent(tempS.name) + "&phone=" + tempS.phone + "&service=" + encodeURIComponent(tempS.service), {mode:'no-cors'});
-        alert("Success!"); closeP('reg-p'); syncCounts();
+        alert("Team Added Successfully!"); closeP('reg-p'); syncCounts();
     }
 
     function previewIDPhoto(event) {
@@ -239,7 +243,7 @@
             document.getElementById('v-name').innerText = s.Name;
             document.getElementById('v-id').innerText = "ID: " + s.ID;
             document.getElementById('v-svc').innerText = s.Service;
-        } else { alert("Not Found"); }
+        } else { alert("Staff ID Not Found"); }
     }
 
     function saveID() {
@@ -253,7 +257,7 @@
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
         await fetch(SCRIPT_URL + "?action=updateStatus&id=" + cid + "&status=Running", {mode:'no-cors'});
-        window.open("https://wa.me/?text=Work Assigned to " + tid + " for Cust " + cid);
+        window.open("https://wa.me/?text=Manual Assign: Cust " + cid + " to Team " + tid);
         closeP('as-p');
         syncCounts();
     }
