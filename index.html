@@ -32,12 +32,12 @@
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { background:#fff; width:88%; margin:20% auto; border-radius:25px; padding:25px; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
-        .status-result { margin-top: 20px; padding: 15px; border-radius: 15px; background: #f9f9f9; border: 1px dashed var(--primary); display: none; }
+        .status-result { margin-top: 20px; padding: 15px; border-radius: 15px; background: #f9f9f9; border: 1px dashed var(--primary); display: none; text-align: left;}
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><br><p>डेटा सुरक्षित किया जा रहा है...</p></div>
+<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><br><p>कृपया प्रतीक्षा करें...</p></div>
 
 <div class="header">
     <img src="57255.jpg" class="logo-img" onclick="adminCheck()" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
@@ -49,11 +49,7 @@
 
 <div id="home" class="page active-page">
     <div class="banner" id="bannerSlider">
-        <img src="1.jpg" class="active">
-        <img src="2.jpg">
-        <img src="3.jpg">
-        <img src="4.jpg">
-        <img src="5.jpg">
+        <img src="1.jpg" class="active"><img src="2.jpg"><img src="3.jpg"><img src="4.jpg"><img src="5.jpg">
     </div>
     <div class="grid" id="mainGrid"></div>
 </div>
@@ -63,7 +59,7 @@
     <input type="text" id="svc" class="input-box" readonly style="background:#eef5ff; font-weight:bold; border-color:var(--primary);">
     <input type="text" id="name" class="input-box" placeholder="आपका नाम">
     <input type="tel" id="phone" class="input-box" placeholder="मोबाइल नंबर">
-    <textarea id="addr" class="input-box" rows="3" placeholder="पूरा पता (मकान नं, गली, लैंडमार्क)"></textarea>
+    <textarea id="addr" class="input-box" rows="3" placeholder="पूरा पता"></textarea>
     <button class="main-btn" style="background:#3498db; margin-bottom:10px;" onclick="getGPS()"><i class="fas fa-map-marker-alt"></i> लोकेशन कन्फर्म करें</button>
     <button id="finalSubmit" class="main-btn" style="background:var(--success); display:none;" onclick="saveAndSend()"><i class="fab fa-whatsapp"></i> सबमिट करें</button>
 </div>
@@ -77,9 +73,9 @@
 
 <div id="review" class="page">
     <h2 style="color:var(--primary); margin-bottom:20px;">कस्टमर फीडबैक</h2>
-    <p>हमारे बारे में अपनी राय दें:</p><br>
-    <textarea class="input-box" placeholder="आपका अनुभव यहाँ लिखें..." rows="4"></textarea>
-    <button class="main-btn" onclick="alert('धन्यवाद! आपका रिव्यू सुरक्षित कर लिया गया है।')">रिव्यू भेजें</button>
+    <p style="margin-bottom:15px; color:#666;">आपका अनुभव हमारे लिए कीमती है:</p>
+    <textarea id="revText" class="input-box" placeholder="आपका अनुभव यहाँ लिखें..." rows="5"></textarea>
+    <button class="main-btn" onclick="sendReview()">रिव्यू भेजें</button>
 </div>
 
 <div class="nav">
@@ -87,15 +83,6 @@
     <div class="nav-item" onclick="go('booking', this)"><i class="fas fa-calendar-check"></i>Booking</div>
     <div class="nav-item" onclick="go('track', this)"><i class="fas fa-search-location"></i>Track</div>
     <div class="nav-item" onclick="go('review', this)"><i class="fas fa-star"></i>Review</div>
-</div>
-
-<div id="adminModal" class="modal">
-    <div class="modal-content">
-        <h3 style="color:var(--primary);">एडमिन लॉगिन</h3><br>
-        <input type="password" id="adminPass" class="input-box" placeholder="पासवर्ड">
-        <button class="main-btn" onclick="verifyAdmin()">प्रवेश करें</button>
-        <p onclick="closeAdmin()" style="color:red; margin-top:15px; cursor:pointer;">बंद करें</p>
-    </div>
 </div>
 
 <div id="subModal" class="modal">
@@ -106,24 +93,31 @@
     </div>
 </div>
 
+<div id="adminModal" class="modal">
+    <div class="modal-content">
+        <h3>एडमिन लॉगिन</h3><br>
+        <input type="password" id="adminPass" class="input-box" placeholder="पासवर्ड">
+        <button class="main-btn" onclick="verifyAdmin()">प्रवेश करें</button>
+        <p onclick="closeAdmin()" style="color:red; margin-top:15px; cursor:pointer;">बंद करें</p>
+    </div>
+</div>
+
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
 
-    // Slider Logic
+    // Banner Slider
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
-    function startSlider() {
+    setInterval(() => {
         if(imgs.length > 0) {
             imgs[currentImg].classList.remove('active');
             currentImg = (currentImg + 1) % imgs.length;
             imgs[currentImg].classList.add('active');
         }
-    }
-    setInterval(startSlider, 3000);
+    }, 3000);
 
-    // Services Data
     const services = {
         'PLUMBER': ['नल रिपेयर', 'टंकी सफाई', 'लीकेज', 'Fit', 'Geyser', 'सिंक', 'मोटर', 'टॉयलेट', 'अन्य'],
         'ELECTRICIAN': ['पंख', 'वायरिंग', 'बोर्ड', 'Inverter', 'MCB', 'लाइट', 'कूलर', 'झूमर', 'अन्य'],
@@ -135,10 +129,8 @@
         'FITTING': ['TV Stand', 'पर्दा रॉड', 'आईना', 'फोटो', 'नेम प्लेट', 'अन्य'],
         'OTHER': ['पेंटर', 'राजमिस्त्री', 'वेल्डिंग', 'टाइल', 'गार्डन', 'हेल्पर', 'अन्य']
     };
-
     const icons = {'PLUMBER':'faucet','ELECTRICIAN':'bolt','CARPENTER':'hammer','RO SERVICE':'tint','CCTV':'video','AC SERVICE':'snowflake','CLEANING':'broom','FITTING':'tools','OTHER':'plus-circle'};
 
-    // Main Grid Rendering
     const grid = document.getElementById('mainGrid');
     Object.keys(services).forEach(s => {
         grid.innerHTML += `<div class="box" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}"></i><span>${s}</span></div>`;
@@ -175,10 +167,7 @@
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
                 alert("📍 लोकेशन कन्फर्म हो गई!");
-            }, () => { 
-                alert("कृपया लोकेशन एक्सेस चालू करें!"); 
-                document.getElementById('loader').style.display = 'none'; 
-            });
+            }, () => { alert("कृपया लोकेशन चालू करें!"); document.getElementById('loader').style.display = 'none'; });
         }
     }
 
@@ -187,23 +176,22 @@
         const phone = document.getElementById('phone').value;
         const addr = document.getElementById('addr').value;
         const svc = document.getElementById('svc').value;
-
         if(!name || !phone || !addr) return alert("कृपया सभी जानकारी भरें!");
-        document.getElementById('loader').style.display = 'flex';
         
+        document.getElementById('loader').style.display = 'flex';
         const id = "AK-" + Math.floor(1000 + Math.random() * 9000);
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            await fetch(SCRIPT_URL + "?Date=" + encodeURIComponent(date) + "&ID=" + id + "&Name=" + encodeURIComponent(name) + "&Phone=" + phone + "&Address=" + encodeURIComponent(addr) + "&Service=" + encodeURIComponent(svc) + "&GPS=" + encodeURIComponent(userGPS) + "&Status=Pending", {mode: 'no-cors'});
+            await fetch(SCRIPT_URL + `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`, {mode: 'no-cors'});
             
-            const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ Service: ${encodeURIComponent(svc)}%0A👤 Name: ${encodeURIComponent(name)}%0A📞 Phone: ${phone}%0A📍 Location: ${encodeURIComponent(userGPS)}`;
+            const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ सर्विस: ${encodeURIComponent(svc)}%0A👤 नाम: ${encodeURIComponent(name)}%0A📞 फोन: ${phone}%0A📍 लोकेशन: ${encodeURIComponent(userGPS)}`;
             window.open("https://wa.me/919927464530?text=" + msg);
             
-            alert("✅ बुकिंग सफल! ID: " + id);
+            alert("✅ बुकिंग सफल! आपकी ID: " + id);
             location.reload();
         } catch(e) { 
-            alert("डेटा भेजने में त्रुटि!"); 
+            alert("डेटा सुरक्षित नहीं हो सका!");
             document.getElementById('loader').style.display = 'none'; 
         }
     }
@@ -211,22 +199,24 @@
     async function trackStatus() {
         let inputId = document.getElementById('trackInput').value.toUpperCase();
         if(!inputId) return alert("ID भरें!");
-        
         document.getElementById('loader').style.display = 'flex';
         try {
             let res = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
             let data = await res.json();
             let found = data.find(item => item.ID === inputId);
-            
             let resDiv = document.getElementById('statusResult');
             resDiv.style.display = 'block';
-            if(found) {
-                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Status:</b> <span style="color:var(--primary)">${found.Status}</span>`;
-            } else {
-                resDiv.innerHTML = `<span style="color:red;">ID नहीं मिली!</span>`;
-            }
-        } catch(e) { alert("ट्रैकिंग में समस्या आई"); }
+            resDiv.innerHTML = found ? `<b>ID:</b> ${found.ID}<br><b>Status:</b> <span style="color:var(--primary)">${found.Status}</span>` : "<span style='color:red;'>ID नहीं मिली!</span>";
+        } catch(e) { alert("ट्रैकिंग लोड नहीं हो सकी"); }
         document.getElementById('loader').style.display = 'none';
+    }
+
+    function sendReview() {
+        const text = document.getElementById('revText').value;
+        if(!text) return alert("कृपया कुछ लिखें!");
+        alert("धन्यवाद! आपका फीडबैक हमें मिल गया है।");
+        document.getElementById('revText').value = "";
+        go('home', document.querySelectorAll('.nav-item')[0]);
     }
 
     function adminCheck() {

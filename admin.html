@@ -3,260 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - PRO MAX</title>
+    <title>AK MASTER ADMIN - FINAL STABLE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
-        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; --glass: rgba(255, 255, 255, 0.95); }
-        * { box-sizing: border-box; font-family: 'Poppins', 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background: #eef2f7; color: #333; padding-bottom: 50px; }
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .header h2 { font-size: 22px; letter-spacing: 1px; }
-        #dashboard { padding: 15px; max-width: 600px; margin: auto; }
-        .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-        .ind-box { background: white; padding: 15px 5px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; border-bottom: 4px solid #ddd; text-align: center; }
-        .ind-box b { font-size: 22px; color: var(--dark); }
-        .status-panel { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .input { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #dde; border-radius: 12px; font-size: 16px; text-align: center; background: #f9fbff; }
-        .grid-status { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .status-btn { padding: 12px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.3s; }
-        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .panel-box { background: white; border-radius: 18px; padding: 20px 10px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; }
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:9999; backdrop-filter: blur(8px); }
-        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 85vh; background:white; padding:25px; border-radius:25px; overflow-y: auto; text-align: center; }
-        .data-card { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 12px; border-left: 5px solid var(--primary); text-align: left; }
-        .action-row { display: flex; gap: 5px; margin-top: 10px; }
-        .mini-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; color: white; font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: none; text-align: center; }
-        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--glass); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
+        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        body { background: #eef2f7; padding-bottom: 50px; }
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
+        .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; }
+        .ind-box b { font-size: 18px; color: var(--dark); display: block; }
+        .ind-box span { font-size: 10px; color: #888; font-weight: bold; }
+        .manual-box { background: white; margin: 0 15px 20px; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dde; border-radius: 10px; text-align: center; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .status-btn { padding: 12px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 11px; text-decoration: none; display: inline-block; text-align: center; }
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
+        .panel-box { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .panel-box i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
+        .panel-box span { font-size: 10px; font-weight: bold; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
+        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
+        .data-card { padding:12px; background:#fff; border-radius:15px; margin-bottom:10px; text-align:left; border-left:5px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
+        #id-card-render { width: 280px; height: 400px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; }
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><p style="margin-top:10px;">AK SYSTEM SYNCING...</p></div>
+<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><p>सिंक हो रहा है...</p></div>
 
 <div class="header">
-    <h2>AK MASTER ADMIN PRO</h2>
-    <p style="font-size: 10px; opacity: 0.8;">AKSOLUTION HUB MANAGEMENT</p>
+    <h2>AK MASTER ADMIN</h2>
+    <p style="font-size: 10px;">PRO CONTROL PANEL • FINAL</p>
 </div>
 
-<div id="dashboard">
-    <div class="indicator-grid">
-        <div class="ind-box" style="border-color:var(--primary)"><span>Total</span><b id="count-book">0</b></div>
-        <div class="ind-box" style="border-color:var(--success)"><span>Done</span><b id="count-done">0</b></div>
-        <div class="ind-box" style="border-color:var(--running)"><span>Run</span><b id="count-run">0</b></div>
-        <div class="ind-box" style="border-color:var(--warning)"><span>Pend</span><b id="count-pend">0</b></div>
-        <div class="ind-box" style="border-color:var(--danger)"><span>Rej</span><b id="count-rej">0</b></div>
-        <div class="ind-box" style="background:#fff3cd"><span>Team</span><b id="count-team">0</b></div>
-    </div>
+<div class="indicator-grid">
+    <div class="ind-box" style="border-color:var(--primary)"><span>Total</span><b id="c-total">0</b></div>
+    <div class="ind-box" style="border-color:var(--success)"><span>Done</span><b id="c-done">0</b></div>
+    <div class="ind-box" style="border-color:var(--running)"><span>Running</span><b id="c-run">0</b></div>
+    <div class="ind-box" style="border-color:var(--warning)"><span>Pending</span><b id="c-pend">0</b></div>
+    <div class="ind-box" style="border-color:var(--danger)"><span>Reject</span><b id="c-rej">0</b></div>
+    <div class="ind-box" style="background:#fff3cd"><span>Team</span><b id="c-team">0</b></div>
+</div>
 
-    <div class="status-panel">
-        <h4><i class="fas fa-bolt"></i> क्विक अपडेट</h4>
-        <input type="text" id="targetId" class="input" placeholder="Enter ID (AK-XXXX)">
-        <div class="grid-status">
-            <button class="status-btn" style="background:var(--success)" onclick="updateStatus('Done')">DONE</button>
-            <button class="status-btn" style="background:var(--running)" onclick="updateStatus('Running')">RUNNING</button>
-            <button class="status-btn" style="background:var(--warning)" onclick="updateStatus('Pending')">PENDING</button>
-            <button class="status-btn" style="background:var(--danger)" onclick="updateStatus('Reject')">REJECT</button>
-        </div>
-    </div>
-
-    <div class="menu-grid">
-        <div class="panel-box" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
-        <div class="panel-box" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
-        <div class="panel-box" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
-        <div class="panel-box" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
-        <div class="panel-box" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
-        <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
+<div class="manual-box">
+    <input type="text" id="man-id" class="input" placeholder="Enter ID (AK-XXXX / T-XXXX)">
+    <div class="btn-grid">
+        <button class="status-btn" style="background:var(--success)" onclick="quickUpdate('Done')">DONE</button>
+        <button class="status-btn" style="background:var(--danger)" onclick="quickUpdate('Reject')">REJECT</button>
+        <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')">RUNNING</button>
+        <button class="status-btn" style="background:var(--warning)" onclick="quickUpdate('Pending')">PENDING</button>
     </div>
 </div>
 
-<div id="id-p" class="modal">
-    <div class="modal-content" style="background: #f0f2f5;">
-        <canvas id="stampCanvas" style="display:none;"></canvas>
-        <div style="margin-bottom: 15px;">
-            <input type="file" id="id-photo-input" accept="image/*" capture="environment" style="display:none;" onchange="processStampPhoto(event)">
-            <button class="status-btn" onclick="document.getElementById('id-photo-input').click()" style="background:var(--dark); width: 100%;"><i class="fas fa-camera"></i> क्लिक फोटो / गैलरी</button>
-        </div>
-
-        <div id="id-card-render" style="width:320px; height:500px; margin:auto; background:white; border-radius:20px; overflow:hidden; position:relative; box-shadow:0 20px 40px rgba(0,0,0,0.2); text-align: center;">
-            <div style="background: linear-gradient(135deg, #005eb8 0%, #003d7a 100%); height: 130px; padding: 15px; color: white;">
-                <h2 style="font-size: 18px; margin: 0;">AK SOLUTION HUB</h2>
-                <p style="font-size: 8px; opacity: 0.8; letter-spacing: 2px;">OFFICIAL IDENTITY CARD</p>
-                <div style="position: absolute; top: 75px; left: 50%; transform: translateX(-50%);">
-                    <div style="position: relative; width: 110px; height: 110px;">
-                        <img id="v-img" src="https://via.placeholder.com/110" style="width:110px; height:110px; border-radius:15px; border: 4px solid white; object-fit: cover; background: #eee;">
-                        <div id="stamp-tag" style="display:none; position: absolute; bottom: 5px; right: 5px; background: rgba(231, 76, 60, 0.9); color: white; font-size: 7px; padding: 2px 5px; border-radius: 3px; border: 1px solid white; transform: rotate(-15deg); font-weight: bold;">AK VERIFIED</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top: 65px; padding: 20px;">
-                <h2 id="v-name" style="font-size: 20px; color: #2c3e50; text-transform: uppercase;">TEAM NAME</h2>
-                <p id="v-id" style="color: var(--primary); font-weight: bold; margin-bottom: 10px;">ID: T-0000</p>
-                
-                <div style="text-align: left; font-size: 11px; background: #f8f9fa; padding: 12px; border-radius: 12px; border: 1px solid #eee; color: #555;">
-                    <div><b>FATHER:</b> <span id="v-father-show">---</span></div>
-                    <div><b>PHONE:</b> <span id="v-phone-show">---</span></div>
-                    <div><b>SERVICE:</b> <span id="v-svc-show" style="color:var(--success); font-weight: bold;">---</span></div>
-                    <div style="height: 35px; overflow: hidden;"><b>ADDR:</b> <span id="v-addr-show">---</span></div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-                    <div id="qrcode" style="width: 60px; height: 60px;"></div>
-                    <div style="text-align: right;">
-                        <p style="font-size: 8px; font-weight: bold; border-top: 1px solid #ccc; color: #888; margin-top: 40px;">AUTHORIZED SIGNATURE</p>
-                    </div>
-                </div>
-            </div>
-            <div style="position: absolute; bottom: 0; width: 100%; height: 8px; background: var(--primary);"></div>
-        </div>
-
-        <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <input type="text" id="id-load-id" class="input" placeholder="Enter Team ID" style="grid-column: span 2; margin:0;">
-            <button class="status-btn" style="background:var(--dark);" onclick="loadID()"><i class="fas fa-sync"></i> LOAD</button>
-            <button class="status-btn" style="background:var(--success);" onclick="saveID()"><i class="fas fa-download"></i> SAVE</button>
-        </div>
-        <button onclick="closeP('id-p')" style="margin-top:10px; border:none; background:none; color:red; font-weight: bold;">CLOSE</button>
-    </div>
+<div class="menu-grid">
+    <div class="panel-box" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
+    <div class="panel-box" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
+    <div class="panel-box" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
+    <div class="panel-box" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
+    <div class="panel-box" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
+    <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt">List</h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">Close</button></div></div>
-<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><div id="otp-1"><input type="text" id="reg-name" class="input" placeholder="Full Name"><input type="text" id="reg-father" class="input" placeholder="Father's Name"><input type="number" id="reg-phone" class="input" placeholder="WhatsApp Number"><input type="text" id="reg-address" class="input" placeholder="Full Address"><input type="text" id="reg-service" class="input" placeholder="Service"><button class="status-btn" style="background:var(--primary); width:100%;" onclick="sendOTP()">Send OTP</button></div><div id="otp-2" style="display:none;"><input type="number" id="otp-input" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%;" onclick="verifyOTP()">Verify</button></div><button onclick="closeP('reg-p')" style="color:red; background:none; border:none; margin-top:10px;">Close</button></div></div>
+<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt" style="margin-bottom:10px;"></h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
+
+<div id="reg-p" class="modal"><div class="modal-content">
+    <h3>New Team Member</h3>
+    <input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="Phone"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service">
+    <button class="status-btn" style="background:var(--primary); width:100%" onclick="submitTeam()">REGISTER</button>
+    <button onclick="closeP('reg-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
+</div></div>
+
+<div id="as-p" class="modal"><div class="modal-content">
+    <h3>Assign Work</h3>
+    <input id="as-cid" class="input" placeholder="Customer ID"><input id="as-tid" class="input" placeholder="Team ID">
+    <button class="status-btn" style="background:var(--primary); width:100%" onclick="processAssign()">ASSIGN WORK</button>
+    <button onclick="closeP('as-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
+</div></div>
+
+<div id="id-p" class="modal"><div class="modal-content">
+    <h3>ID Generator</h3>
+    <div id="id-card-render">
+        <div style="background:var(--primary); color:white; padding:10px; text-align:center;">AK SOLUTION HUB</div>
+        <div id="id-photo" style="width:80px; height:80px; margin:10px auto; background:#eee; border-radius:10px; overflow:hidden;"><img id="v-img" src="" style="width:100%; height:100%; object-fit:cover;"></div>
+        <div style="padding:10px; font-size:12px;">
+            <b id="v-name">NAME</b><br><span id="v-id" style="color:var(--primary)">ID: T-0000</span><br>
+            Phone: <span id="v-phone">-</span><br>Address: <span id="v-addr">-</span>
+        </div>
+        <div id="id-qr" style="display:flex; justify-content:center; margin-top:5px;"></div>
+    </div>
+    <input type="text" id="id-tid" class="input" placeholder="Team ID">
+    <input type="file" id="cam" accept="image/*" capture="environment" style="display:none" onchange="previewFile(event)">
+    <div class="btn-grid">
+        <button class="status-btn" style="background:var(--dark)" onclick="document.getElementById('cam').click()">PHOTO</button>
+        <button class="status-btn" style="background:var(--primary)" onclick="loadIDData()">LOAD</button>
+    </div>
+    <button class="status-btn" style="background:var(--success); width:100%; margin-top:5px;" onclick="downloadID()">SAVE ID</button>
+    <button onclick="closeP('id-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
+</div></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
-    let curOTP, tempS;
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8Gn5yZkrMcifMTVf1idnTXFObwmEpFyHvX8Zm21vOr8gXS6QfS8RaS8-u-RugmqnC/exec";
 
-    window.onload = syncCounts;
-
-    function openP(id) { document.getElementById(id).style.display = "block"; }
-    function closeP(id) { document.getElementById(id).style.display = "none"; }
+    function openP(id) { document.getElementById(id).style.display = 'block'; }
+    function closeP(id) { document.getElementById(id).style.display = 'none'; }
 
     async function syncCounts() {
-        try {
-            let res = await fetch(SCRIPT_URL + "?action=getCounts");
-            let d = await res.json();
-            document.getElementById('count-book').innerText = d.total || 0;
-            document.getElementById('count-done').innerText = d.done || 0;
-            document.getElementById('count-run').innerText = d.run || 0;
-            document.getElementById('count-pend').innerText = d.pend || 0;
-            document.getElementById('count-rej').innerText = d.rej || 0;
-            document.getElementById('count-team').innerText = d.team || 0;
-        } catch(e) { console.log("Error Syncing"); }
+        let r = await fetch(SCRIPT_URL + "?action=getCounts");
+        let d = await r.json();
+        document.getElementById('c-total').innerText = d.total || 0;
+        document.getElementById('c-done').innerText = d.done || 0;
+        document.getElementById('c-run').innerText = d.run || 0;
+        document.getElementById('c-pend').innerText = d.pend || 0;
+        document.getElementById('c-rej').innerText = d.rej || 0;
+        document.getElementById('c-team').innerText = d.team || 0;
+    }
+
+    async function quickUpdate(st) {
+        let id = document.getElementById('man-id').value.toUpperCase();
+        if(!id) return alert("Enter ID");
+        document.getElementById('loader').style.display = 'flex';
+        await fetch(SCRIPT_URL + "?action=updateStatus&id="+id+"&status="+st, {mode:'no-cors'});
+        alert("Updated!"); syncCounts();
+        document.getElementById('man-id').value = "";
+        document.getElementById('loader').style.display = 'none';
     }
 
     async function loadList(type) {
         document.getElementById('loader').style.display = 'flex';
-        let res = await fetch(SCRIPT_URL + "?action=getList&type=" + type);
-        let data = await res.json();
+        let r = await fetch(SCRIPT_URL + "?action=getList&type=" + type);
+        let data = await r.json();
         let html = "";
         data.forEach(item => {
-            let st = item.Status || (type === 'TEAM' ? 'Free' : 'Pending');
-            let col = st === 'Done' || st === 'Free' ? "var(--success)" : st === 'Running' || st === 'Busy' ? "var(--running)" : "var(--warning)";
-            html += `<div class="data-card" style="border-left-color:${col}">
-                        <div class="card-row"><b>${item.Name}</b><span class="tag" style="background:${col}">${st}</span></div>
-                        <div style="font-size:12px;">ID: ${item.ID} | ${item.Phone}</div>`;
-            if(type === 'TEAM') {
-                let nextSt = (st === 'Free' || st === '') ? 'Busy' : 'Free';
-                html += `<div class="action-row">
-                            <button onclick="toggleTeamStatus('${item.ID}', '${nextSt}')" class="mini-btn" style="background:${nextSt === 'Busy' ? 'var(--danger)' : 'var(--success)'}">MARK ${nextSt.toUpperCase()}</button>
-                            <a href="tel:${item.Phone}" class="mini-btn" style="background:var(--primary)"><i class="fas fa-phone"></i></a>
-                         </div>`;
-            }
-            html += `</div>`;
+            html += `<div class="data-card">
+                <b>${item.Name}</b> (${item.ID}) <span style="float:right; font-size:10px; color:${item.Status === 'Busy' ? 'red' : 'green'}">${item.Status || ''}</span><br>
+                ${item.WorkingOn ? `<small style="color:blue">Working On: ${item.WorkingOn}</small><br>` : ''}
+                <div style="display:flex; gap:5px; margin-top:8px;">
+                    <a href="tel:${item.Phone}" class="status-btn" style="background:var(--primary); flex:1;">CALL</a>
+                    <a href="https://wa.me/91${item.Phone}" class="status-btn" style="background:var(--success); flex:1;">WA</a>
+                    ${type==='TEAM' ? `<button onclick="quickUpdateStatus('${item.ID}','Free')" class="status-btn" style="background:var(--running); flex:1;">FREE</button>` : `<button onclick="fillAssign('${item.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>`}
+                </div>
+            </div>`;
         });
-        document.getElementById('lb').innerHTML = html;
+        document.getElementById('lb').innerHTML = html || "No Records";
         document.getElementById('lt').innerText = type + " LIST";
+        document.getElementById('loader').style.display = 'none';
         openP('list-p');
+    }
+
+    async function quickUpdateStatus(id, st) {
+        document.getElementById('loader').style.display = 'flex';
+        await fetch(SCRIPT_URL + "?action=updateStatus&id="+id+"&status="+st, {mode:'no-cors'});
+        alert("Updated"); closeP('list-p'); syncCounts();
         document.getElementById('loader').style.display = 'none';
     }
 
-    async function toggleTeamStatus(id, st) {
+    async function processAssign() {
+        let cid = document.getElementById('as-cid').value.toUpperCase();
+        let tid = document.getElementById('as-tid').value.toUpperCase();
         document.getElementById('loader').style.display = 'flex';
-        await fetch(`${SCRIPT_URL}?action=updateStatus&id=${id}&status=${st}`, {mode:'no-cors'});
-        closeP('list-p'); syncCounts(); loadList('TEAM');
+        // Multi-action: Customer Running + Team Busy with ID
+        await fetch(SCRIPT_URL + `?action=assignWork&cid=${cid}&tid=${tid}`, {mode:'no-cors'});
+        alert("Assigned & Tracked!");
+        closeP('as-p'); syncCounts();
+        document.getElementById('loader').style.display = 'none';
     }
 
-    async function loadID() {
-        let tid = document.getElementById('id-load-id').value.toUpperCase();
-        if(!tid) return alert("Enter Team ID");
+    async function submitTeam() {
+        let p = `?action=addTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&phone=${document.getElementById('rp').value}&father=${encodeURIComponent(document.getElementById('rf').value)}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`;
         document.getElementById('loader').style.display = 'flex';
-        let res = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
-        let data = await res.json();
+        await fetch(SCRIPT_URL + p, {mode:'no-cors'});
+        alert("Registered!"); location.reload();
+    }
+
+    async function loadIDData() {
+        let tid = document.getElementById('id-tid').value.toUpperCase();
+        let r = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
+        let data = await r.json();
         let s = data.find(x => x.ID == tid);
         if(s) {
             document.getElementById('v-name').innerText = s.Name;
             document.getElementById('v-id').innerText = "ID: " + s.ID;
-            document.getElementById('v-father-show').innerText = s.Father || "---";
-            document.getElementById('v-phone-show').innerText = s.Phone || "---";
-            document.getElementById('v-svc-show').innerText = s.Service || "---";
-            document.getElementById('v-addr-show').innerText = s.Address || "---";
-            document.getElementById('qrcode').innerHTML = "";
-            new QRCode(document.getElementById("qrcode"), { text: s.ID, width: 60, height: 60 });
-        } else { alert("ID Not Found"); }
-        document.getElementById('loader').style.display = 'none';
+            document.getElementById('v-phone').innerText = s.Phone;
+            document.getElementById('v-addr').innerText = s.Address;
+            document.getElementById('id-qr').innerHTML = "";
+            new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 });
+        }
     }
 
-    function processStampPhoto(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.getElementById('stampCanvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = img.width; canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                
-                // Add Red Stamp Text
-                ctx.font = `bold ${canvas.width/10}px Arial`;
-                ctx.fillStyle = "rgba(231, 76, 60, 0.7)";
-                ctx.save();
-                ctx.translate(canvas.width*0.7, canvas.height*0.8);
-                ctx.rotate(-Math.PI / 8);
-                ctx.fillText("AK VERIFIED", 0, 0);
-                ctx.restore();
-
-                document.getElementById('v-img').src = canvas.toDataURL("image/jpeg");
-                document.getElementById('stamp-tag').style.display = 'block';
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+    function previewFile(e) {
+        let reader = new FileReader();
+        reader.onload = function(){ document.getElementById('v-img').src = reader.result; }
+        reader.readAsDataURL(e.target.files[0]);
     }
 
-    function saveID() {
-        html2canvas(document.getElementById('id-card-render'), {useCORS: true, scale: 2}).then(c => {
-            let a = document.createElement('a'); a.download = 'AK_ID_CARD.png'; a.href = c.toDataURL(); a.click();
+    function downloadID() {
+        html2canvas(document.getElementById('id-card-render')).then(c => {
+            let a = document.createElement('a'); a.download = 'ID.png'; a.href = c.toDataURL(); a.click();
         });
     }
 
-    async function updateStatus(st) {
-        let id = document.getElementById('targetId').value.toUpperCase();
-        if(!id) return alert("Enter ID");
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + "?action=updateStatus&id=" + id + "&status=" + st, {mode:'no-cors'});
-        alert("Updated!"); syncCounts();
-        document.getElementById('loader').style.display = 'none';
-    }
+    function fillAssign(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
 
-    function sendOTP() {
-        tempS = { name: document.getElementById('reg-name').value, phone: document.getElementById('reg-phone').value, service: document.getElementById('reg-service').value, father: document.getElementById('reg-father').value, address: document.getElementById('reg-address').value };
-        curOTP = Math.floor(1000 + Math.random() * 9000);
-        window.open("https://wa.me/91" + tempS.phone + "?text=AK Verification Code: " + curOTP);
-        document.getElementById('otp-1').style.display = 'none'; document.getElementById('otp-2').style.display = 'block';
-    }
-
-    async function verifyOTP() {
-        if(document.getElementById('otp-input').value != curOTP) return alert("Wrong OTP");
-        document.getElementById('loader').style.display = 'flex';
-        let params = `?action=addTeam&name=${encodeURIComponent(tempS.name)}&phone=${tempS.phone}&service=${encodeURIComponent(tempS.service)}&father=${encodeURIComponent(tempS.father)}&address=${encodeURIComponent(tempS.address)}`;
-        await fetch(SCRIPT_URL + params, {mode:'no-cors'});
-        alert("Registered!"); closeP('reg-p'); syncCounts();
-    }
+    window.onload = syncCounts;
 </script>
 </body>
 </html>
