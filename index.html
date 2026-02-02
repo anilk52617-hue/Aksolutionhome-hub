@@ -37,7 +37,7 @@
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><br><p>कृपया प्रतीक्षा करें...</p></div>
+<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><br><p>सिंक हो रहा है...</p></div>
 
 <div class="header">
     <img src="57255.jpg" class="logo-img" onclick="adminCheck()" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
@@ -73,7 +73,6 @@
 
 <div id="review" class="page">
     <h2 style="color:var(--primary); margin-bottom:20px;">कस्टमर फीडबैक</h2>
-    <p style="margin-bottom:15px; color:#666;">आपका अनुभव हमारे लिए कीमती है:</p>
     <textarea id="revText" class="input-box" placeholder="आपका अनुभव यहाँ लिखें..." rows="5"></textarea>
     <button class="main-btn" onclick="sendReview()">रिव्यू भेजें</button>
 </div>
@@ -107,7 +106,6 @@
     let userGPS = "Not Provided";
     let tapCount = 0;
 
-    // Banner Slider
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
     setInterval(() => {
@@ -183,17 +181,11 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            await fetch(SCRIPT_URL + `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`, {mode: 'no-cors'});
-            
-            const msg = `*AK SOLUTION HUB*%0A🆔 ID: ${id}%0A🛠️ सर्विस: ${encodeURIComponent(svc)}%0A👤 नाम: ${encodeURIComponent(name)}%0A📞 फोन: ${phone}%0A📍 लोकेशन: ${encodeURIComponent(userGPS)}`;
-            window.open("https://wa.me/919927464530?text=" + msg);
-            
-            alert("✅ बुकिंग सफल! आपकी ID: " + id);
+            await fetch(SCRIPT_URL + `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`);
+            window.open(`https://wa.me/919927464530?text=*AK SOLUTION HUB*%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0ALocation: ${encodeURIComponent(userGPS)}`);
+            alert("✅ बुकिंग सफल! ID: " + id);
             location.reload();
-        } catch(e) { 
-            alert("डेटा सुरक्षित नहीं हो सका!");
-            document.getElementById('loader').style.display = 'none'; 
-        }
+        } catch(e) { document.getElementById('loader').style.display = 'none'; alert("त्रुटि: डेटा सेव नहीं हुआ।"); }
     }
 
     async function trackStatus() {
@@ -203,9 +195,11 @@
         try {
             let res = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
             let data = await res.json();
+            // यहाँ ID कॉलम B (Index 1) से मैच हो रही है
             let found = data.find(item => item.ID === inputId);
             let resDiv = document.getElementById('statusResult');
             resDiv.style.display = 'block';
+            // स्टेटस कॉलम H से आ रहा है
             resDiv.innerHTML = found ? `<b>ID:</b> ${found.ID}<br><b>Status:</b> <span style="color:var(--primary)">${found.Status}</span>` : "<span style='color:red;'>ID नहीं मिली!</span>";
         } catch(e) { alert("ट्रैकिंग लोड नहीं हो सकी"); }
         document.getElementById('loader').style.display = 'none';
@@ -214,22 +208,13 @@
     function sendReview() {
         const text = document.getElementById('revText').value;
         if(!text) return alert("कृपया कुछ लिखें!");
-        alert("धन्यवाद! आपका फीडबैक हमें मिल गया है।");
+        alert("धन्यवाद! आपका फीडबैक मिल गया है।");
         document.getElementById('revText').value = "";
         go('home', document.querySelectorAll('.nav-item')[0]);
     }
 
-    function adminCheck() {
-        tapCount++;
-        if(tapCount === 3) { document.getElementById('adminModal').style.display = 'block'; tapCount = 0; }
-        setTimeout(() => tapCount = 0, 2000);
-    }
-
-    function verifyAdmin() {
-        if(document.getElementById('adminPass').value === "Ak2525") { window.location.href = "admin.html"; } 
-        else { alert("गलत पासवर्ड!"); }
-    }
-
+    function adminCheck() { tapCount++; if(tapCount === 3) { document.getElementById('adminModal').style.display = 'block'; tapCount = 0; } setTimeout(() => tapCount = 0, 2000); }
+    function verifyAdmin() { if(document.getElementById('adminPass').value === "Ak2525") { window.location.href = "admin.html"; } else { alert("गलत पासवर्ड!"); } }
     function closeSub() { document.getElementById('subModal').style.display = 'none'; }
     function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
 </script>

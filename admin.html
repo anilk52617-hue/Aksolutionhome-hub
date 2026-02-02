@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - FINAL STABLE</title>
+    <title>AK MASTER ADMIN - FIXED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -28,16 +28,15 @@
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         .data-card { padding:12px; background:#fff; border-radius:15px; margin-bottom:10px; text-align:left; border-left:5px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
-        #id-card-render { width: 280px; height: 400px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; }
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><p>सिंक हो रहा है...</p></div>
+<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><p>प्रोसेसिंग...</p></div>
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">PRO CONTROL PANEL • FINAL</p>
+    <p style="font-size: 10px;">PRO CONTROL PANEL • STABLE</p>
 </div>
 
 <div class="indicator-grid">
@@ -55,7 +54,7 @@
         <button class="status-btn" style="background:var(--success)" onclick="quickUpdate('Done')">DONE</button>
         <button class="status-btn" style="background:var(--danger)" onclick="quickUpdate('Reject')">REJECT</button>
         <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')">RUNNING</button>
-        <button class="status-btn" style="background:var(--warning)" onclick="quickUpdate('Pending')">PENDING</button>
+        <button class="status-btn" style="background:var(--success); background-color:#27ae60;" onclick="quickUpdate('Free')">FREE (TEAM)</button>
     </div>
 </div>
 
@@ -68,145 +67,125 @@
     <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt" style="margin-bottom:10px;"></h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
+<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
 
 <div id="reg-p" class="modal"><div class="modal-content">
     <h3>New Team Member</h3>
-    <input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="Phone"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service">
+    <input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="Phone"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service Specialty">
     <button class="status-btn" style="background:var(--primary); width:100%" onclick="submitTeam()">REGISTER</button>
     <button onclick="closeP('reg-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
 </div></div>
 
 <div id="as-p" class="modal"><div class="modal-content">
     <h3>Assign Work</h3>
-    <input id="as-cid" class="input" placeholder="Customer ID"><input id="as-tid" class="input" placeholder="Team ID">
-    <button class="status-btn" style="background:var(--primary); width:100%" onclick="processAssign()">ASSIGN WORK</button>
+    <input id="as-cid" class="input" placeholder="Customer ID (AK-XXXX)"><input id="as-tid" class="input" placeholder="Team ID (T-XXXX)">
+    <button class="status-btn" style="background:var(--primary); width:100%" onclick="processAssign()">CONFIRM ASSIGN</button>
     <button onclick="closeP('as-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
 </div></div>
 
-<div id="id-p" class="modal"><div class="modal-content">
-    <h3>ID Generator</h3>
-    <div id="id-card-render">
-        <div style="background:var(--primary); color:white; padding:10px; text-align:center;">AK SOLUTION HUB</div>
-        <div id="id-photo" style="width:80px; height:80px; margin:10px auto; background:#eee; border-radius:10px; overflow:hidden;"><img id="v-img" src="" style="width:100%; height:100%; object-fit:cover;"></div>
-        <div style="padding:10px; font-size:12px;">
-            <b id="v-name">NAME</b><br><span id="v-id" style="color:var(--primary)">ID: T-0000</span><br>
-            Phone: <span id="v-phone">-</span><br>Address: <span id="v-addr">-</span>
-        </div>
-        <div id="id-qr" style="display:flex; justify-content:center; margin-top:5px;"></div>
-    </div>
-    <input type="text" id="id-tid" class="input" placeholder="Team ID">
-    <input type="file" id="cam" accept="image/*" capture="environment" style="display:none" onchange="previewFile(event)">
-    <div class="btn-grid">
-        <button class="status-btn" style="background:var(--dark)" onclick="document.getElementById('cam').click()">PHOTO</button>
-        <button class="status-btn" style="background:var(--primary)" onclick="loadIDData()">LOAD</button>
-    </div>
-    <button class="status-btn" style="background:var(--success); width:100%; margin-top:5px;" onclick="downloadID()">SAVE ID</button>
-    <button onclick="closeP('id-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
-</div></div>
-
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8Gn5yZkrMcifMTVf1idnTXFObwmEpFyHvX8Zm21vOr8gXS6QfS8RaS8-u-RugmqnC/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
 
     function openP(id) { document.getElementById(id).style.display = 'block'; }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
 
+    // Sync Counters
     async function syncCounts() {
-        let r = await fetch(SCRIPT_URL + "?action=getCounts");
-        let d = await r.json();
-        document.getElementById('c-total').innerText = d.total || 0;
-        document.getElementById('c-done').innerText = d.done || 0;
-        document.getElementById('c-run').innerText = d.run || 0;
-        document.getElementById('c-pend').innerText = d.pend || 0;
-        document.getElementById('c-rej').innerText = d.rej || 0;
-        document.getElementById('c-team').innerText = d.team || 0;
+        try {
+            let r = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
+            let cData = await r.json();
+            let tr = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
+            let tData = await tr.json();
+            
+            document.getElementById('c-total').innerText = cData.length;
+            document.getElementById('c-done').innerText = cData.filter(x => x.Status === 'Done').length;
+            document.getElementById('c-run').innerText = cData.filter(x => x.Status === 'Running').length;
+            document.getElementById('c-pend').innerText = cData.filter(x => x.Status === 'Pending').length;
+            document.getElementById('c-rej').innerText = cData.filter(x => x.Status === 'Reject').length;
+            document.getElementById('c-team').innerText = tData.length;
+        } catch(e) { console.log("Sync Error"); }
     }
 
+    // Quick Update for Manual ID
     async function quickUpdate(st) {
-        let id = document.getElementById('man-id').value.toUpperCase();
-        if(!id) return alert("Enter ID");
+        let id = document.getElementById('man-id').value.toUpperCase().trim();
+        if(!id) return alert("Enter ID first");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + "?action=updateStatus&id="+id+"&status="+st, {mode:'no-cors'});
-        alert("Updated!"); syncCounts();
+        await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${st}`, {mode:'no-cors'});
+        alert("Status Updated to: " + st);
+        syncCounts();
         document.getElementById('man-id').value = "";
         document.getElementById('loader').style.display = 'none';
     }
 
+    // Load Data Lists (Customer/Team)
     async function loadList(type) {
         document.getElementById('loader').style.display = 'flex';
-        let r = await fetch(SCRIPT_URL + "?action=getList&type=" + type);
-        let data = await r.json();
-        let html = "";
-        data.forEach(item => {
-            html += `<div class="data-card">
-                <b>${item.Name}</b> (${item.ID}) <span style="float:right; font-size:10px; color:${item.Status === 'Busy' ? 'red' : 'green'}">${item.Status || ''}</span><br>
-                ${item.WorkingOn ? `<small style="color:blue">Working On: ${item.WorkingOn}</small><br>` : ''}
-                <div style="display:flex; gap:5px; margin-top:8px;">
-                    <a href="tel:${item.Phone}" class="status-btn" style="background:var(--primary); flex:1;">CALL</a>
-                    <a href="https://wa.me/91${item.Phone}" class="status-btn" style="background:var(--success); flex:1;">WA</a>
-                    ${type==='TEAM' ? `<button onclick="quickUpdateStatus('${item.ID}','Free')" class="status-btn" style="background:var(--running); flex:1;">FREE</button>` : `<button onclick="fillAssign('${item.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>`}
-                </div>
-            </div>`;
-        });
-        document.getElementById('lb').innerHTML = html || "No Records";
-        document.getElementById('lt').innerText = type + " LIST";
+        try {
+            let r = await fetch(SCRIPT_URL + "?action=getList&type=" + type);
+            let data = await r.json();
+            let html = "";
+            data.forEach(item => {
+                let cleanID = item.ID || "N/A";
+                let statusColor = (item.Status === 'Free' || item.Status === 'Pending') ? 'green' : 'orange';
+                
+                html += `<div class="data-card">
+                    <b>${item.Name || 'No Name'}</b> (${cleanID}) 
+                    <span style="float:right; font-weight:bold; color:${statusColor}">${item.Status || 'Active'}</span><br>
+                    <small>${item.Phone || ''} | ${item.Service || ''}</small>
+                    <div style="display:flex; gap:5px; margin-top:8px;">
+                        <a href="tel:${item.Phone}" class="status-btn" style="background:var(--primary); flex:1;">CALL</a>
+                        <a href="https://wa.me/91${item.Phone}" class="status-btn" style="background:var(--success); flex:1;">WA</a>
+                        ${type==='TEAM' ? 
+                            `<button onclick="quickUpdateStatus('${cleanID}','Free')" class="status-btn" style="background:var(--running); flex:1;">FREE</button>` : 
+                            `<button onclick="fillAssign('${cleanID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>`
+                        }
+                    </div>
+                </div>`;
+            });
+            document.getElementById('lb').innerHTML = html || "No Records Found";
+            document.getElementById('lt').innerText = type + " DATABASE";
+            openP('list-p');
+        } catch(e) { alert("Error loading list"); }
         document.getElementById('loader').style.display = 'none';
-        openP('list-p');
     }
 
     async function quickUpdateStatus(id, st) {
+        if(id === "N/A") return alert("Invalid ID");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + "?action=updateStatus&id="+id+"&status="+st, {mode:'no-cors'});
-        alert("Updated"); closeP('list-p'); syncCounts();
+        await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${st}`, {mode:'no-cors'});
+        alert("Member is now " + st);
+        closeP('list-p');
+        syncCounts();
         document.getElementById('loader').style.display = 'none';
     }
+
+    function fillAssign(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
 
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
+        if(!cid || !tid) return alert("Both IDs required");
         document.getElementById('loader').style.display = 'flex';
-        // Multi-action: Customer Running + Team Busy with ID
-        await fetch(SCRIPT_URL + `?action=assignWork&cid=${cid}&tid=${tid}`, {mode:'no-cors'});
-        alert("Assigned & Tracked!");
+        // अपडेट कस्टमर को Running करेगा और टीम को Busy
+        await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running`, {mode:'no-cors'});
+        await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`, {mode:'no-cors'});
+        alert("Task Assigned Successfully!");
         closeP('as-p'); syncCounts();
         document.getElementById('loader').style.display = 'none';
     }
 
     async function submitTeam() {
-        let p = `?action=addTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&phone=${document.getElementById('rp').value}&father=${encodeURIComponent(document.getElementById('rf').value)}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`;
+        let name = document.getElementById('rn').value;
+        let phone = document.getElementById('rp').value;
+        if(!name || !phone) return alert("Name and Phone are must");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + p, {mode:'no-cors'});
-        alert("Registered!"); location.reload();
+        let id = "T-" + Math.floor(100 + Math.random() * 900);
+        let date = new Date().toLocaleDateString('en-GB');
+        // नोट: इसके लिए आपके GS में addBooking जैसा ही एक addTeam एक्शन होना चाहिए
+        alert("Member Registration feature requires addTeam Script. Use manual entry in Sheet for now.");
+        document.getElementById('loader').style.display = 'none';
     }
-
-    async function loadIDData() {
-        let tid = document.getElementById('id-tid').value.toUpperCase();
-        let r = await fetch(SCRIPT_URL + "?action=getList&type=TEAM");
-        let data = await r.json();
-        let s = data.find(x => x.ID == tid);
-        if(s) {
-            document.getElementById('v-name').innerText = s.Name;
-            document.getElementById('v-id').innerText = "ID: " + s.ID;
-            document.getElementById('v-phone').innerText = s.Phone;
-            document.getElementById('v-addr').innerText = s.Address;
-            document.getElementById('id-qr').innerHTML = "";
-            new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 });
-        }
-    }
-
-    function previewFile(e) {
-        let reader = new FileReader();
-        reader.onload = function(){ document.getElementById('v-img').src = reader.result; }
-        reader.readAsDataURL(e.target.files[0]);
-    }
-
-    function downloadID() {
-        html2canvas(document.getElementById('id-card-render')).then(c => {
-            let a = document.createElement('a'); a.download = 'ID.png'; a.href = c.toDataURL(); a.click();
-        });
-    }
-
-    function fillAssign(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
 
     window.onload = syncCounts;
 </script>
