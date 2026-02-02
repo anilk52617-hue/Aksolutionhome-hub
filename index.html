@@ -102,6 +102,7 @@
 </div>
 
 <script>
+    // आपका पुराना SCRIPT_URL
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
@@ -181,26 +182,36 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            await fetch(SCRIPT_URL + `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`);
-            window.open(`https://wa.me/919927464530?text=*AK SOLUTION HUB*%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0ALocation: ${encodeURIComponent(userGPS)}`);
+            // New logic to match Google Sheet columns
+            await fetch(SCRIPT_URL + `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`, {mode: 'no-cors'});
+            
+            window.open(`https://wa.me/919927464530?text=*AK SOLUTION HUB*%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0AAddress: ${encodeURIComponent(addr)}%0ALocation: ${encodeURIComponent(userGPS)}`);
+            
             alert("✅ बुकिंग सफल! ID: " + id);
             location.reload();
-        } catch(e) { document.getElementById('loader').style.display = 'none'; alert("त्रुटि: डेटा सेव नहीं हुआ।"); }
+        } catch(e) { 
+            document.getElementById('loader').style.display = 'none'; 
+            alert("नेटवर्क त्रुटि: डेटा सेव नहीं हुआ।"); 
+        }
     }
 
     async function trackStatus() {
-        let inputId = document.getElementById('trackInput').value.toUpperCase();
+        let inputId = document.getElementById('trackInput').value.toUpperCase().trim();
         if(!inputId) return alert("ID भरें!");
         document.getElementById('loader').style.display = 'flex';
         try {
             let res = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
             let data = await res.json();
-            // यहाँ ID कॉलम B (Index 1) से मैच हो रही है
+            // Matching ID from Column B
             let found = data.find(item => item.ID === inputId);
             let resDiv = document.getElementById('statusResult');
             resDiv.style.display = 'block';
-            // स्टेटस कॉलम H से आ रहा है
-            resDiv.innerHTML = found ? `<b>ID:</b> ${found.ID}<br><b>Status:</b> <span style="color:var(--primary)">${found.Status}</span>` : "<span style='color:red;'>ID नहीं मिली!</span>";
+            
+            if(found) {
+                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Status:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
+            } else {
+                resDiv.innerHTML = "<span style='color:red;'>ID नहीं मिली!</span>";
+            }
         } catch(e) { alert("ट्रैकिंग लोड नहीं हो सकी"); }
         document.getElementById('loader').style.display = 'none';
     }
