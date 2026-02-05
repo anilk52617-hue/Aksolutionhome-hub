@@ -103,7 +103,7 @@
 
 <script>
     // आपका फाइनल अपडेटेड URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOIob4HjbRXYXOdXxDCUp38IF0dzF4dUrYKzUqtDAIfJN5N8_ijRmbeWHEl5MjX-5OAg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
 
@@ -182,7 +182,7 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            // गूगल शीट के 8 कॉलम्स के लिए डेटा भेजना (Updated Parameters)
+            // गूगल शीट के 8 कॉलम्स के लिए डेटा क्रम
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
             
             await fetch(SCRIPT_URL + params, {mode: 'no-cors'});
