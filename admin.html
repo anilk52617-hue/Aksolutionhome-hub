@@ -119,40 +119,36 @@
 </div></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4rRCAGQp_C2Wi2TkBjQYpY1KbNtddPuEMtYxPUVeHgO73ABMa0sNiEBmiszh0Coc9yQ/exec";
+    // आपका फाइनल अपडेटेड URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOIob4HjbRXYXOdXxDCUp38IF0dzF4dUrYKzUqtDAIfJN5N8_ijRmbeWHEl5MjX-5OAg/exec";
     let serverOTP = null;
 
     function openP(id) { document.getElementById(id).style.display = 'block'; }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
 
-    // आपके लिए अपडेट किया गया handleOTP फंक्शन - अब यह सीधे व्हाट्सएप खोलेगा
     async function handleOTP() {
         let phone = document.getElementById('rp').value;
         let name = document.getElementById('rn').value;
         if(!phone || !name) return alert("नाम और व्हाट्सएप नंबर ज़रूरी है!");
 
-        // 4 अंकों का OTP बनाएं
         serverOTP = Math.floor(1000 + Math.random() * 9000);
-        
         let message = `नमस्ते *${name}*, AK SOLUTION HUB में टीम रजिस्ट्रेशन के लिए आपका OTP है: *${serverOTP}*`;
-        
-        // व्हाट्सएप खोलने के लिए लिंक
         let waURL = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
-        
-        // सीधे व्हाट्सएप विंडो खोलना (बुकिंग की तरह)
         window.open(waURL, '_blank');
 
-        // UI को अपडेट करना
         document.getElementById('reg-fields').style.opacity = '0.4';
         document.getElementById('otp-area').style.display = 'block';
-        alert("व्हाट्सएप पर मैसेज भेज दिया गया है। कृपया वहां से OTP देखकर यहाँ भरें।");
+        alert("व्हाट्सएप पर OTP भेज दिया गया है।");
     }
 
     async function verifyAndFinish() {
         if(document.getElementById('otp-val').value == serverOTP) {
             document.getElementById('loader').style.display = 'flex';
             const tid = "T-" + Math.floor(1000 + Math.random() * 9000);
-            let p = `?action=addTeam&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${document.getElementById('rp').value}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}&Status=Free`;
+            const date = new Date().toLocaleDateString('en-GB');
+            
+            // 8 कॉलम स्ट्रक्चर के साथ डेटा भेजना (Date सबसे पहले)
+            let p = `?action=addTeam&Date=${date}&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${document.getElementById('rp').value}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}&Status=Free`;
             
             await fetch(SCRIPT_URL + p, {mode:'no-cors'});
             alert("Registration Successful! ID: " + tid);
@@ -160,7 +156,6 @@
         } else { alert("गलत OTP!"); }
     }
 
-    // बाकी सभी पुराने फंक्शन्स (syncCounts, quickUpdate, loadList आदि) सुरक्षित हैं
     async function syncCounts() {
         try {
             let r = await fetch(SCRIPT_URL + "?action=getList&type=CUST");

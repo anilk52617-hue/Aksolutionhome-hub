@@ -102,8 +102,8 @@
 </div>
 
 <script>
-    // आपका नया और अपडेटेड URL यहाँ लगा दिया गया है
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4rRCAGQp_C2Wi2TkBjQYpY1KbNtddPuEMtYxPUVeHgO73ABMa0sNiEBmiszh0Coc9yQ/exec";
+    // आपका फाइनल अपडेटेड URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOIob4HjbRXYXOdXxDCUp38IF0dzF4dUrYKzUqtDAIfJN5N8_ijRmbeWHEl5MjX-5OAg/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
 
@@ -162,7 +162,7 @@
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
-                userGPS = `http://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
+                userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
                 alert("📍 लोकेशन कन्फर्म हो गई!");
@@ -182,11 +182,14 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            // गूगल शीट के 8 कॉलम्स के लिए डेटा भेजना
-            await fetch(SCRIPT_URL + `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`, {mode: 'no-cors'});
+            // गूगल शीट के 8 कॉलम्स के लिए डेटा भेजना (Updated Parameters)
+            let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
+            
+            await fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
             // व्हाट्सएप अलर्ट
-            window.open(`https://wa.me/919927464530?text=*AK SOLUTION HUB*%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0AAddress: ${encodeURIComponent(addr)}%0ALocation: ${encodeURIComponent(userGPS)}`);
+            let waMsg = `*AK SOLUTION HUB*%0A*Booking Details*%0A------------------%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0AAddress: ${encodeURIComponent(addr)}%0ALocation: ${encodeURIComponent(userGPS)}`;
+            window.open(`https://wa.me/919927464530?text=${waMsg}`);
             
             alert("✅ बुकिंग सफल! ID: " + id);
             location.reload();
@@ -208,7 +211,7 @@
             resDiv.style.display = 'block';
             
             if(found) {
-                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Status:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
+                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Service:</b> ${found.Service}<br><b>Status:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
             } else {
                 resDiv.innerHTML = "<span style='color:red;'>ID नहीं मिली!</span>";
             }
