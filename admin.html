@@ -79,7 +79,6 @@
         <button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP ON WHATSAPP</button>
     </div>
     <div id="otp-area" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
-        <p style="font-size:12px; margin-bottom:10px;">Enter OTP received on WhatsApp</p>
         <input id="otp-val" class="input" placeholder="Enter 4-Digit OTP">
         <button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndFinish()">VERIFY & REGISTER</button>
     </div>
@@ -120,12 +119,48 @@
 </div></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMd9VjxN8U3NlunHiZ3Z5JN8Rutd8QIFH8psF1hB6D5KM4sDsnH7w0Ky5uWJFPCVBZUw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4rRCAGQp_C2Wi2TkBjQYpY1KbNtddPuEMtYxPUVeHgO73ABMa0sNiEBmiszh0Coc9yQ/exec";
     let serverOTP = null;
 
     function openP(id) { document.getElementById(id).style.display = 'block'; }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
 
+    // आपके लिए अपडेट किया गया handleOTP फंक्शन - अब यह सीधे व्हाट्सएप खोलेगा
+    async function handleOTP() {
+        let phone = document.getElementById('rp').value;
+        let name = document.getElementById('rn').value;
+        if(!phone || !name) return alert("नाम और व्हाट्सएप नंबर ज़रूरी है!");
+
+        // 4 अंकों का OTP बनाएं
+        serverOTP = Math.floor(1000 + Math.random() * 9000);
+        
+        let message = `नमस्ते *${name}*, AK SOLUTION HUB में टीम रजिस्ट्रेशन के लिए आपका OTP है: *${serverOTP}*`;
+        
+        // व्हाट्सएप खोलने के लिए लिंक
+        let waURL = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+        
+        // सीधे व्हाट्सएप विंडो खोलना (बुकिंग की तरह)
+        window.open(waURL, '_blank');
+
+        // UI को अपडेट करना
+        document.getElementById('reg-fields').style.opacity = '0.4';
+        document.getElementById('otp-area').style.display = 'block';
+        alert("व्हाट्सएप पर मैसेज भेज दिया गया है। कृपया वहां से OTP देखकर यहाँ भरें।");
+    }
+
+    async function verifyAndFinish() {
+        if(document.getElementById('otp-val').value == serverOTP) {
+            document.getElementById('loader').style.display = 'flex';
+            const tid = "T-" + Math.floor(1000 + Math.random() * 9000);
+            let p = `?action=addTeam&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${document.getElementById('rp').value}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}&Status=Free`;
+            
+            await fetch(SCRIPT_URL + p, {mode:'no-cors'});
+            alert("Registration Successful! ID: " + tid);
+            location.reload();
+        } else { alert("गलत OTP!"); }
+    }
+
+    // बाकी सभी पुराने फंक्शन्स (syncCounts, quickUpdate, loadList आदि) सुरक्षित हैं
     async function syncCounts() {
         try {
             let r = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
@@ -141,33 +176,6 @@
             document.getElementById('c-total').innerText = cData.length;
             document.getElementById('c-team').innerText = tData.length;
         } catch(e) { console.error("Sync Failed"); }
-    }
-
-    // OTP Handlers
-    async function handleOTP() {
-        let phone = document.getElementById('rp').value;
-        let name = document.getElementById('rn').value;
-        if(!phone || !name) return alert("नाम और व्हाट्सएप नंबर ज़रूरी है!");
-        document.getElementById('loader').style.display = 'flex';
-        try {
-            let r = await fetch(SCRIPT_URL + `?action=sendOTP&phone=${phone}&name=${encodeURIComponent(name)}`);
-            let res = await r.json();
-            serverOTP = res.otp;
-            document.getElementById('reg-fields').style.opacity = '0.4';
-            document.getElementById('otp-area').style.display = 'block';
-            alert("OTP आपके व्हाट्सएप पर भेज दिया गया है!");
-        } catch(e) { alert("OTP Error!"); }
-        document.getElementById('loader').style.display = 'none';
-    }
-
-    async function verifyAndFinish() {
-        if(document.getElementById('otp-val').value == serverOTP) {
-            let p = `?action=addTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&phone=${document.getElementById('rp').value}&father=${encodeURIComponent(document.getElementById('rf').value)}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`;
-            document.getElementById('loader').style.display = 'flex';
-            await fetch(SCRIPT_URL + p, {mode:'no-cors'});
-            alert("Registration Successful!");
-            location.reload();
-        } else { alert("गलत OTP!"); }
     }
 
     async function quickUpdate(st) {
@@ -194,10 +202,8 @@
                 <small>${item.Phone} | ${item.Service || ''}</small>
                 <div style="display:flex; gap:5px; margin-top:8px;">
                     <a href="tel:${item.Phone}" class="status-btn" style="background:var(--primary); flex:1;">CALL</a>
-                    ${type==='TEAM' ? 
-                        `<button onclick="quickUpdateStatus('${item.ID}','Free')" class="status-btn" style="background:var(--success); flex:1;">SET FREE</button>` : 
-                        (isPending ? `<button onclick="fillAssign('${item.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : '')
-                    }
+                    ${type==='TEAM' ? `<button onclick="quickUpdateStatus('${item.ID}','Free')" class="status-btn" style="background:var(--success); flex:1;">SET FREE</button>` : 
+                    (isPending ? `<button onclick="fillAssign('${item.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : '')}
                 </div>
             </div>`;
         });
