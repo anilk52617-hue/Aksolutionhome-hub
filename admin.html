@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V8.2 FINAL FIXED</title>
+    <title>AK MASTER ADMIN - V8.5 FINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -35,7 +35,7 @@
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • V8.2 FIXED</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • V8.5 FINAL</p>
 </div>
 
 <div class="indicator-grid">
@@ -109,17 +109,15 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
     let fullCustData = [], fullTeamData = [], serverOTP = null;
 
-    // --- Helper function to format any date to DD/MM/YYYY ---
     function formatAsDate(input) {
         try {
             if(!input) return "";
             let d = new Date(input);
-            if(isNaN(d.getTime())) return String(input).split('T')[0].trim(); // If date is weird
+            if(isNaN(d.getTime())) return String(input).split('T')[0].trim();
             return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         } catch(e) { return ""; }
     }
 
-    // --- 1. SYNC COUNTS (SUPER FIXED TODAY LOGIC) ---
     async function syncCounts() {
         document.getElementById('loader').style.display = 'flex';
         try {
@@ -128,19 +126,14 @@
                 fetch(SCRIPT_URL + "?action=getList&type=TEAM").then(r => r.json())
             ]);
             fullCustData = cr; fullTeamData = tr;
-            
             let todayStr = formatAsDate(new Date());
-            
-            // Count logic based on formatted comparison
-            let todayCount = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending').length;
-
-            document.getElementById('c-today-new').innerText = todayCount;
+            document.getElementById('c-today-new').innerText = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending').length;
             document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
             document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
             document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
             document.getElementById('c-total').innerText = fullCustData.length;
             document.getElementById('c-team').innerText = fullTeamData.length;
-        } catch(e) { console.log("Sync Error:", e); }
+        } catch(e) { console.log(e); }
         document.getElementById('loader').style.display = 'none';
     }
 
@@ -157,7 +150,7 @@
         document.getElementById('loader').style.display = 'none';
         let cM = `नमस्ते ${cust.Name}, आपकी सेवा के लिए ${team.Name} (ID: ${tid}) को भेज दिया गया है।`;
         let tM = `*नया टास्क!*\nकस्टमर: ${cust.Name}\nपता: ${cust.Address}\nलोकेशन: ${cust.GPS}`;
-        document.getElementById('as-content').innerHTML = `<h3>✅ सफलतापूर्वक असाइन!</h3><a href="https://wa.me/91${cust.Phone}?text=${encodeURIComponent(cM)}" target="_blank" class="status-btn" style="background:#25D366; width:100%; margin-bottom:10px; height:50px;">कस्टमर को भेजें</a><a href="https://wa.me/91${team.Phone}?text=${encodeURIComponent(tM)}" target="_blank" class="status-btn" style="background:#128C7E; width:100%; height:50px;">टीम को भेजें</a><button onclick="location.reload()" class="status-btn" style="background:var(--dark); width:100%; margin-top:15px;">वापस</button>`;
+        document.getElementById('as-content').innerHTML = `<h3>✅ सफलतापूर्वक असाइन!</h3><a href="https://wa.me/91${cust.Phone}?text=${encodeURIComponent(cM)}" target="_blank" class="status-btn" style="background:#25D366; width:100%; margin-bottom:10px; height:50px;">कस्टमर को भेजें</a><a href="https://wa.me/91${team.Phone}?text=${encodeURIComponent(tM)}" target="_blank" class="status-btn" style="background:#128C7E; width:100%; height:50px;">टीम को भेजें</a><button onclick="closeP('as-p'); syncCounts();" class="status-btn" style="background:var(--dark); width:100%; margin-top:15px;">वापस डैशबोर्ड</button>`;
     }
 
     function loadRunningDetailed() {
@@ -178,12 +171,21 @@
         syncCounts(); closeP('list-p');
     }
 
+    async function freeTeamManually(tid) {
+        if(!confirm(`क्या आप ${tid} को फ्री करना चाहते हैं?`)) return;
+        document.getElementById('loader').style.display = 'flex';
+        await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`);
+        await syncCounts();
+        loadList('TEAM'); 
+    }
+
     function loadIDData() {
         let s = fullTeamData.find(x => x.ID === document.getElementById('id-tid').value.toUpperCase());
         if(s) { document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: "+s.ID; document.getElementById('v-phone').innerText = s.Phone; document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), {text:s.ID, width:60, height:60}); }
     }
     function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; r.readAsDataURL(e.target.files[0]); }
     function downloadID() { html2canvas(document.getElementById('id-card-render')).then(c => { let a = document.createElement('a'); a.download = 'Staff_ID.png'; a.href = c.toDataURL(); a.click(); }); }
+    
     function handleOTP() { let ph = document.getElementById('rp').value; serverOTP = Math.floor(1000+Math.random()*9000); window.open(`https://wa.me/91${ph}?text=OTP: ${serverOTP}`); document.getElementById('otp-area').style.display = 'block'; }
     async function verifyAndRegister() {
         if(document.getElementById('otp-val').value == serverOTP) {
@@ -197,7 +199,6 @@
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
     function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`); }
     
-    // --- FIXED FILTER LOGIC FOR TODAY ---
     function filterStatus(s) { 
         let todayStr = formatAsDate(new Date()); 
         let filtered = (s === 'Today') ? fullCustData.filter(x => formatAsDate(x.Date) === todayStr) : fullCustData.filter(x => x.Status === s);
@@ -205,13 +206,28 @@
     }
 
     function loadList(t) { renderDataList(t==='CUST'?fullCustData:fullTeamData, t); }
+    
     function renderDataList(d, t) {
-        let h = ""; d.forEach(i => h += `<div class="data-card"><b>${i.Name}</b> (${i.ID})<br><small>${i.Phone} | ${i.Service || ''}</small><br>${i.Status === 'Pending' ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); margin-top:5px;">ASSIGN</button>` : ''}</div>`);
-        document.getElementById('lb').innerHTML = h || "No data"; document.getElementById('lt').innerText = t; openP('list-p');
+        let h = ""; 
+        d.forEach(i => {
+            let isTeam = (t === 'TEAM' || String(i.ID).startsWith('T-'));
+            h += `<div class="data-card">
+                <b>${i.Name}</b> (${i.ID})<br>
+                <small>${i.Phone} | ${i.Service || ''}</small><br>
+                <span style="font-size:10px; color:${i.Status === 'Free' || i.Status === 'Done' ? 'green' : 'red'}; font-weight:bold;">STATUS: ${i.Status}</span><br>
+                ${(i.Status === 'Pending' && !isTeam) ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); margin-top:5px;">ASSIGN</button>` : ''}
+                ${(i.Status === 'Busy' && isTeam) ? `<button onclick="freeTeamManually('${i.ID}')" class="status-btn" style="background:var(--danger); margin-top:5px;">FREE MANUALLY</button>` : ''}
+            </div>`;
+        });
+        document.getElementById('lb').innerHTML = h || "No data"; 
+        document.getElementById('lt').innerText = t; 
+        openP('list-p');
     }
+
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { 
         let id = document.getElementById('man-id').value.toUpperCase(); 
+        if(!id) return alert("Enter ID");
         document.getElementById('loader').style.display = 'flex';
         await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); 
         syncCounts(); 
