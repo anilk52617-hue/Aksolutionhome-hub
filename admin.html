@@ -141,25 +141,51 @@
         let cid = document.getElementById('as-cid').value, tid = document.getElementById('as-tid').value;
         if(!tid) return alert("Select Staff!");
         document.getElementById('loader').style.display = 'flex';
+        
         let cust = fullCustData.find(x => x.ID === cid), team = fullTeamData.find(x => x.ID === tid);
         let newGPS = (cust.GPS || "") + " | " + tid;
+        
         await Promise.all([
             fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${encodeURIComponent(newGPS)}`),
             fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
         ]);
+        
         document.getElementById('loader').style.display = 'none';
-        let cM = `नमस्ते ${cust.Name}, आपकी सेवा के लिए ${team.Name} (ID: ${tid}) को भेज दिया गया है।`;
-        let tM = `*नया टास्क!*\nकस्टमर: ${cust.Name}\nपता: ${cust.Address}\nलोकेशन: ${cust.GPS}`;
-        document.getElementById('as-content').innerHTML = `<h3>✅ सफलतापूर्वक असाइन!</h3><a href="https://wa.me/91${cust.Phone}?text=${encodeURIComponent(cM)}" target="_blank" class="status-btn" style="background:#25D366; width:100%; margin-bottom:10px; height:50px;">कस्टमर को भेजें</a><a href="https://wa.me/91${team.Phone}?text=${encodeURIComponent(tM)}" target="_blank" class="status-btn" style="background:#128C7E; width:100%; height:50px;">टीम को भेजें</a><button onclick="closeP('as-p'); syncCounts();" class="status-btn" style="background:var(--dark); width:100%; margin-top:15px;">वापस डैशबोर्ड</button>`;
+
+        // कस्टमर के लिए मैसेज (स्टाफ की पूरी डिटेल)
+        let customerMsg = `*AK SOLUTION HUB*%0A------------------------------%0Aनमस्ते *${encodeURIComponent(cust.Name)}*,%0Aआपकी सेवा के लिए टीम भेज दी गई है।%0A%0A*स्टाफ की जानकारी:*%0A👤 नाम: ${encodeURIComponent(team.Name)}%0A🆔 ID: ${tid}%0A📞 फोन: ${team.Phone}%0A🛠️ सर्विस: ${encodeURIComponent(cust.Service)}%0A%0Aधन्यवाद!`;
+
+        // टीम के लिए मैसेज (कस्टमर की पूरी डिटेल)
+        let teamMsg = `*AK SOLUTION HUB (New Task)*%0A------------------------------%0Aनमस्ते *${encodeURIComponent(team.Name)}*, नया काम असाइन हुआ है।%0A%0A*कस्टमर की जानकारी:*%0A👤 नाम: ${encodeURIComponent(cust.Name)}%0A📞 फोन: ${cust.Phone}%0A📍 पता: ${encodeURIComponent(cust.Address)}%0A🛠️ काम: ${encodeURIComponent(cust.Service)}%0A📍 लोकेशन: ${encodeURIComponent(cust.GPS)}`;
+
+        document.getElementById('as-content').innerHTML = `
+            <h3>✅ सफलतापूर्वक असाइन!</h3>
+            <a href="https://wa.me/91${cust.Phone}?text=${customerMsg}" target="_blank" class="status-btn" style="background:#25D366; width:100%; margin-bottom:10px; height:50px;">कस्टमर को भेजें</a>
+            <a href="https://wa.me/91${team.Phone}?text=${teamMsg}" target="_blank" class="status-btn" style="background:#128C7E; width:100%; height:50px;">टीम को भेजें</a>
+            <button onclick="closeP('as-p'); syncCounts();" class="status-btn" style="background:var(--dark); width:100%; margin-top:15px;">वापस डैशबोर्ड</button>
+        `;
     }
 
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            let gps = String(c.GPS || ""), tid = gps.includes('|') ? gps.split('|').pop().trim() : "Unknown";
+            let gpsStr = String(c.GPS || "");
+            let tid = "Unknown";
+            // GPS कॉलम में ' | ' ढूंढ कर स्टाफ ID निकालें
+            if(gpsStr.includes('|')) {
+                tid = gpsStr.split('|').pop().trim();
+            }
             let s = fullTeamData.find(st => st.ID === tid);
-            h += `<div class="data-card" style="border-left-color:var(--running); display:flex; justify-content:space-between; align-items:center;"><div><b>CUST: ${c.Name}</b><br><small>${c.Service}</small><br><b style="color:var(--success)">STAFF: ${s ? s.Name : tid}</b></div><button onclick="finishTask('${c.ID}', '${tid}')" class="status-btn" style="background:var(--success); height:55px; width:75px;">DONE &<br>FREE</button></div>`;
+            
+            h += `<div class="data-card" style="border-left-color:var(--running); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <b>CUST: ${c.Name}</b><br>
+                    <small>${c.Service}</small><br>
+                    <b style="color:var(--primary)">STAFF: ${s ? s.Name + " ("+tid+")" : tid}</b>
+                </div>
+                <button onclick="finishTask('${c.ID}', '${tid}')" class="status-btn" style="background:var(--success); height:55px; width:75px;">DONE &<br>FREE</button>
+            </div>`;
         });
         document.getElementById('lb').innerHTML = h || "कोई रनिंग टास्क नहीं"; document.getElementById('lt').innerText = "RUNNING STATUS"; openP('list-p');
     }
