@@ -106,6 +106,7 @@
     let userGPS = "Not Provided";
     let tapCount = 0;
 
+    // बैनर स्लाइडर
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
     setInterval(() => {
@@ -161,7 +162,7 @@
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
-                // सुधरा हुआ गूगल मैप्स लिंक (Backticks fix)
+                // सुधरा हुआ गूगल मैप्स लिंक
                 userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
@@ -186,21 +187,23 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            // गूगल शीट में डेटा भेजना
+            // गूगल शीट के लिए पैरामीटर्स
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(addrVal)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
+            
+            // डेटा सिंक (Silent Fetch)
             fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
-            // --- सुधरा हुआ व्हाट्सएप फॉर्मेट (📞 फोन नंबर के साथ) ---
+            // व्हाट्सएप मैसेज फॉर्मेट
             let waMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
                         `------------------------------------%0A` +
-                        `🆔 *ID:* ${id}%0A` +
+                        `🆔 *बुकिंग ID:* ${id}%0A` +
                         `📞 *मोबाइल:* ${phoneVal}%0A` +
-                        `👤 *नाम:* ${encodeURIComponent(nameVal)}%0A` +
+                        `👤 *कस्टमर:* ${encodeURIComponent(nameVal)}%0A` +
                         `🛠️ *सर्विस:* ${encodeURIComponent(svcVal)}%0A` +
                         `📍 *पता:* ${encodeURIComponent(addrVal)}%0A` +
                         `🌍 *लोकेशन:* ${encodeURIComponent(userGPS)}%0A` +
                         `------------------------------------%0A` +
-                        `✅ *टीम असाइन करें।*`;
+                        `✅ *एडमिन पैनल से टीम असाइन करें।*`;
             
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
@@ -214,7 +217,7 @@
                 // होम पेज पर वापस
                 go('home', document.querySelectorAll('.nav-item')[0]);
 
-                // व्हाट्सएप पर भेजना
+                // व्हाट्सएप ओपन करना
                 window.location.href = `https://wa.me/919927464530?text=${waMsg}`;
             }, 1500);
             
