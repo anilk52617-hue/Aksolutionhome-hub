@@ -161,7 +161,7 @@
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
-                userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                userGPS = `http://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
                 alert("📍 लोकेशन कन्फर्म हो गई!");
@@ -183,23 +183,27 @@
         try {
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
             
-            // डेटा शीट में भेजें
+            // डेटा शीट में भेजना शुरू करें
             fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
             let waMsg = `*AK SOLUTION HUB*%0A*Booking Details*%0A------------------%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0AAddress: ${encodeURIComponent(addr)}%0ALocation: ${encodeURIComponent(userGPS)}`;
             
-            // 2 सेकंड का इंतज़ार ताकि डेटा चला जाए, फिर लोडर हटाकर व्हाट्सएप खोलें
+            // सुधार: 1.5 सेकंड बाद लोडर बंद करें और फिर व्हाट्सएप्प खोलें
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
-                window.location.href = `https://wa.me/919927464530?text=${waMsg}`;
                 
-                // फॉर्म रीसेट
+                // फॉर्म डेटा साफ करें ताकि वापसी पर लोडर न मिले
                 document.getElementById('name').value = "";
                 document.getElementById('phone').value = "";
                 document.getElementById('addr').value = "";
                 document.getElementById('finalSubmit').style.display = 'none';
+                
+                // होम पेज पर वापस स्विच करें
                 go('home', document.querySelectorAll('.nav-item')[0]);
-            }, 2000);
+
+                // अब व्हाट्सएप्प खोलें
+                window.location.href = `https://wa.me/919927464530?text=${waMsg}`;
+            }, 1500);
             
         } catch(e) { 
             document.getElementById('loader').style.display = 'none'; 
