@@ -161,11 +161,17 @@
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
-                userGPS = `http://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
+                // सुधरा हुआ गूगल मैप्स लिंक
+                userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
                 alert("📍 लोकेशन कन्फर्म हो गई!");
-            }, () => { alert("कृपया लोकेशन चालू करें!"); document.getElementById('loader').style.display = 'none'; });
+            }, () => { 
+                alert("कृपया लोकेशन चालू करें!"); 
+                document.getElementById('loader').style.display = 'none'; 
+            });
+        } else {
+            alert("आपका ब्राउज़र लोकेशन सपोर्ट नहीं करता!");
         }
     }
 
@@ -174,6 +180,7 @@
         const phone = document.getElementById('phone').value;
         const addr = document.getElementById('addr').value;
         const svc = document.getElementById('svc').value;
+        
         if(!name || !phone || !addr) return alert("कृपया सभी जानकारी भरें!");
         
         document.getElementById('loader').style.display = 'flex';
@@ -181,27 +188,35 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
+            // गूगल शीट में डेटा भेजना
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
-            
-            // डेटा शीट में भेजना शुरू करें
             fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
-            let waMsg = `*AK SOLUTION HUB*%0A*Booking Details*%0A------------------%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0AAddress: ${encodeURIComponent(addr)}%0ALocation: ${encodeURIComponent(userGPS)}`;
+            // --- नया प्रोफेशनल बुकिंग फॉर्मेट (नंबर के साथ) ---
+            let waMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
+                        `------------------------------------%0A` +
+                        `🆔 *बुकिंग ID:* ${id}%0A` +
+                        `📞 *कस्टमर नंबर:* ${phone}%0A` +
+                        `👤 *नाम:* ${encodeURIComponent(name)}%0A` +
+                        `🛠️ *सर्विस:* ${encodeURIComponent(svc)}%0A` +
+                        `📍 *पता:* ${encodeURIComponent(addr)}%0A` +
+                        `🌍 *लोकेशन:* ${encodeURIComponent(userGPS)}%0A` +
+                        `------------------------------------%0A` +
+                        `✅ *एडमिन पैनल से टीम असाइन करें।*`;
             
-            // सुधार: 1.5 सेकंड बाद लोडर बंद करें और फिर व्हाट्सएप्प खोलें
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
                 
-                // फॉर्म डेटा साफ करें ताकि वापसी पर लोडर न मिले
+                // फॉर्म साफ़ करना
                 document.getElementById('name').value = "";
                 document.getElementById('phone').value = "";
                 document.getElementById('addr').value = "";
                 document.getElementById('finalSubmit').style.display = 'none';
                 
-                // होम पेज पर वापस स्विच करें
+                // होम पेज पर वापस
                 go('home', document.querySelectorAll('.nav-item')[0]);
 
-                // अब व्हाट्सएप्प खोलें
+                // व्हाट्सएप्प पर भेजना (आपका नंबर: 9927464530)
                 window.location.href = `https://wa.me/919927464530?text=${waMsg}`;
             }, 1500);
             
