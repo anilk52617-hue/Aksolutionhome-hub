@@ -184,14 +184,22 @@
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(name)}&Phone=${phone}&Address=${encodeURIComponent(addr)}&Service=${encodeURIComponent(svc)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
             
             // डेटा शीट में भेजें
-            await fetch(SCRIPT_URL + params, {mode: 'no-cors'});
+            fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
-            // व्हाट्सएप मैसेज तैयार करें
             let waMsg = `*AK SOLUTION HUB*%0A*Booking Details*%0A------------------%0AID: ${id}%0AService: ${encodeURIComponent(svc)}%0AName: ${encodeURIComponent(name)}%0AAddress: ${encodeURIComponent(addr)}%0ALocation: ${encodeURIComponent(userGPS)}`;
             
-            // "पापा वाला मामला" (पॉप-अप ब्लॉकर) को हल करने के लिए .replace इस्तेमाल किया गया है
-            // यह बिना किसी अनुमति के सीधा व्हाट्सएप खोल देगा
-            window.location.replace(`https://wa.me/919927464530?text=${waMsg}`);
+            // 2 सेकंड का इंतज़ार ताकि डेटा चला जाए, फिर लोडर हटाकर व्हाट्सएप खोलें
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                window.location.href = `https://wa.me/919927464530?text=${waMsg}`;
+                
+                // फॉर्म रीसेट
+                document.getElementById('name').value = "";
+                document.getElementById('phone').value = "";
+                document.getElementById('addr').value = "";
+                document.getElementById('finalSubmit').style.display = 'none';
+                go('home', document.querySelectorAll('.nav-item')[0]);
+            }, 2000);
             
         } catch(e) { 
             document.getElementById('loader').style.display = 'none'; 
