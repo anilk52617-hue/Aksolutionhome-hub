@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V4.5 PRO FIXED</title>
+    <title>AK MASTER ADMIN - V8.2 FINAL FIXED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -13,31 +13,29 @@
         body { background: #eef2f7; padding-bottom: 50px; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; }
         .ind-box b { font-size: 18px; color: var(--dark); display: block; }
         .ind-box span { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
         .manual-box { background: white; margin: 0 15px 20px; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dde; border-radius: 10px; text-align: center; outline: none; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .status-btn { padding: 10px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; text-decoration: none; }
+        .status-btn { padding: 10px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; text-decoration: none; display:flex; align-items:center; justify-content:center; gap:5px; }
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
         .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:5px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
-        .panel-box { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .panel-box i { font-size: 22px; color: var(--primary); margin-bottom: 5px; }
-        .panel-box span { font-size: 10px; font-weight: bold; }
-        #id-card-render { width: 260px; height: 380px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .panel-box { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        #id-card-render { width: 260px; height: 380px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; }
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><p>प्रोसेसिंग...</p></div>
+<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><p>सिंक हो रहा है...</p></div>
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • V4.5 FIXED</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • V8.2 FIXED</p>
 </div>
 
 <div class="indicator-grid">
@@ -68,204 +66,156 @@
     <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
+<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
+
 <div id="reg-p" class="modal"><div class="modal-content">
-    <h3 style="color:var(--primary)">Team Registration</h3>
-    <input id="rn" class="input" placeholder="Name">
-    <input id="rf" class="input" placeholder="Father's Name">
-    <input id="rp" class="input" placeholder="WhatsApp Number">
-    <input id="ra" class="input" placeholder="Full Address">
-    <input id="rs" class="input" placeholder="Service (Electrician etc.)">
-    <button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP ON WHATSAPP</button>
-    
-    <div id="otp-area" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
-        <input id="otp-val" class="input" placeholder="4-Digit OTP">
-        <button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">VERIFY & REGISTER</button>
-    </div>
-    <button onclick="closeP('reg-p')" style="color:red; margin-top:15px; border:none; background:none; cursor:pointer;">CLOSE</button>
+    <h3>Team Registration</h3>
+    <input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father's Name">
+    <input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address">
+    <input id="rs" class="input" placeholder="Service Type">
+    <button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button>
+    <div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter OTP"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div>
+    <button onclick="closeP('reg-p')" style="margin-top:15px; border:none; background:none; color:red;">CLOSE</button>
 </div></div>
 
 <div id="id-p" class="modal"><div class="modal-content">
     <h3>Staff ID Generator</h3>
     <div id="id-card-render">
-        <div style="background:var(--primary); color:white; padding:10px; text-align:center; font-weight:bold; font-size:14px;">AK SOLUTION HUB</div>
-        <div style="width:90px; height:90px; margin:10px auto; background:#f0f0f0; border:2px solid #ddd; border-radius:10px; overflow:hidden;"><img id="v-img" src="" style="width:100%; height:100%; object-fit:cover;"></div>
-        <div style="padding:10px; font-size:12px; line-height:1.6;">
-            <b id="v-name" style="font-size:15px;">STAFF NAME</b><br>
-            <span id="v-id" style="color:var(--primary); font-weight:bold;">ID: T-0000</span><br>
-            📞 Phone: <span id="v-phone">-</span><br>
-            📍 Addr: <span id="v-addr">-</span>
-        </div>
-        <div id="id-qr" style="display:flex; justify-content:center; margin-top:2px;"></div>
+        <div style="background:var(--primary); color:white; padding:10px; text-align:center;">AK SOLUTION HUB</div>
+        <img id="v-img" style="width:80px; height:80px; display:block; margin:10px auto; border-radius:10px; object-fit:cover;">
+        <div style="padding:10px; font-size:12px;"><b id="v-name">NAME</b><br><span id="v-id">ID: -</span><br>📞 <span id="v-phone">-</span></div>
+        <div id="id-qr" style="display:flex; justify-content:center; margin-bottom:5px;"></div>
     </div>
-    <input type="text" id="id-tid" class="input" placeholder="Enter Staff ID (T-XXXX)">
-    <input type="file" id="cam" accept="image/*" capture="environment" style="display:none" onchange="previewFile(event)">
+    <input type="text" id="id-tid" class="input" placeholder="Enter T-ID">
+    <input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)">
     <div class="btn-grid">
-        <button class="status-btn" style="background:var(--dark)" onclick="document.getElementById('cam').click()">TAKE PHOTO</button>
-        <button class="status-btn" style="background:var(--primary)" onclick="loadIDData()">LOAD DATA</button>
+        <button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">TAKE PHOTO</button>
+        <button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button>
     </div>
-    <button class="status-btn" style="background:var(--success); width:100%; margin-top:8px;" onclick="downloadID()">DOWNLOAD ID IMAGE</button>
-    <button onclick="closeP('id-p')" style="color:red; margin-top:10px; border:none; background:none;">CLOSE</button>
+    <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px;" onclick="downloadID()">DOWNLOAD ID</button>
+    <button onclick="closeP('id-p')" style="margin-top:10px; border:none; background:none; color:red;">CLOSE</button>
 </div></div>
 
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt" style="color:var(--primary);"></h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
-
-<div id="as-p" class="modal"><div class="modal-content">
-    <h3>Assign Task</h3>
-    <input id="as-cid" class="input" placeholder="Customer ID" readonly>
-    <div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; background:#f9f9f9; border-radius:10px;"></div>
-    <input id="as-tid" class="input" placeholder="Selected Team ID" readonly style="background:#e3f2fd">
-    <button class="status-btn" style="background:var(--primary); width:100%" onclick="processAssign()">CONFIRM ASSIGN</button>
-    <button onclick="closeP('as-p')" style="color:red; margin-top:15px; border:none; background:none;">CANCEL</button>
+<div id="as-p" class="modal"><div class="modal-content" id="as-content">
+    <h3>Assign Team</h3>
+    <input id="as-cid" class="input" readonly style="background:#f9f9f9">
+    <div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px;"></div>
+    <input id="as-tid" class="input" placeholder="Staff ID" readonly>
+    <button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button>
+    <button onclick="closeP('as-p')" style="margin-top:15px; border:none; background:none; color:red;">CANCEL</button>
 </div></div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
     let fullCustData = [], fullTeamData = [], serverOTP = null;
 
-    function getTodayStr() {
-        let d = new Date();
-        return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+    // --- Helper function to format any date to DD/MM/YYYY ---
+    function formatAsDate(input) {
+        try {
+            if(!input) return "";
+            let d = new Date(input);
+            if(isNaN(d.getTime())) return String(input).split('T')[0].trim(); // If date is weird
+            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        } catch(e) { return ""; }
     }
 
-    function openP(id) { document.getElementById(id).style.display = 'block'; if(id === 'as-p') renderFreeStaff(); }
-    function closeP(id) { document.getElementById(id).style.display = 'none'; }
-
+    // --- 1. SYNC COUNTS (SUPER FIXED TODAY LOGIC) ---
     async function syncCounts() {
+        document.getElementById('loader').style.display = 'flex';
         try {
-            document.getElementById('loader').style.display = 'flex';
             let [cr, tr] = await Promise.all([
                 fetch(SCRIPT_URL + "?action=getList&type=CUST").then(r => r.json()),
                 fetch(SCRIPT_URL + "?action=getList&type=TEAM").then(r => r.json())
             ]);
             fullCustData = cr; fullTeamData = tr;
-            let today = getTodayStr();
             
-            // Fixed Count Logic: String matching for dates
-            document.getElementById('c-today-new').innerText = fullCustData.filter(x => String(x.Date).includes(today) && x.Status === 'Pending').length;
+            let todayStr = formatAsDate(new Date());
+            
+            // Count logic based on formatted comparison
+            let todayCount = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending').length;
+
+            document.getElementById('c-today-new').innerText = todayCount;
             document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
             document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
             document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
             document.getElementById('c-total').innerText = fullCustData.length;
             document.getElementById('c-team').innerText = fullTeamData.length;
-            document.getElementById('loader').style.display = 'none';
-        } catch(e) { document.getElementById('loader').style.display = 'none'; }
-    }
-
-    // --- ID CARD LOGIC ---
-    function loadIDData() {
-        let tid = document.getElementById('id-tid').value.toUpperCase().trim();
-        let s = fullTeamData.find(x => String(x.ID).toUpperCase() === tid);
-        if(s) {
-            document.getElementById('v-name').innerText = s.Name;
-            document.getElementById('v-id').innerText = "ID: " + s.ID;
-            document.getElementById('v-phone').innerText = s.Phone;
-            document.getElementById('v-addr').innerText = s.Address;
-            document.getElementById('id-qr').innerHTML = "";
-            new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 });
-        } else { alert("Staff ID not found! Refresh data."); }
-    }
-    function previewFile(e) {
-        let reader = new FileReader();
-        reader.onload = function(){ document.getElementById('v-img').src = reader.result; }
-        reader.readAsDataURL(e.target.files[0]);
-    }
-    function downloadID() {
-        html2canvas(document.getElementById('id-card-render')).then(c => {
-            let a = document.createElement('a'); a.download = 'Staff_ID.png'; a.href = c.toDataURL(); a.click();
-        });
-    }
-
-    // --- REGISTRATION LOGIC ---
-    function handleOTP() {
-        let phone = document.getElementById('rp').value;
-        if(!phone || phone.length < 10) return alert("Valid Number डालें");
-        serverOTP = Math.floor(1000 + Math.random() * 9000);
-        window.open(`https://wa.me/91${phone}?text=Your AK OTP: ${serverOTP}`, '_blank');
-        document.getElementById('otp-area').style.display = 'block';
-    }
-    async function verifyAndRegister() {
-        if(document.getElementById('otp-val').value == serverOTP) {
-            document.getElementById('loader').style.display = 'flex';
-            let tid = "T-" + Math.floor(1000 + Math.random() * 9000);
-            let p = `?action=addTeam&Date=${getTodayStr()}&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${document.getElementById('rp').value}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}&Status=Free`;
-            await fetch(SCRIPT_URL + p);
-            alert("Team Registered! ID: " + tid); location.reload();
-        } else { alert("Invalid OTP!"); }
-    }
-
-    // --- LIST & RUNNING LOGIC ---
-    function filterStatus(status) {
-        let today = getTodayStr();
-        let list = (status === 'Today') ? fullCustData.filter(x => String(x.Date).includes(today)) : fullCustData.filter(x => x.Status === status);
-        renderDataList(list, status + " CUSTOMERS");
-    }
-
-    function loadRunningDetailed() {
-        let running = fullCustData.filter(x => x.Status === 'Running');
-        let html = "";
-        running.forEach(c => {
-            let staffID = c.GPS && c.GPS.includes('|') ? c.GPS.split('|')[1].trim() : c.GPS;
-            let staff = fullTeamData.find(s => s.ID === staffID);
-            html += `<div class="data-card" style="border-left-color:var(--running)">
-                <div style="display:flex; justify-content:space-between;">
-                    <div><b>CUST: ${c.Name}</b><br><small>Service: ${c.Service}</small><br><b>STAFF: ${staff ? staff.Name : 'Not Linked'} (${staffID || '??'})</b></div>
-                    <button onclick="finishTask('${c.ID}', '${staffID}')" class="status-btn" style="background:var(--success); padding:8px;">DONE & FREE</button>
-                </div>
-            </div>`;
-        });
-        document.getElementById('lb').innerHTML = html || "<p>No active tasks</p>";
-        document.getElementById('lt').innerText = "RUNNING STATUS";
-        openP('list-p');
-    }
-
-    async function finishTask(cid, tid) {
-        if(!confirm("Finish task and free team?")) return;
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`);
-        if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`);
-        syncCounts(); closeP('list-p');
+        } catch(e) { console.log("Sync Error:", e); }
+        document.getElementById('loader').style.display = 'none';
     }
 
     async function processAssign() {
         let cid = document.getElementById('as-cid').value, tid = document.getElementById('as-tid').value;
-        if(!cid || !tid) return alert("Select staff");
+        if(!tid) return alert("Select Staff!");
         document.getElementById('loader').style.display = 'flex';
-        let cust = fullCustData.find(x => x.ID === cid);
-        let newGPS = (cust ? cust.GPS : "") + " | " + tid;
+        let cust = fullCustData.find(x => x.ID === cid), team = fullTeamData.find(x => x.ID === tid);
+        let newGPS = (cust.GPS || "") + " | " + tid;
         await Promise.all([
             fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${encodeURIComponent(newGPS)}`),
             fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
         ]);
-        syncCounts(); closeP('as-p'); alert("Assigned!");
+        document.getElementById('loader').style.display = 'none';
+        let cM = `नमस्ते ${cust.Name}, आपकी सेवा के लिए ${team.Name} (ID: ${tid}) को भेज दिया गया है।`;
+        let tM = `*नया टास्क!*\nकस्टमर: ${cust.Name}\nपता: ${cust.Address}\nलोकेशन: ${cust.GPS}`;
+        document.getElementById('as-content').innerHTML = `<h3>✅ सफलतापूर्वक असाइन!</h3><a href="https://wa.me/91${cust.Phone}?text=${encodeURIComponent(cM)}" target="_blank" class="status-btn" style="background:#25D366; width:100%; margin-bottom:10px; height:50px;">कस्टमर को भेजें</a><a href="https://wa.me/91${team.Phone}?text=${encodeURIComponent(tM)}" target="_blank" class="status-btn" style="background:#128C7E; width:100%; height:50px;">टीम को भेजें</a><button onclick="location.reload()" class="status-btn" style="background:var(--dark); width:100%; margin-top:15px;">वापस</button>`;
     }
 
-    function renderFreeStaff() {
-        let box = document.getElementById('staff-picker-box');
-        let free = fullTeamData.filter(x => x.Status === 'Free');
-        box.innerHTML = free.length === 0 ? "<p>No Free Staff</p>" : "";
-        free.forEach(t => box.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`);
-    }
-
-    function loadList(type) { renderDataList(type==='CUST'?fullCustData:fullTeamData, type + " LIST"); }
-    function renderDataList(data, title) {
-        let html = "";
-        data.forEach(item => {
-            html += `<div class="data-card"><b>${item.Name}</b> (${item.ID}) <span style="float:right;">${item.Status}</span><br><small>${item.Phone}</small>
-            <div style="margin-top:10px;"><a href="tel:${item.Phone}" class="status-btn" style="background:var(--primary); padding:5px 12px;">CALL</a>
-            ${item.Status==='Pending'?`<button onclick="fillAs('${item.ID}')" class="status-btn" style="background:var(--dark); padding:5px 12px; margin-left:5px;">ASSIGN</button>`:''}</div></div>`;
+    function loadRunningDetailed() {
+        let running = fullCustData.filter(x => x.Status === 'Running');
+        let h = "";
+        running.forEach(c => {
+            let gps = String(c.GPS || ""), tid = gps.includes('|') ? gps.split('|').pop().trim() : "Unknown";
+            let s = fullTeamData.find(st => st.ID === tid);
+            h += `<div class="data-card" style="border-left-color:var(--running); display:flex; justify-content:space-between; align-items:center;"><div><b>CUST: ${c.Name}</b><br><small>${c.Service}</small><br><b style="color:var(--success)">STAFF: ${s ? s.Name : tid}</b></div><button onclick="finishTask('${c.ID}', '${tid}')" class="status-btn" style="background:var(--success); height:55px; width:75px;">DONE &<br>FREE</button></div>`;
         });
-        document.getElementById('lb').innerHTML = html; document.getElementById('lt').innerText = title; openP('list-p');
+        document.getElementById('lb').innerHTML = h || "कोई रनिंग टास्क नहीं"; document.getElementById('lt').innerText = "RUNNING STATUS"; openP('list-p');
     }
 
-    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    async function quickUpdate(st) {
-        let id = document.getElementById('man-id').value.toUpperCase().trim();
-        if(!id) return alert("Enter ID");
+    async function finishTask(cid, tid) {
+        if(!confirm("काम पूरा?")) return;
         document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + "?action=updateStatus&id="+id+"&status="+st);
-        document.getElementById('man-id').value = ""; syncCounts();
+        await Promise.all([fetch(SCRIPT_URL+`?action=updateStatus&id=${cid}&status=Done`), (tid && tid !== "Unknown") ? fetch(SCRIPT_URL+`?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()]);
+        syncCounts(); closeP('list-p');
     }
 
+    function loadIDData() {
+        let s = fullTeamData.find(x => x.ID === document.getElementById('id-tid').value.toUpperCase());
+        if(s) { document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: "+s.ID; document.getElementById('v-phone').innerText = s.Phone; document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), {text:s.ID, width:60, height:60}); }
+    }
+    function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; r.readAsDataURL(e.target.files[0]); }
+    function downloadID() { html2canvas(document.getElementById('id-card-render')).then(c => { let a = document.createElement('a'); a.download = 'Staff_ID.png'; a.href = c.toDataURL(); a.click(); }); }
+    function handleOTP() { let ph = document.getElementById('rp').value; serverOTP = Math.floor(1000+Math.random()*9000); window.open(`https://wa.me/91${ph}?text=OTP: ${serverOTP}`); document.getElementById('otp-area').style.display = 'block'; }
+    async function verifyAndRegister() {
+        if(document.getElementById('otp-val').value == serverOTP) {
+            let tid = "T-" + Math.floor(1000+Math.random()*9000);
+            await fetch(SCRIPT_URL + `?action=addTeam&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Phone=${document.getElementById('rp').value}&Status=Free`);
+            alert("ID: " + tid); location.reload();
+        }
+    }
+
+    function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
+    function closeP(id) { document.getElementById(id).style.display = 'none'; }
+    function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`); }
+    
+    // --- FIXED FILTER LOGIC FOR TODAY ---
+    function filterStatus(s) { 
+        let todayStr = formatAsDate(new Date()); 
+        let filtered = (s === 'Today') ? fullCustData.filter(x => formatAsDate(x.Date) === todayStr) : fullCustData.filter(x => x.Status === s);
+        renderDataList(filtered, s); 
+    }
+
+    function loadList(t) { renderDataList(t==='CUST'?fullCustData:fullTeamData, t); }
+    function renderDataList(d, t) {
+        let h = ""; d.forEach(i => h += `<div class="data-card"><b>${i.Name}</b> (${i.ID})<br><small>${i.Phone} | ${i.Service || ''}</small><br>${i.Status === 'Pending' ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); margin-top:5px;">ASSIGN</button>` : ''}</div>`);
+        document.getElementById('lb').innerHTML = h || "No data"; document.getElementById('lt').innerText = t; openP('list-p');
+    }
+    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
+    async function quickUpdate(s) { 
+        let id = document.getElementById('man-id').value.toUpperCase(); 
+        document.getElementById('loader').style.display = 'flex';
+        await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); 
+        syncCounts(); 
+    }
     window.onload = syncCounts;
 </script>
 </body>
