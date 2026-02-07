@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V8.5 FINAL</title>
+    <title>AK MASTER ADMIN - V9.5 FINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -25,8 +25,16 @@
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
         .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:5px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
-        .panel-box { background: white; border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        #id-card-render { width: 260px; height: 380px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; }
+        .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
+        .panel-box i { font-size: 22px; margin-bottom: 5px; }
+        .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
+        .p-add { background: #f39c12; }
+        .p-tlist { background: #3498db; }
+        .p-assign { background: #005eb8; }
+        .p-clist { background: #27ae60; }
+        .p-id { background: #9b59b6; }
+        .p-sync { background: #34495e; }
+        #id-card-render { width: 280px; height: 440px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; }
     </style>
 </head>
 <body>
@@ -35,7 +43,7 @@
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • V8.5 FINAL</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • V9.5 FINAL</p>
 </div>
 
 <div class="indicator-grid">
@@ -58,64 +66,40 @@
 </div>
 
 <div class="menu-grid">
-    <div class="panel-box" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
-    <div class="panel-box" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
-    <div class="panel-box" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
-    <div class="panel-box" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
-    <div class="panel-box" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
-    <div class="panel-box" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
+    <div class="panel-box p-add" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
+    <div class="panel-box p-tlist" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
+    <div class="panel-box p-assign" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
+    <div class="panel-box p-clist" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
+    <div class="panel-box p-id" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
+    <div class="panel-box p-sync" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
-
-<div id="reg-p" class="modal"><div class="modal-content">
-    <h3>Team Registration</h3>
-    <input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father's Name">
-    <input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address">
-    <input id="rs" class="input" placeholder="Service Type">
-    <button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button>
-    <div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter OTP"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div>
-    <button onclick="closeP('reg-p')" style="margin-top:15px; border:none; background:none; color:red;">CLOSE</button>
-</div></div>
-
-<div id="id-p" class="modal"><div class="modal-content">
-    <h3>Staff ID Generator</h3>
-    <div id="id-card-render">
-        <div style="background:var(--primary); color:white; padding:10px; text-align:center;">AK SOLUTION HUB</div>
-        <img id="v-img" style="width:80px; height:80px; display:block; margin:10px auto; border-radius:10px; object-fit:cover;">
-        <div style="padding:10px; font-size:12px;"><b id="v-name">NAME</b><br><span id="v-id">ID: -</span><br>📞 <span id="v-phone">-</span></div>
-        <div id="id-qr" style="display:flex; justify-content:center; margin-bottom:5px;"></div>
+<div id="list-p" class="modal">
+    <div class="modal-content">
+        <h3 id="lt"></h3>
+        <div style="display: flex; gap: 5px; margin: 10px 0;">
+            <input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()" style="margin-bottom:0; flex:3;">
+            <button onclick="bulkWhatsApp()" class="status-btn" style="background:#25D366; flex:1; font-size:10px;"><i class="fab fa-whatsapp"></i> ALL</button>
+        </div>
+        <div id="lb"></div>
+        <button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button>
     </div>
-    <input type="text" id="id-tid" class="input" placeholder="Enter T-ID">
-    <input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)">
-    <div class="btn-grid">
-        <button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">TAKE PHOTO</button>
-        <button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button>
-    </div>
-    <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px;" onclick="downloadID()">DOWNLOAD ID</button>
-    <button onclick="closeP('id-p')" style="margin-top:10px; border:none; background:none; color:red;">CLOSE</button>
-</div></div>
+</div>
 
-<div id="as-p" class="modal"><div class="modal-content" id="as-content">
-    <h3>Assign Team</h3>
-    <input id="as-cid" class="input" readonly style="background:#f9f9f9">
-    <div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px;"></div>
-    <input id="as-tid" class="input" placeholder="Staff ID" readonly>
-    <button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button>
-    <button onclick="closeP('as-p')" style="margin-top:15px; border:none; background:none; color:red;">CANCEL</button>
-</div></div>
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father's Name"><input id="rp" class="input" placeholder="WhatsApp"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter OTP"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red;">CLOSE</button></div></div>
+
+<div id="id-p" class="modal"><div class="modal-content"><h3>ID Generator</h3><div id="id-card-render"><div style="background:var(--primary); color:white; padding:12px; text-align:center;"><div style="font-size:18px; font-weight:bold;">AK SOLUTION HUB</div></div><div style="text-align:center; margin-top:15px;"><img id="v-img" style="width:110px; height:110px; border-radius:10px; margin:0 auto;" src="https://via.placeholder.com/110"></div><div style="margin-top:20px; padding: 0 20px;"><div style="text-align:center;"><b id="v-name">NAME</b><br><b id="v-id" style="color:var(--primary);">ID: -</b></div><div style="font-size:10px; margin-top:10px;"><b>FATHER:</b> <span id="v-father">-</span><br><b>SERVICE:</b> <span id="v-service">-</span><br><b>PHONE:</b> <span id="v-phone">-</span><br><b>ADDRESS:</b> <span id="v-address">-</span></div></div><div style="position:absolute; bottom:30px; left:20px;"><div id="id-qr"></div></div></div><input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD</button></div><input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)"><button class="status-btn" style="background:var(--success); width:100%; margin-top:10px;" onclick="downloadID()">DOWNLOAD</button><button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red;">CLOSE</button></div></div>
+
+<div id="as-p" class="modal"><div class="modal-content" id="as-content"><h3>Assign Team</h3><input id="as-cid" class="input" readonly style="background:#f9f9f9;"><div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px;"></div><input id="as-tid" class="input" placeholder="Staff ID" readonly><button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button><button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red;">CANCEL</button></div></div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
-    let fullCustData = [], fullTeamData = [], serverOTP = null;
+    let fullCustData = [], fullTeamData = [], lastData = [], lastType = "";
 
     function formatAsDate(input) {
-        try {
-            if(!input) return "";
-            let d = new Date(input);
-            if(isNaN(d.getTime())) return String(input).split('T')[0].trim();
-            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
-        } catch(e) { return ""; }
+        if(!input) return "";
+        let d = new Date(input);
+        return isNaN(d.getTime()) ? String(input).split('T')[0].trim() : `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
     }
 
     async function syncCounts() {
@@ -137,127 +121,121 @@
         document.getElementById('loader').style.display = 'none';
     }
 
+    function filterStatus(s) {
+        let todayStr = formatAsDate(new Date());
+        let filtered = (s === 'Today') ? fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending') : fullCustData.filter(x => x.Status === s);
+        lastData = filtered; lastType = 'CUST';
+        renderDataList(filtered, 'CUST');
+    }
+
+    // FIXED: RUNNING LIST STAFF NAME ISSUE
+    function loadRunningDetailed() {
+        let running = fullCustData.filter(x => x.Status === 'Running');
+        lastData = running; lastType = 'CUST';
+        let h = "";
+        running.forEach(c => {
+            let tid = (c.GPS && c.GPS.includes('|')) ? c.GPS.split('|').pop().trim() : "NA";
+            let s = fullTeamData.find(st => st.ID === tid);
+            let staffName = s ? s.Name : tid;
+            
+            h += `<div class="data-card" style="border-left:5px solid var(--running);">
+                <b>${c.Name}</b><br>
+                <small style="color:var(--danger); font-weight:bold;"><i class="fas fa-tools"></i> स्टाफ: ${staffName}</small>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
+                    <button onclick="finishTask('${c.ID}', '${tid}')" class="status-btn" style="background:var(--success); flex:2;">MARK DONE</button>
+                </div>
+            </div>`;
+        });
+        document.getElementById('lb').innerHTML = h || "कोई काम चालू नहीं है";
+        document.getElementById('lt').innerText = "RUNNING"; openP('list-p');
+    }
+
+    async function finishTask(cid, tid) {
+        if(!confirm("Work Finished?")) return;
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            await Promise.all([
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`),
+                (tid && tid !== "NA") ? fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()
+            ]);
+            syncCounts(); closeP('list-p');
+        } catch(e) { alert("Error updating!"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
+
+    function loadList(t) { lastData = (t === 'CUST') ? fullCustData : fullTeamData; lastType = t; renderDataList(lastData, t); }
+
+    // FIXED: TEAM BUSY WITH CUSTOMER NAME ISSUE
+    function renderDataList(d, t) {
+        let h = ""; 
+        d.forEach(i => {
+            let col = (i.Status === 'Free' || i.Status === 'Done') ? 'var(--success)' : 'var(--danger)';
+            
+            let busyInfo = "";
+            if(t === 'TEAM' && i.Status === 'Busy') {
+                let assignedCust = fullCustData.find(c => c.GPS && c.GPS.includes(i.ID) && c.Status === 'Running');
+                if(assignedCust) busyInfo = `<br><b style="color:var(--primary); font-size:10px;">काम पर: ${assignedCust.Name}</b>`;
+            }
+
+            h += `<div class="data-card" style="border-left:5px solid ${col};">
+                <b>${i.Name}</b> (${i.ID}) ${busyInfo}<br>
+                <small>${i.Service || ''} | ${i.Address || ''}</small>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i> CALL</a>
+                    <a href="https://wa.me/91${i.Phone}" target="_blank" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i> WA</a>
+                </div>
+                ${(i.Status==='Pending')?`<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">ASSIGN</button>`:''}
+            </div>`;
+        });
+        document.getElementById('lb').innerHTML = h || "No Data"; document.getElementById('lt').innerText = t; openP('list-p');
+    }
+
+    function searchInList() {
+        let v = document.getElementById('listSearch').value.toLowerCase();
+        let f = lastData.filter(x => x.Name.toLowerCase().includes(v) || x.ID.toLowerCase().includes(v) || x.Phone.toString().includes(v));
+        renderDataList(f, lastType);
+    }
+
     async function processAssign() {
         let cid = document.getElementById('as-cid').value, tid = document.getElementById('as-tid').value;
         if(!tid) return alert("Select Staff!");
         document.getElementById('loader').style.display = 'flex';
-        
-        let cust = fullCustData.find(x => x.ID === cid), team = fullTeamData.find(x => x.ID === tid);
-        let newGPS = (cust.GPS || "") + " | " + tid;
-        
-        await Promise.all([
-            fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${encodeURIComponent(newGPS)}`),
-            fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
-        ]);
-        
-        document.getElementById('loader').style.display = 'none';
-
-        // कस्टमर के लिए मैसेज (स्टाफ की पूरी डिटेल)
-        let customerMsg = `*AK SOLUTION HUB*%0A------------------------------%0Aनमस्ते *${encodeURIComponent(cust.Name)}*,%0Aआपकी सेवा के लिए टीम भेज दी गई है।%0A%0A*स्टाफ की जानकारी:*%0A👤 नाम: ${encodeURIComponent(team.Name)}%0A🆔 ID: ${tid}%0A📞 फोन: ${team.Phone}%0A🛠️ सर्विस: ${encodeURIComponent(cust.Service)}%0A%0Aधन्यवाद!`;
-
-        // टीम के लिए मैसेज (कस्टमर की पूरी डिटेल)
-        let teamMsg = `*AK SOLUTION HUB (New Task)*%0A------------------------------%0Aनमस्ते *${encodeURIComponent(team.Name)}*, नया काम असाइन हुआ है।%0A%0A*कस्टमर की जानकारी:*%0A👤 नाम: ${encodeURIComponent(cust.Name)}%0A📞 फोन: ${cust.Phone}%0A📍 पता: ${encodeURIComponent(cust.Address)}%0A🛠️ काम: ${encodeURIComponent(cust.Service)}%0A📍 लोकेशन: ${encodeURIComponent(cust.GPS)}`;
-
-        document.getElementById('as-content').innerHTML = `
-            <h3>✅ सफलतापूर्वक असाइन!</h3>
-            <a href="https://wa.me/91${cust.Phone}?text=${customerMsg}" target="_blank" class="status-btn" style="background:#25D366; width:100%; margin-bottom:10px; height:50px;">कस्टमर को भेजें</a>
-            <a href="https://wa.me/91${team.Phone}?text=${teamMsg}" target="_blank" class="status-btn" style="background:#128C7E; width:100%; height:50px;">टीम को भेजें</a>
-            <button onclick="closeP('as-p'); syncCounts();" class="status-btn" style="background:var(--dark); width:100%; margin-top:15px;">वापस डैशबोर्ड</button>
-        `;
-    }
-
-    function loadRunningDetailed() {
-        let running = fullCustData.filter(x => x.Status === 'Running');
-        let h = "";
-        running.forEach(c => {
-            let gpsStr = String(c.GPS || "");
-            let tid = "Unknown";
-            // GPS कॉलम में ' | ' ढूंढ कर स्टाफ ID निकालें
-            if(gpsStr.includes('|')) {
-                tid = gpsStr.split('|').pop().trim();
-            }
-            let s = fullTeamData.find(st => st.ID === tid);
-            
-            h += `<div class="data-card" style="border-left-color:var(--running); display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <b>CUST: ${c.Name}</b><br>
-                    <small>${c.Service}</small><br>
-                    <b style="color:var(--primary)">STAFF: ${s ? s.Name + " ("+tid+")" : tid}</b>
-                </div>
-                <button onclick="finishTask('${c.ID}', '${tid}')" class="status-btn" style="background:var(--success); height:55px; width:75px;">DONE &<br>FREE</button>
-            </div>`;
-        });
-        document.getElementById('lb').innerHTML = h || "कोई रनिंग टास्क नहीं"; document.getElementById('lt').innerText = "RUNNING STATUS"; openP('list-p');
-    }
-
-    async function finishTask(cid, tid) {
-        if(!confirm("काम पूरा?")) return;
-        document.getElementById('loader').style.display = 'flex';
-        await Promise.all([fetch(SCRIPT_URL+`?action=updateStatus&id=${cid}&status=Done`), (tid && tid !== "Unknown") ? fetch(SCRIPT_URL+`?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()]);
-        syncCounts(); closeP('list-p');
-    }
-
-    async function freeTeamManually(tid) {
-        if(!confirm(`क्या आप ${tid} को फ्री करना चाहते हैं?`)) return;
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`);
-        await syncCounts();
-        loadList('TEAM'); 
+        try {
+            let cust = fullCustData.find(x => x.ID === cid);
+            let oldGPS = (cust.GPS || "").toString().split('|')[0].trim();
+            let newGPS = oldGPS + " | " + tid;
+            await Promise.all([
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${encodeURIComponent(newGPS)}`),
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
+            ]);
+            location.reload();
+        } catch(e) { alert("Network Error!"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     function loadIDData() {
-        let s = fullTeamData.find(x => x.ID === document.getElementById('id-tid').value.toUpperCase());
-        if(s) { document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: "+s.ID; document.getElementById('v-phone').innerText = s.Phone; document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), {text:s.ID, width:60, height:60}); }
-    }
-    function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; r.readAsDataURL(e.target.files[0]); }
-    function downloadID() { html2canvas(document.getElementById('id-card-render')).then(c => { let a = document.createElement('a'); a.download = 'Staff_ID.png'; a.href = c.toDataURL(); a.click(); }); }
-    
-    function handleOTP() { let ph = document.getElementById('rp').value; serverOTP = Math.floor(1000+Math.random()*9000); window.open(`https://wa.me/91${ph}?text=OTP: ${serverOTP}`); document.getElementById('otp-area').style.display = 'block'; }
-    async function verifyAndRegister() {
-        if(document.getElementById('otp-val').value == serverOTP) {
-            let tid = "T-" + Math.floor(1000+Math.random()*9000);
-            await fetch(SCRIPT_URL + `?action=addTeam&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Phone=${document.getElementById('rp').value}&Status=Free`);
-            alert("ID: " + tid); location.reload();
-        }
+        let tid = document.getElementById('id-tid').value.toUpperCase();
+        let s = fullTeamData.find(x => x.ID === tid);
+        if(s) { 
+            document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: "+s.ID; 
+            document.getElementById('v-phone').innerText = s.Phone; document.getElementById('v-father').innerText = s.Father || "-";
+            document.getElementById('v-service').innerText = s.Service || "-"; document.getElementById('v-address').innerText = s.Address || "-";
+            document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), {text:s.ID, width:55, height:55}); 
+        } else alert("Not Found");
     }
 
+    function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; r.readAsDataURL(e.target.files[0]); }
+    function downloadID() { html2canvas(document.getElementById('id-card-render')).then(c => { let a = document.createElement('a'); a.download = 'ID.png'; a.href = c.toDataURL(); a.click(); }); }
     function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
-    function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`); }
-    
-    function filterStatus(s) { 
-        let todayStr = formatAsDate(new Date()); 
-        let filtered = (s === 'Today') ? fullCustData.filter(x => formatAsDate(x.Date) === todayStr) : fullCustData.filter(x => x.Status === s);
-        renderDataList(filtered, s); 
-    }
-
-    function loadList(t) { renderDataList(t==='CUST'?fullCustData:fullTeamData, t); }
-    
-    function renderDataList(d, t) {
-        let h = ""; 
-        d.forEach(i => {
-            let isTeam = (t === 'TEAM' || String(i.ID).startsWith('T-'));
-            h += `<div class="data-card">
-                <b>${i.Name}</b> (${i.ID})<br>
-                <small>${i.Phone} | ${i.Service || ''}</small><br>
-                <span style="font-size:10px; color:${i.Status === 'Free' || i.Status === 'Done' ? 'green' : 'red'}; font-weight:bold;">STATUS: ${i.Status}</span><br>
-                ${(i.Status === 'Pending' && !isTeam) ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); margin-top:5px;">ASSIGN</button>` : ''}
-                ${(i.Status === 'Busy' && isTeam) ? `<button onclick="freeTeamManually('${i.ID}')" class="status-btn" style="background:var(--danger); margin-top:5px;">FREE MANUALLY</button>` : ''}
-            </div>`;
-        });
-        document.getElementById('lb').innerHTML = h || "No data"; 
-        document.getElementById('lt').innerText = t; 
-        openP('list-p');
-    }
-
+    function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee;">🟢 ${t.Name}</div>`); }
+    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); document.getElementById('loader').style.display = 'flex'; try { await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); } finally { document.getElementById('loader').style.display = 'none'; } }
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    async function quickUpdate(s) { 
-        let id = document.getElementById('man-id').value.toUpperCase(); 
-        if(!id) return alert("Enter ID");
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); 
-        syncCounts(); 
-    }
+    function bulkWhatsApp() { let msg = prompt("Message:"); if(msg) lastData.forEach((p, idx) => setTimeout(() => window.open(`https://wa.me/91${p.Phone}?text=${encodeURIComponent(msg)}`), idx * 1000)); }
+    function handleOTP() { let ph = document.getElementById('rp').value; serverOTP = Math.floor(1000+Math.random()*9000); window.open(`https://wa.me/91${ph}?text=OTP: ${serverOTP}`); document.getElementById('otp-area').style.display = 'block'; }
+    async function verifyAndRegister() { if(document.getElementById('otp-val').value == serverOTP) { let tid = "T-" + Math.floor(1000+Math.random()*9000); await fetch(SCRIPT_URL + `?action=addTeam&ID=${tid}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${document.getElementById('rp').value}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}&Status=Free`); alert("Success ID: " + tid); location.reload(); } }
+
     window.onload = syncCounts;
 </script>
 </body>
