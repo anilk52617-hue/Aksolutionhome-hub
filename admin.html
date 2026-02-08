@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V10.3 (PRO)</title>
+    <title>AK MASTER ADMIN - V9.5.1</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -13,29 +12,35 @@
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         body { background: #eef2f7; padding-bottom: 50px; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
-        
-        /* Top Indicator Styling Fix */
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.3s; }
-        .ind-box:active { transform: scale(0.95); }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; }
         .ind-box b { font-size: 18px; color: var(--dark); display: block; }
         .ind-box span { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
-        
         .manual-box { background: white; margin: 0 15px 20px; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dde; border-radius: 10px; text-align: center; outline: none; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .status-btn { padding: 10px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; text-decoration: none; display:flex; align-items:center; justify-content:center; gap:5px; }
-        
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
-        
         .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:5px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
         .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
         .panel-box i { font-size: 22px; margin-bottom: 5px; }
         .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
+        .p-add { background: #f39c12; }
+        .p-tlist { background: #3498db; }
+        .p-assign { background: #005eb8; }
+        .p-clist { background: #27ae60; }
+        .p-id { background: #9b59b6; }
+        .p-sync { background: #34495e; }
+
+        /* ID Card Isolated Style */
         #id-card-render { width: 280px; height: 440px; margin: 10px auto; background: white; border: 1px solid #ddd; border-radius: 15px; position: relative; overflow: hidden; text-align: left; }
+        .v-header-id { background: var(--primary); color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 15px; }
+        #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #eee; }
+        .v-stamp { position: absolute; width: 75px; top: 125px; right: 55px; z-index: 10; transform: rotate(-15deg); opacity: 0.8; }
+        #v-work-label { color: var(--primary); font-weight: bold; font-size: 13px; text-transform: uppercase; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -44,136 +49,75 @@
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • V10.3</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • V9.5.1</p>
 </div>
 
 <div class="indicator-grid">
-    <div class="ind-box" style="border-bottom-color: var(--primary);" onclick="filterStatus('Today')"><span>आज</span><b id="c-today-new">0</b></div>
-    <div class="ind-box" style="border-bottom-color: var(--danger);" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
-    <div class="ind-box" style="border-bottom-color: var(--running);" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
-    <div class="ind-box" style="border-bottom-color: var(--success);" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
-    <div class="ind-box" style="border-bottom-color: var(--dark);" onclick="loadList('CUST')"><span>Total</span><b id="c-total">0</b></div>
-    <div class="ind-box" style="border-bottom-color: var(--warning);" onclick="loadList('TEAM')"><span>Team</span><b id="c-team">0</b></div>
+    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="filterStatus('Today')"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
+    <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
+    <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
+    <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
+    <div class="ind-box" style="border-color:var(--warning)" onclick="loadList('CUST')"><span>Total Cust</span><b id="c-total">0</b></div>
+    <div class="ind-box" style="background:#fff3cd" onclick="loadList('TEAM')"><span>Team</span><b id="c-team">0</b></div>
 </div>
 
 <div class="manual-box">
     <input type="text" id="man-id" class="input" placeholder="ID (AK-XXXX / T-XXXX)">
     <div class="btn-grid">
         <button class="status-btn" style="background:var(--success)" onclick="quickUpdate('Done')">DONE</button>
-        <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')">RUNNING</button>
         <button class="status-btn" style="background:var(--danger)" onclick="quickUpdate('Reject')">REJECT</button>
-        <button class="status-btn" style="background:var(--dark);" onclick="quickUpdate('Free')">FREE</button>
+        <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')">RUNNING</button>
+        <button class="status-btn" style="background:var(--dark);" onclick="quickUpdate('Free')">FREE (TEAM)</button>
     </div>
 </div>
 
 <div class="menu-grid">
-    <div class="panel-box" style="background:#f39c12" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
-    <div class="panel-box" style="background:#3498db" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
-    <div class="panel-box" style="background:#005eb8" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
-    <div class="panel-box" style="background:#27ae60" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
-    <div class="panel-box" style="background:#9b59b6" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
-    <div class="panel-box" style="background:#34495e" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
+    <div class="panel-box p-add" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
+    <div class="panel-box p-tlist" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
+    <div class="panel-box p-assign" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
+    <div class="panel-box p-clist" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
+    <div class="panel-box p-id" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
+    <div class="panel-box p-sync" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()"><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
+<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div style="display: flex; gap: 5px; margin: 10px 0;"><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()" style="margin-bottom:0; flex:3;"><button onclick="bulkWhatsApp()" class="status-btn" style="background:#25D366; flex:1; font-size:10px;"><i class="fab fa-whatsapp"></i> ALL</button></div><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
 
-<div id="as-p" class="modal"><div class="modal-content" id="as-content">
-    <h3>Assign Team</h3>
-    <input id="as-cid" class="input" readonly style="background:#f9f9f9;">
-    <div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px;"></div>
-    <input id="as-tid" class="input" placeholder="Staff ID" readonly>
-    <button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button>
-    <button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none;">CANCEL</button>
-</div></div>
+<div id="as-p" class="modal"><div class="modal-content"><h3>Assign Expert</h3><input id="as-cid" class="input" placeholder="Customer ID"><div id="staff-picker-box" style="max-height:180px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px; text-align:left; background:#f9f9f9;"></div><input id="as-tid" class="input" placeholder="Staff ID यहाँ आएगा" readonly><button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button><button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none; cursor:pointer;">CANCEL</button></div></div>
 
-<div id="reg-p" class="modal"><div class="modal-content">
-    <h3>Team Registration</h3>
-    <input id="rn" class="input" placeholder="Name">
-    <input id="rf" class="input" placeholder="Father's Name">
-    <input id="rp" class="input" placeholder="WhatsApp Number">
-    <input id="ra" class="input" placeholder="Address">
-    <input id="rs" class="input" placeholder="Service Type">
-    <button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button>
-    <div id="otp-area" style="display:none; margin-top:10px;">
-        <input id="otp-val" class="input" placeholder="Enter 4-Digit OTP">
-        <button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">VERIFY & REGISTER</button>
-    </div>
-    <button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button>
-</div></div>
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father's Name"><input id="rp" class="input" placeholder="WhatsApp"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button id="otp-send-btn" class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter OTP"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER TEAM</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button></div></div>
+
+<div id="id-p" class="modal"><div class="modal-content"><h3>ID Generator</h3><div id="id-card-render"><div class="v-header-id">AK SOLUTION HUB</div><img id="v-img" src="https://via.placeholder.com/110"><img src="https://i.ibb.co/30X8Y5k/blue-stamp.png" class="v-stamp"><div style="margin-top:110px; text-align:center; padding:10px;"><b id="v-name" style="font-size:16px; text-transform:uppercase;">NAME</b><br><span id="v-work-label">SERVICE</span><div style="font-size:11px; font-weight:bold; color:#555; margin-top:5px;" id="v-id">ID: -</div></div><div style="text-align:left; padding:0 25px; font-size:10px; line-height:1.6;"><b>FATHER:</b> <span id="v-father">-</span><br><b>PHONE:</b> <span id="v-phone">-</span><br><b>ADDRESS:</b> <span id="v-address">-</span></div><div id="id-qr" style="position:absolute; bottom:45px; left:20px;"></div><div style="position:absolute; bottom:45px; right:20px; text-align:center;"><img src="https://i.ibb.co/example/sign.png" style="width:70px;"><br><div style="font-size:7px; font-weight:bold; border-top:1px solid #000;">Authorized Admin</div></div><div style="position:absolute; bottom:0; width:100%; height:30px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">AK SOLUTION HUB</div></div><input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div><input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)"><button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:45px;" onclick="downloadID()">DOWNLOAD</button><button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none;">CLOSE</button></div></div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
-    let fullCustData = [], fullTeamData = [];
-    let currentOTP = "";
+    let fullCustData = [], fullTeamData = [], lastData = [], lastType = "";
+    let currentGeneratedOTP = "";
 
-    // --- OTP LOGIC ---
-    function handleOTP() {
-        let phone = document.getElementById('rp').value;
-        if(!phone) return alert("Number Enter Karen!");
-        currentOTP = Math.floor(1000 + Math.random() * 9000).toString();
-        window.open(`https://wa.me/91${phone}?text=AKSOLUTION HUB: OTP is ${currentOTP}`, '_blank');
-        document.getElementById('otp-area').style.display = 'block';
-    }
-
-    async function verifyAndRegister() {
-        if(document.getElementById('otp-val').value !== currentOTP) return alert("Wrong OTP!");
-        document.getElementById('loader').style.display = 'flex';
-        let p = `?action=addTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&phone=${document.getElementById('rp').value}&service=${encodeURIComponent(document.getElementById('rs').value)}&status=Free&father=${encodeURIComponent(document.getElementById('rf').value)}&address=${encodeURIComponent(document.getElementById('ra').value)}`;
-        await fetch(SCRIPT_URL + p);
-        location.reload();
-    }
-
-    // --- LIST RENDERING WITH CALL/WA BUTTONS ---
-    function renderDataList(d, t) {
-        let h = "";
-        d.forEach(i => {
-            h += `<div class="data-card">
-                <div style="display:flex; justify-content:space-between;">
-                    <b>${i.Name}</b>
-                    <small style="color:var(--primary); font-weight:bold;">${i.ID}</small>
-                </div>
-                <div style="font-size:11px; color:#666; margin:5px 0;">${i.Service || ''} | ${i.Address || ''}</div>
-                <div style="display:flex; gap:8px; margin-top:10px;">
-                    <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                    <a href="https://wa.me/91${i.Phone}" target="_blank" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i></a>
-                    ${(i.Status==='Pending' && t==='CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:2;">ASSIGN</button>` : ''}
-                </div>
-            </div>`;
-        });
-        document.getElementById('lb').innerHTML = h || "No Data Found";
-        document.getElementById('lt').innerText = t;
-        openP('list-p');
-    }
-
-    // --- ASSIGN & CORE LOGIC ---
-    async function processAssign() {
-        let cid = document.getElementById('as-cid').value;
-        let tid = document.getElementById('as-tid').value;
-        if(!tid) return alert("Select Staff!");
-        document.getElementById('loader').style.display = 'flex';
-        await Promise.all([
-            fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${tid}`),
-            fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
-        ]);
-        location.reload();
-    }
-
+    function formatAsDate(input) { if(!input) return ""; let d = new Date(input); return isNaN(d.getTime()) ? String(input).split('T')[0].trim() : `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; }
+    
     async function syncCounts() {
         document.getElementById('loader').style.display = 'flex';
         try {
-            const [cr, tr] = await Promise.all([
-                fetch(SCRIPT_URL + "?action=getList&type=CUST").then(r => r.json()),
-                fetch(SCRIPT_URL + "?action=getList&type=TEAM").then(r => r.json())
-            ]);
-            fullCustData = cr; fullTeamData = tr;
-            updateUI();
-        } catch(e) { console.error(e); }
-        document.getElementById('loader').style.display = 'none';
+            let [cr, tr] = await Promise.all([fetch(SCRIPT_URL + "?action=getList&type=CUST").then(r => r.json()), fetch(SCRIPT_URL + "?action=getList&type=TEAM").then(r => r.json())]);
+            fullCustData = cr; 
+            fullTeamData = tr;
+
+            // --- AUTO CORRECTION LOGIC ---
+            // अगर स्टाफ BUSY है लेकिन RUNNING कस्टमर लिस्ट में उसका कोई काम नहीं है, तो उसे FREE दिखाओ।
+            fullTeamData.forEach(staff => {
+                if (staff.Status === 'Busy') {
+                    let isWorking = fullCustData.some(cust => cust.Status === 'Running' && cust.GPS === staff.ID);
+                    if (!isWorking) staff.Status = 'Free';
+                }
+            });
+
+            updateCounters();
+        } finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    function updateUI() {
-        const today = new Date().toLocaleDateString('en-GB');
-        document.getElementById('c-today-new').innerText = fullCustData.filter(x => x.Date.includes(today) && x.Status === 'Pending').length;
+    function updateCounters() {
+        let todayStr = formatAsDate(new Date());
+        document.getElementById('c-today-new').innerText = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending').length;
         document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
         document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
@@ -181,52 +125,65 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
+    function renderDataList(d, t) {
+        if(t === 'CUST') {
+            d.sort((a, b) => {
+                let order = { 'Pending': 1, 'Running': 2, 'Done': 3, 'Reject': 4 };
+                return (order[a.Status] || 99) - (order[b.Status] || 99);
+            });
+        }
+
+        lastData = d; lastType = t; let h = "";
+        d.forEach(i => {
+            let statusCol = (i.Status === 'Free' || i.Status === 'Done') ? 'var(--success)' : (i.Status === 'Running' || i.Status === 'Busy' ? 'var(--danger)' : 'var(--warning)');
+            
+            h += `<div class="data-card" style="border-left:5px solid ${statusCol};">
+                    <div style="display:flex; justify-content:space-between; align-items:start;">
+                        <b>${i.Name}</b>
+                        <span style="font-size:9px; background:${statusCol}; color:white; padding:2px 6px; border-radius:5px; font-weight:bold;">${(i.Status || 'NA').toUpperCase()}</span>
+                    </div>
+                    <small>ID: ${i.ID} | ${i.Service || ''}</small><br>
+                    <small>${i.Address || ''}</small>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
+                        <a href="https://wa.me/91${i.Phone}" target="_blank" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                    ${(i.Status === 'Pending' && t === 'CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">ASSIGN NOW</button>` : ''}
+                  </div>`;
+        });
+        document.getElementById('lb').innerHTML = h || "No Data";
+        document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS LIST" : "TEAM STATUS LIST";
+        openP('list-p');
+    }
+
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            h += `<div class="data-card" style="border-left-color:var(--running);">
-                <b>${c.Name}</b> <small>(${c.ID})</small><br>
-                <div style="display:flex; gap:8px; margin-top:10px;">
-                    <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                    <button onclick="finishTask('${c.ID}', '${c.GPS}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE</button>
-                </div>
-            </div>`;
+            let s = fullTeamData.find(st => st.ID === c.GPS);
+            h += `<div class="data-card" style="border-left:5px solid var(--running);"><b>${c.Name}</b><br><small style="color:var(--danger); font-weight:bold;">Assign to: ${s ? s.Name : 'NA'}</small><div style="display:flex; gap:10px; margin-top:10px;"><a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a><button onclick="finishTask('${c.ID}', '${c.GPS}')" class="status-btn" style="background:var(--success); flex:2;">MARK DONE</button></div></div>`;
         });
-        document.getElementById('lb').innerHTML = h || "No Running Task";
-        document.getElementById('lt').innerText = "RUNNING";
-        openP('list-p');
+        document.getElementById('lb').innerHTML = h || "कोई रनिंग टास्क नहीं है"; document.getElementById('lt').innerText = "RUNNING TASKS"; openP('list-p');
     }
 
-    async function finishTask(cid, tid) {
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`);
-        if(tid && tid !== "NA") await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`);
-        location.reload();
-    }
-
-    function filterStatus(s) { 
-        let data = (s === 'Today') ? fullCustData.filter(x => x.Status === 'Pending' && x.Date.includes(new Date().toLocaleDateString('en-GB'))) : fullCustData.filter(x => x.Status === s);
-        renderDataList(data, s);
-    }
-    function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
+    async function finishTask(cid, tid) { if(!confirm("Work Finished?")) return; document.getElementById('loader').style.display='flex'; await Promise.all([fetch(SCRIPT_URL+`?action=updateStatus&id=${cid}&status=Done`), (tid && tid!=="NA") ? fetch(SCRIPT_URL+`?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()]); syncCounts(); closeP('list-p'); }
+    function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:white;">🟢 ${t.Name} (${t.ID})</div>`; }); }
+    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
+    function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => x.Name.toLowerCase().includes(q) || x.ID.toLowerCase().includes(q)); renderDataList(filtered, lastType); }
+    function bulkWhatsApp() { let nos = lastData.map(x => "91" + x.Phone).join(","); if(nos) window.open(`https://wa.me/?phone=${nos}&text=Hello`); }
+    function handleOTP() { let p = document.getElementById('rp').value; if(p.length<10) return alert("सही नंबर डालें!"); currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000); alert("OTP: " + currentGeneratedOTP); document.getElementById('otp-area').style.display = 'block'; }
+    async function verifyAndRegister() { if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP!"); document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=registerTeam&name=${document.getElementById('rn').value}&father=${document.getElementById('rf').value}&phone=${document.getElementById('rp').value}&address=${document.getElementById('ra').value}&service=${document.getElementById('rs').value}`); syncCounts(); closeP('reg-p'); }
     function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
-    function renderFree() { 
-        let b = document.getElementById('staff-picker-box'); b.innerHTML = "";
-        fullTeamData.filter(x => x.Status === 'Free').forEach(t => {
-            b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`;
-        });
-    }
-    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    async function quickUpdate(s) {
-        let id = document.getElementById('man-id').value.toUpperCase();
-        if(!id) return;
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`);
-        syncCounts();
-    }
-    function searchInList() { const v = document.getElementById('listSearch').value.toLowerCase(); document.querySelectorAll('.data-card').forEach(c => c.style.display = c.innerText.toLowerCase().includes(v) ? "block" : "none"); }
+    function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
+    function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
+    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
+    async function processAssign() { let cid = document.getElementById('as-cid').value.toUpperCase(); let tid = document.getElementById('as-tid').value.toUpperCase(); if(!tid || !cid) return alert("चुनें!"); document.getElementById('loader').style.display = 'flex'; await Promise.all([fetch(SCRIPT_URL+`?action=updateStatus&id=${cid}&status=Running&gps=${tid}`), fetch(SCRIPT_URL+`?action=updateStatus&id=${tid}&status=Busy`)]); location.reload(); }
+
+    async function loadIDData() { let tid = document.getElementById('id-tid').value.toUpperCase().trim(); let t = fullTeamData.find(x => x.ID === tid); if(t) { document.getElementById('v-name').innerText = t.Name; document.getElementById('v-id').innerText = "ID: " + t.ID; document.getElementById('v-work-label').innerText = t.Service || "ENGINEER"; document.getElementById('v-father').innerText = t.Father || "-"; document.getElementById('v-phone').innerText = t.Phone || "-"; document.getElementById('v-address').innerText = t.Address || "-"; document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById('id-qr'), { text: tid, width: 60, height: 60 }); } else alert("नहीं मिला!"); }
+    function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; r.readAsDataURL(e.target.files[0]); }
+    async function downloadID() { document.getElementById('loader').style.display = 'flex'; const canvas = await html2canvas(document.getElementById('id-card-render'), { useCORS: true, scale: 3 }); const l = document.createElement('a'); l.download = "AK_ID.png"; l.href = canvas.toDataURL(); l.click(); document.getElementById('loader').style.display = 'none'; }
+
     window.onload = syncCounts;
 </script>
 </body>

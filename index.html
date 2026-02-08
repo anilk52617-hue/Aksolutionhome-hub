@@ -6,38 +6,62 @@
     <title>AK SOLUTION HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #005eb8; --success: #27ae60; --bg: #f4f7fa; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        :root { --primary: #005eb8; --success: #27ae60; --bg: #eef2f7; --dark: #2c3e50; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         body { background: #fff; padding-bottom: 80px; text-align: center; overflow-x: hidden; }
+        
+        /* Header & Banner Styles */
         .header { padding: 15px; background: #fff; position: sticky; top:0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .logo-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); padding: 3px; cursor: pointer; object-fit: cover; }
-        .brand-title { color: var(--primary); font-size: 24px; font-weight: bold; margin: 5px 0; }
-        .call-btn { background: #27ae60; color: white; padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 18px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
-        .ticker { background: var(--primary); color: #fff; padding: 8px; font-size: 14px; overflow: hidden; }
-        .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: 180px; position: relative; }
+        .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); padding: 3px; cursor: pointer; object-fit: cover; }
+        .brand-title { color: var(--primary); font-size: 22px; font-weight: bold; margin: 5px 0; }
+        .call-btn { background: #27ae60; color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 16px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
+        .ticker { background: var(--primary); color: #fff; padding: 6px; font-size: 12px; overflow: hidden; }
+        .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: 160px; position: relative; }
         .banner img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .banner img.active { display: block; animation: fade 0.8s; }
         @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 15px; background: var(--bg); }
-        .box { background: #fff; border-radius: 15px; padding: 20px 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; }
-        .box i { font-size: 32px; color: var(--primary); margin-bottom: 10px; display: block; }
-        .box span { font-size: 11px; font-weight: 800; color: #333; }
+
+        /* NEW INDICATOR STYLE FOR CATEGORIES */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; background: var(--bg); }
+        
+        /* Matching Admin Indicator Style */
+        .box { 
+            background: white; 
+            padding: 15px 5px; 
+            border-radius: 15px; 
+            text-align: center; 
+            border-bottom: 4px solid #ddd; /* Admin style border */
+            cursor: pointer; 
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .box:active { transform: scale(0.95); }
+        .box i { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
+        .box span { font-size: 10px; color: #555; font-weight: bold; text-transform: uppercase; display: block; }
+        
+        /* Modal & UI Elements */
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-page { display: block; }
-        .input-box { width: 100%; padding: 16px; border: 2px solid #ddd; border-radius: 12px; font-size: 16px; margin-bottom: 15px; text-align: center; }
-        .main-btn { width: 100%; padding: 16px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; border-top: 1px solid #ddd; height: 75px; z-index: 1000; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 12px; cursor: pointer; }
+        .input-box { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 15px; margin-bottom: 15px; text-align: center; outline: none; }
+        .main-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        
+        .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; border-top: 1px solid #ddd; height: 70px; z-index: 1000; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; }
         .nav-item.active { color: var(--primary); border-top: 4px solid var(--primary); font-weight: bold; }
+        
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
-        .modal-content { background:#fff; width:88%; margin:20% auto; border-radius:25px; padding:25px; text-align: center; }
+        .modal-content { background:#fff; width:92%; margin:15% auto; border-radius:25px; padding:20px; text-align: center; max-height: 80vh; overflow-y: auto; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
         .status-result { margin-top: 20px; padding: 15px; border-radius: 15px; background: #f9f9f9; border: 1px dashed var(--primary); display: none; text-align: left;}
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><br><p>सिंक हो रहा है...</p></div>
+<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><br><p>लोड हो रहा है...</p></div>
 
 <div class="header">
     <img src="57255.jpg" class="logo-img" onclick="adminCheck()" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
@@ -55,8 +79,8 @@
 </div>
 
 <div id="booking" class="page">
-    <h2 style="color:var(--primary); margin-bottom:20px;">बुकिंग फॉर्म</h2>
-    <input type="text" id="svc" class="input-box" readonly style="background:#eef5ff; font-weight:bold; border-color:var(--primary);">
+    <h2 style="color:var(--primary); margin-bottom:15px;">बुकिंग फॉर्म</h2>
+    <input type="text" id="svc" class="input-box" readonly style="background:#eef5ff; font-weight:bold; border-color:var(--primary); color:var(--primary);">
     <input type="text" id="name" class="input-box" placeholder="आपका नाम">
     <input type="tel" id="phone" class="input-box" placeholder="मोबाइल नंबर">
     <textarea id="addr" class="input-box" rows="3" placeholder="पूरा पता"></textarea>
@@ -87,8 +111,8 @@
 <div id="subModal" class="modal">
     <div class="modal-content">
         <h3 id="mTitle" style="color:var(--primary); margin-bottom:15px;"></h3>
-        <div id="mList" class="grid" style="grid-template-columns: 1fr 1fr; background:none;"></div>
-        <button onclick="closeSub()" class="main-btn" style="background:#444;">वापस</button>
+        <div id="mList" class="grid" style="grid-template-columns: 1fr 1fr; background:none; padding:0;"></div>
+        <button onclick="closeSub()" class="main-btn" style="background:var(--dark); margin-top:20px;">वापस जाएँ</button>
     </div>
 </div>
 
@@ -97,7 +121,7 @@
         <h3>एडमिन लॉगिन</h3><br>
         <input type="password" id="adminPass" class="input-box" placeholder="पासवर्ड">
         <button class="main-btn" onclick="verifyAdmin()">प्रवेश करें</button>
-        <p onclick="closeAdmin()" style="color:red; margin-top:15px; cursor:pointer;">बंद करें</p>
+        <p onclick="closeAdmin()" style="color:red; margin-top:15px; cursor:pointer; font-weight:bold;">बंद करें</p>
     </div>
 </div>
 
@@ -128,11 +152,24 @@
         'FITTING': ['TV Stand', 'पर्दा रॉड', 'आईना', 'फोटो', 'नेम प्लेट', 'अन्य'],
         'OTHER': ['पेंटर', 'राजमिस्त्री', 'वेल्डिंग', 'टाइल', 'गार्डन', 'हेल्पर', 'अन्य']
     };
+    
+    // Borders to match Admin indicators
+    const colors = {
+        'PLUMBER':'#005eb8',
+        'ELECTRICIAN':'#f39c12',
+        'CARPENTER':'#e67e22',
+        'RO SERVICE':'#3498db',
+        'CCTV':'#e74c3c',
+        'AC SERVICE':'#1abc9c',
+        'CLEANING':'#27ae60',
+        'FITTING':'#9b59b6',
+        'OTHER':'#34495e'
+    };
     const icons = {'PLUMBER':'faucet','ELECTRICIAN':'bolt','CARPENTER':'hammer','RO SERVICE':'tint','CCTV':'video','AC SERVICE':'snowflake','CLEANING':'broom','FITTING':'tools','OTHER':'plus-circle'};
 
     const grid = document.getElementById('mainGrid');
     Object.keys(services).forEach(s => {
-        grid.innerHTML += `<div class="box" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}"></i><span>${s}</span></div>`;
+        grid.innerHTML += `<div class="box" style="border-bottom-color:${colors[s]}" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}" style="color:${colors[s]}"></i><span>${s}</span></div>`;
     });
 
     function go(id, el) {
@@ -147,7 +184,7 @@
         document.getElementById('mTitle').innerText = cat;
         list.innerHTML = "";
         services[cat].forEach(s => {
-            list.innerHTML += `<div class="box" style="height:65px; padding:10px;" onclick="selectSvc('${cat} - ${s}')"><span>${s}</span></div>`;
+            list.innerHTML += `<div class="box" style="padding:10px; border-bottom-color:${colors[cat]}" onclick="selectSvc('${cat} - ${s}')"><span>${s}</span></div>`;
         });
         document.getElementById('subModal').style.display = 'block';
     }
@@ -162,7 +199,6 @@
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
-                // सुधरा हुआ गूगल मैप्स लिंक
                 userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
@@ -187,13 +223,9 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            // गूगल शीट के लिए पैरामीटर्स
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(addrVal)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
-            
-            // डेटा सिंक (Silent Fetch)
             fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
-            // व्हाट्सएप मैसेज फॉर्मेट
             let waMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
                         `------------------------------------%0A` +
                         `🆔 *बुकिंग ID:* ${id}%0A` +
@@ -203,24 +235,17 @@
                         `📍 *पता:* ${encodeURIComponent(addrVal)}%0A` +
                         `🌍 *लोकेशन:* ${encodeURIComponent(userGPS)}%0A` +
                         `------------------------------------%0A` +
-                        `✅ *एडमिन पैनल से टीम असाइन करें।*`;
+                        `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
             
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
-                
-                // फॉर्म साफ़ करना
                 document.getElementById('name').value = "";
                 document.getElementById('phone').value = "";
                 document.getElementById('addr').value = "";
                 document.getElementById('finalSubmit').style.display = 'none';
-                
-                // होम पेज पर वापस
                 go('home', document.querySelectorAll('.nav-item')[0]);
-
-                // व्हाट्सएप ओपन करना
                 window.location.href = `https://wa.me/919927464530?text=${waMsg}`;
             }, 1500);
-            
         } catch(e) { 
             document.getElementById('loader').style.display = 'none'; 
             alert("नेटवर्क त्रुटि!"); 
@@ -238,7 +263,7 @@
             let resDiv = document.getElementById('statusResult');
             resDiv.style.display = 'block';
             if(found) {
-                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Service:</b> ${found.Service}<br><b>Status:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
+                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>नाम:</b> ${found.Name}<br><b>सर्विस:</b> ${found.Service}<br><b>स्टेटस:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
             } else {
                 resDiv.innerHTML = "<span style='color:red;'>ID नहीं मिली!</span>";
             }
