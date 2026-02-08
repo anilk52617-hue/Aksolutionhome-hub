@@ -3,134 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V9.9 PRO</title>
+    <title>AK MASTER ADMIN - V11 FINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { 
-            --primary: #005eb8; 
-            --success: #10b981; 
-            --danger: #ef4444; 
-            --warning: #f59e0b; 
-            --running: #3b82f6; 
-            --dark: #1e293b; 
-            --bg: #f8fafc;
-        }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-        body { background: var(--bg); padding-bottom: 50px; color: #334155; }
-        
-        .header { 
-            background: linear-gradient(135deg, var(--primary), #003d7a); 
-            color: white; padding: 30px 20px; text-align: center; 
-            border-radius: 0 0 30px 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .header h2 { font-size: 24px; letter-spacing: 1px; }
-
-        .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px 15px; margin-top: -25px; }
-        .ind-box { 
-            background: white; padding: 15px 5px; border-radius: 18px; text-align: center; 
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-        .ind-box b { font-size: 22px; color: var(--dark); display: block; margin-top: 5px; }
-        .ind-box span { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .manual-box { background: white; margin: 0 15px 20px; padding: 20px; border-radius: 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-        .input { 
-            width: 100%; padding: 14px; margin-bottom: 12px; border: 1.5px solid #e2e8f0; 
-            border-radius: 12px; text-align: center; outline: none; font-size: 16px; transition: 0.3s;
-        }
-
-        .status-btn { 
-            padding: 12px; border: none; border-radius: 12px; color: white; 
-            font-weight: 600; cursor: pointer; font-size: 12px; text-align: center; 
-            text-decoration: none; display:flex; align-items:center; justify-content:center; gap:8px;
-        }
-
-        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
-        .panel-box { 
-            border-radius: 20px; padding: 18px 5px; display: flex; flex-direction: column; 
-            align-items: center; cursor: pointer; color: white; transition: 0.3s;
-        }
-        .panel-box i { font-size: 24px; margin-bottom: 8px; }
-        .panel-box span { font-size: 10px; font-weight: 700; text-transform: uppercase; }
-
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.8); z-index:9999; backdrop-filter: blur(8px); }
-        .modal-content { 
-            position:relative; top:50%; left:50%; transform:translate(-50%,-50%); 
-            width:92%; max-height: 85vh; background:white; padding:25px; border-radius:30px; 
-            overflow-y: auto; text-align: center;
-        }
-
-        .data-card { 
-            padding:18px; background:#fff; border-radius:20px; margin-bottom:15px; 
-            text-align: left; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
-            border: 1px solid #f1f5f9; position: relative;
-        }
-        .status-badge { font-size: 9px; padding: 4px 8px; border-radius: 20px; font-weight: 800; text-transform: uppercase; }
-
+        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
+        body { background: #eef2f7; padding-bottom: 50px; }
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
+        .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; }
+        .ind-box b { font-size: 18px; color: var(--dark); display: block; }
+        .ind-box span { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
+        .manual-box { background: white; margin: 0 15px 20px; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dde; border-radius: 10px; text-align: center; outline: none; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .status-btn { padding: 10px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; text-decoration: none; display:flex; align-items:center; justify-content:center; gap:5px; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
+        .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
-        
+        .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:5px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
+        .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
+        .panel-box i { font-size: 22px; margin-bottom: 5px; }
+        .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
+
         #id-card-render { width: 300px; height: 460px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
         #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
-        .v-sign-text { font-family: 'Brush Script MT', cursive, sans-serif; font-size: 22px; color: #1a2a6c; margin-bottom: -8px; }
         .v-stamp-new { position: absolute; width: 75px; height: 75px; border: 2px solid rgba(0, 94, 184, 0.7); border-radius: 50%; top: 100px; right: 45px; z-index: 10; transform: rotate(-15deg); display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); color: rgba(0, 94, 184, 0.8); font-weight: bold; }
+        .v-stamp-inner { border: 1px dashed rgba(0, 94, 184, 0.5); width: 65px; height: 65px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .v-sign-text { font-family: 'Brush Script MT', cursive, sans-serif; font-size: 22px; color: #1a2a6c; margin-bottom: -8px; }
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-circle-notch fa-spin fa-3x" style="color:var(--primary);"></i><p style="margin-top:10px; font-weight:600;">डेटा सिंक हो रहा है...</p></div>
+<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><p>सिंक हो रहा है...</p></div>
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 11px; opacity: 0.8; font-weight: 600;">AKSOLUTION HUB • V9.9 PRO</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • V11 FINAL</p>
 </div>
 
 <div class="indicator-grid">
-    <div class="ind-box" style="border-top: 4px solid var(--primary);" onclick="filterStatus('Today')"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
-    <div class="ind-box" style="border-top: 4px solid var(--danger);" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
-    <div class="ind-box" style="border-top: 4px solid var(--running);" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
-    <div class="ind-box" style="border-top: 4px solid var(--success);" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
-    <div class="ind-box" style="border-top: 4px solid var(--warning);" onclick="loadList('CUST')"><span>Total Cust</span><b id="c-total">0</b></div>
-    <div class="ind-box" style="border-top: 4px solid #6366f1;" onclick="loadList('TEAM')"><span>Team</span><b id="c-team">0</b></div>
+    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="filterStatus('Today')"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
+    <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
+    <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
+    <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
+    <div class="ind-box" style="border-color:var(--warning)" onclick="loadList('CUST')"><span>Total Cust</span><b id="c-total">0</b></div>
+    <div class="ind-box" style="background:#fff3cd" onclick="loadList('TEAM')"><span>Team</span><b id="c-team">0</b></div>
 </div>
 
 <div class="manual-box">
-    <input type="text" id="man-id" class="input" placeholder="ID दर्ज करें (AK-XXXX / T-XXXX)">
-    <div class="btn-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <button class="status-btn" style="background:var(--success)" onclick="quickUpdate('Done')"><i class="fas fa-check-circle"></i> DONE</button>
-        <button class="status-btn" style="background:var(--danger)" onclick="quickUpdate('Reject')"><i class="fas fa-times-circle"></i> REJECT</button>
-        <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')"><i class="fas fa-play-circle"></i> RUNNING</button>
-        <button class="status-btn" style="background:var(--dark);" onclick="quickUpdate('Free')"><i class="fas fa-user-check"></i> FREE TEAM</button>
+    <input type="text" id="man-id" class="input" placeholder="ID (AK-XXXX / T-XXXX)">
+    <div class="btn-grid">
+        <button class="status-btn" style="background:var(--success)" onclick="quickUpdate('Done')">DONE</button>
+        <button class="status-btn" style="background:var(--danger)" onclick="quickUpdate('Reject')">REJECT</button>
+        <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')">RUNNING</button>
+        <button class="status-btn" style="background:var(--dark);" onclick="quickUpdate('Free')">FREE (TEAM)</button>
     </div>
 </div>
 
 <div class="menu-grid">
-    <div class="panel-box" style="background: linear-gradient(135deg, #f59e0b, #d97706)" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
-    <div class="panel-box" style="background: linear-gradient(135deg, #3b82f6, #2563eb)" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
-    <div class="panel-box" style="background: linear-gradient(135deg, #005eb8, #003d7a)" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
-    <div class="panel-box" style="background: linear-gradient(135deg, #10b981, #059669)" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
-    <div class="panel-box" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed)" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
-    <div class="panel-box" style="background: linear-gradient(135deg, #475569, #1e293b)" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
+    <div class="panel-box" style="background:#f39c12" onclick="openP('reg-p')"><i class="fas fa-user-plus"></i><span>ADD TEAM</span></div>
+    <div class="panel-box" style="background:#3498db" onclick="loadList('TEAM')"><i class="fas fa-users"></i><span>TEAM LIST</span></div>
+    <div class="panel-box" style="background:#005eb8" onclick="openP('as-p')"><i class="fas fa-user-check"></i><span>ASSIGN</span></div>
+    <div class="panel-box" style="background:#27ae60" onclick="loadList('CUST')"><i class="fas fa-address-book"></i><span>CUSTOMERS</span></div>
+    <div class="panel-box" style="background:#9b59b6" onclick="openP('id-p')"><i class="fas fa-id-badge"></i><span>ID CARD</span></div>
+    <div class="panel-box" style="background:#34495e" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
 <div id="as-p" class="modal"><div class="modal-content" id="as-content">
-    <h3 style="margin-bottom:20px;">Assign Expert</h3>
-    <div id="staff-picker-box" style="max-height:200px; overflow-y:auto; border:1px solid #e2e8f0; margin-bottom:15px; border-radius:15px; text-align:left; background:#f8fafc;"></div>
+    <h3>Assign Expert</h3>
+    <div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px; text-align:left; background:#f9f9f9;"></div>
     <input id="as-tid" class="input" placeholder="Staff ID" readonly>
     <input id="as-cid" class="input" placeholder="Customer ID">
-    <button class="status-btn" style="background:var(--primary); width:100%; height:55px; font-size:16px;" onclick="processAssign()">CONFIRM ASSIGN</button>
-    <button onclick="closeP('as-p')" style="margin-top:20px; border:none; color:var(--danger); background:none; cursor:pointer; font-weight:bold;">CANCEL</button>
+    <button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button>
+    <button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none; cursor:pointer;">CANCEL</button>
 </div></div>
 
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt" style="margin-bottom:15px;"></h3><div style="display: flex; gap: 8px; margin-bottom: 15px;"><input type="text" id="listSearch" class="input" placeholder="यहाँ खोजें..." onkeyup="searchInList()" style="margin-bottom:0; flex:3;"><button onclick="bulkWhatsApp()" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i> ALL</button></div><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:20px; height:50px;">CLOSE</button></div></div>
+<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div style="display: flex; gap: 5px; margin: 10px 0;"><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()" style="margin-bottom:0; flex:3;"><button onclick="bulkWhatsApp()" class="status-btn" style="background:#25D366; flex:1; font-size:10px;"><i class="fab fa-whatsapp"></i> ALL</button></div><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
 
-<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><div style="margin-top:15px;"><input id="rn" class="input" placeholder="Full Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service Type"><button class="status-btn" style="background:var(--warning); width:100%; height:50px;" onclick="handleOTP()">SEND OTP ON WHATSAPP</button></div><div id="otp-area" style="display:none; margin-top:15px;"><input id="otp-val" class="input" placeholder="Enter 4 Digit Code"><button class="status-btn" style="background:var(--success); width:100%; height:50px;" onclick="verifyAndRegister()">VERIFY & REGISTER</button></div><button onclick="closeP('reg-p')" style="margin-top:20px; border:none; color:var(--danger); background:none; font-weight:bold;">CLOSE</button></div></div>
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP ON WHATSAPP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button></div></div>
 
 <div id="id-p" class="modal"><div class="modal-content">
-    <h3 style="margin-bottom:15px;">ID Generator</h3>
+    <h3>ID Generator</h3>
     <div id="id-card-render">
         <div class="v-header-id">AK SOLUTION HUB</div>
         <img id="v-img" src="https://via.placeholder.com/110">
@@ -141,16 +99,10 @@
         <div style="position:absolute; bottom:45px; right:25px; text-align:center;"><div class="v-sign-text">Anil Kumar</div><div style="font-size:8px; font-weight:bold; border-top:1px solid #333; padding-top:2px; width:90px;">Authorized Sign</div></div>
         <div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div>
     </div>
-    <div style="margin-top:20px;">
-        <input type="text" id="id-tid" class="input" placeholder="Staff ID दर्ज करें">
-        <div class="btn-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-            <button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button>
-            <button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()"><i class="fas fa-camera"></i> PHOTO</button>
-        </div>
-    </div>
+    <input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div>
     <input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)">
-    <button class="status-btn" style="background:var(--success); width:100%; margin-top:15px; height:55px; font-size:16px;" onclick="downloadID()">DOWNLOAD HD CARD</button>
-    <button onclick="closeP('id-p')" style="margin-top:15px; border:none; color:var(--danger); background:none; font-weight:bold;">CLOSE</button>
+    <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button>
+    <button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button>
 </div></div>
 
 <script>
@@ -178,31 +130,49 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
+    // --- FIX: ASSIGN WITH DIRECT WHATSAPP (MATCHING IMAGE) ---
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
         if(!cid || !tid) return alert("IDs चुनें!");
+        
         let cust = fullCustData.find(x => x.ID === cid);
         let staff = fullTeamData.find(x => x.ID === tid);
         if(!cust || !staff) return alert("Data mismatch!");
+        
         document.getElementById('loader').style.display = 'flex';
         try {
             await Promise.all([
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
-            let m1 = `*नया काम*%0Aकस्टमर: ${cust.Name}%0Aआईडी: ${cust.ID}%0Aफोन: ${cust.Phone}%0Aपता: ${cust.Address}`;
-            let m2 = `*AK SOLUTION HUB*%0Aएक्सपर्ट असाइन हो गया है।%0Aस्टाफ: ${staff.Name}%0Aआईडी: ${staff.ID}%0Aफोन: ${staff.Phone}`;
-            window.open(`https://wa.me/91${staff.Phone}?text=${m1}`, '_blank');
+            
+            // व्हाट्सएप मैसेज फॉर्मेट इमेज के अनुसार
+            let teamMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
+                          `----------------------------%0A%0A` +
+                          `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
+                          `📞 *मोबाइल:* ${cust.Phone}%0A` +
+                          `👤 *कस्टमर:* ${cust.Name}%0A` +
+                          `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}%0A` +
+                          `📍 *पता:* ${cust.Address}%0A` +
+                          `🌍 *लोकेशन:* https://www.google.com/maps?q=${encodeURIComponent(cust.Address)}%0A` +
+                          `----------------------------%0A` +
+                          `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
+
+            let custMsg = `*AK SOLUTION HUB*%0A*एक्सपर्ट असाइन हो गया है*%0A------------------------%0Aनमस्ते, आपकी बुकिंग के लिए एक्सपर्ट असाइन कर दिया गया है।%0A%0A*नाम:* ${staff.Name}%0A*आईडी:* ${staff.ID}%0A*संपर्क:* ${staff.Phone}%0A------------------------%0A*हमारा एक्सपर्ट जल्द ही आपसे संपर्क करेगा। धन्यवाद!*`;
+
+            window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${teamMsg}`;
+            
             document.getElementById('as-content').innerHTML = `
                 <div style="padding:20px; text-align:center;">
-                    <i class="fab fa-whatsapp fa-5x" style="color:#25D366; margin-bottom:15px;"></i>
-                    <h3 style="color:#25D366">सफलतापूर्वक असाइन किया गया!</h3>
-                    <button class="status-btn" style="background:#25D366; width:100%; height:60px; font-size:18px;" 
-                        onclick="window.open('https://wa.me/91${cust.Phone}?text=${m2}', '_blank'); location.reload();">
+                    <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px;"></i>
+                    <h3 style="color:var(--success);">टीम को भेज दिया!</h3>
+                    <button class="status-btn" style="background:#25D366; width:100%; height:60px; font-size:16px; margin-top:10px;" 
+                        onclick="window.location.href='whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsg)}'; setTimeout(()=>location.reload(), 2000);">
                         SEND TO CUSTOMER
                     </button>
                 </div>`;
+                
         } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
 
@@ -211,8 +181,8 @@
         let n = document.getElementById('rn').value;
         if(p.length < 10 || !n) return alert("नाम और नंबर डालें!");
         currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
-        let msg = `नमस्ते *${n}*, कोड है: *${currentGeneratedOTP}*`;
-        window.open(`https://wa.me/91${p}?text=${msg}`, '_blank');
+        let msg = `नमस्ते *${n}*,%0A%0AAK SOLUTION HUB में आपका स्वागत है।%0Aआपका कोड है: *${currentGeneratedOTP}*`;
+        window.location.href = `whatsapp://send?phone=91${p}&text=${msg}`;
         document.getElementById('otp-area').style.display = 'block';
     }
 
@@ -226,39 +196,29 @@
     function renderFree() {
         let b = document.getElementById('staff-picker-box'); b.innerHTML = "";
         let free = fullTeamData.filter(x => x.Status === 'Free');
-        if(!free.length) { b.innerHTML = "<p style='padding:20px; color:var(--danger); font-weight:600; text-align:center;'>कोई स्टाफ उपलब्ध नहीं है</p>"; return; }
-        free.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:15px; border-bottom:1px solid #f1f5f9; cursor:pointer; background:white; display:flex; align-items:center; gap:10px;"><div style="width:10px; height:10px; background:var(--success); border-radius:50%;"></div> <div><b>${t.Name}</b><br><small style="color:#64748b">${t.ID}</small></div></div>`; });
+        if(!free.length) { b.innerHTML = "<p style='padding:10px; color:red;'>No Staff Free</p>"; return; }
+        free.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:white;">🟢 ${t.Name} (${t.ID})</div>`; });
     }
 
     function renderDataList(d, t, skipModal = false) {
         lastData = d; lastType = t; let h = "";
         d.forEach(i => {
-            let statusBadge = "";
-            let cardColor = "var(--primary)";
+            let statusBadge = ""; let cardColor = "var(--primary)";
             if(t === 'TEAM') {
-                statusBadge = i.Status === 'Free' ? "<span class='status-badge' style='background:#dcfce7; color:#166534;'>🟢 FREE</span>" : "<span class='status-badge' style='background:#fee2e2; color:#991b1b;'>🔴 BUSY</span>";
-                cardColor = i.Status === 'Free' ? "var(--success)" : "var(--danger)";
-            } else {
-                let sCol = i.Status === 'Done' ? '#dcfce7' : (i.Status === 'Running' ? '#dbeafe' : '#fee2e2');
-                let tCol = i.Status === 'Done' ? '#166534' : (i.Status === 'Running' ? '#1e40af' : '#991b1b');
-                statusBadge = `<span class='status-badge' style='background:${sCol}; color:${tCol};'>${i.Status}</span>`;
-                cardColor = i.Status === 'Done' ? 'var(--success)' : (i.Status === 'Running' ? 'var(--running)' : 'var(--danger)');
-            }
-            h += `<div class="data-card" style="border-left:6px solid ${cardColor};">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-                        <div><b>${i.Name}</b><br><small style="color:#64748b">ID: ${i.ID}</small></div>
-                        ${statusBadge}
-                    </div>
-                    <p style="font-size:11px; color:#475569; margin-bottom:12px;"><i class="fas fa-map-marker-alt"></i> ${i.Address || 'No Address'}</p>
-                    <div style="display:flex; gap:10px;">
+                if(i.Status === 'Free' || i.Status === 'Done') { statusBadge = "<span style='color:var(--success); font-weight:bold; font-size:10px;'>🟢 FREE</span>"; cardColor = "var(--success)"; }
+                else { statusBadge = "<span style='color:var(--danger); font-weight:bold; font-size:10px;'>🔴 BUSY</span>"; cardColor = "var(--danger)"; }
+            } else { cardColor = i.Status === 'Done' ? 'var(--success)' : (i.Status === 'Running' ? 'var(--running)' : 'var(--danger)'); }
+            h += `<div class="data-card" style="border-left:5px solid ${cardColor};">
+                    <div style="display:flex; justify-content:space-between; align-items:center;"><b>${i.Name}</b> ${statusBadge}</div>
+                    <small>ID: ${i.ID} | ${i.Service || ''}</small><br><small>${i.Address || ''}</small>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
                         <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                        <a href="https://wa.me/91${i.Phone}" target="_blank" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i></a>
-                        ${(i.Status==='Pending' && t==='CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:2;">ASSIGN NOW</button>` : ''}
+                        <a href="whatsapp://send?phone=91${i.Phone}" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i></a>
+                        ${(i.Status==='Pending' && t==='CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : ''}
                     </div>
                   </div>`;
         });
-        document.getElementById('lb').innerHTML = h || `<p style='text-align:center; padding:30px;'>कोई डेटा नहीं मिला</p>`;
-        document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS LIST" : "OUR TEAM LIST";
+        document.getElementById('lb').innerHTML = h || "No Data"; document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
         if(!skipModal) openP('list-p');
     }
 
@@ -266,22 +226,20 @@
         let tid = document.getElementById('id-tid').value.toUpperCase().trim();
         let t = fullTeamData.find(x => x.ID === tid);
         if(t) {
-            document.getElementById('v-name').innerText = t.Name;
-            document.getElementById('v-id').innerText = "ID: " + t.ID;
+            document.getElementById('v-name').innerText = t.Name; document.getElementById('v-id').innerText = "ID: " + t.ID;
             document.getElementById('v-work-label').innerText = t.Service || "FIELD EXPERT";
             document.getElementById('v-father').innerText = t.Father || "-";
             document.getElementById('v-phone').innerText = t.Phone || "-";
             document.getElementById('v-address').innerText = t.Address || "-";
-            document.getElementById('id-qr').innerHTML = "";
-            new QRCode(document.getElementById('id-qr'), { text: tid, width: 60, height: 60 });
-        } else alert("स्टाफ आईडी नहीं मिली!");
+            document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById('id-qr'), { text: tid, width: 60, height: 60 });
+        } else alert("Not Found!");
     }
 
     function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); }
     async function downloadID() { 
         document.getElementById('loader').style.display = 'flex';
         const canvas = await html2canvas(document.getElementById('id-card-render'), { useCORS: true, scale: 3 });
-        const l = document.createElement('a'); l.download = `AK_ID_${document.getElementById('v-name').innerText}.png`; l.href = canvas.toDataURL(); l.click();
+        const l = document.createElement('a'); l.download = "AK_ID_CARD.png"; l.href = canvas.toDataURL(); l.click();
         document.getElementById('loader').style.display = 'none';
     }
 
@@ -290,48 +248,39 @@
     function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
     function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return alert("ID लिखें!"); document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
+    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // UPDATED: Shows IDs and Keeps Record
+    // --- FIX: SMART RUNNING LOGIC (NAME FIX) ---
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            let tid = c.GPS || "NA"; // Staff ID stored in GPS column
-            h += `<div class="data-card" style="border-left:6px solid var(--running);">
+            let rawStaffID = (c.GPS || "NA").toString().trim().toUpperCase();
+            let staffMember = fullTeamData.find(st => String(st.ID).trim().toUpperCase() === rawStaffID);
+            let staffDisplayName = staffMember ? staffMember.Name : "Expert (" + rawStaffID + ")";
+
+            h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
                     <div style="display:flex; justify-content:space-between;">
-                        <b>${c.Name}</b>
-                        <span class='status-badge' style='background:#dbeafe; color:#1e40af;'>ON GOING</span>
+                        <b>कस्टमर: ${c.Name}</b>
+                        <span style="color:var(--running); font-size:10px; font-weight:bold;">● RUNNING</span>
                     </div>
-                    <div style="margin-top:8px; font-size:12px; background:#f1f5f9; padding:10px; border-radius:10px; border:1px solid #e2e8f0;">
-                        <p><b>CUSTOMER ID:</b> ${c.ID}</p>
-                        <p style="color:var(--danger); margin-top:4px;"><b>STAFF ID:</b> ${tid}</p>
+                    <small>ID: ${c.ID} | ${c.Service || ''}</small>
+                    <div style="margin-top:10px; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
+                        <small style="color:var(--danger); font-weight:bold; font-size:10px;">असाइन एक्सपर्ट:</small><br>
+                        <b style="color:var(--primary); font-size:14px; text-transform:uppercase;">${staffDisplayName}</b>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:12px;">
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                        <button onclick="finishTask('${c.ID}', '${tid}')" class="status-btn" style="background:var(--success); flex:2;"><i class="fas fa-check-double"></i> MARK DONE & FREE STAFF</button>
+                        <button onclick="finishTask('${c.ID}', '${rawStaffID}')" class="status-btn" style="background:var(--success); flex:2;">MARK DONE</button>
                     </div>
                   </div>`;
         });
-        document.getElementById('lb').innerHTML = h || "<p style='text-align:center; padding:30px;'>कोई काम रनिंग में नहीं है</p>"; document.getElementById('lt').innerText = "CURRENT RUNNING TASKS"; openP('list-p');
+        document.getElementById('lb').innerHTML = h || "No Running Tasks"; document.getElementById('lt').innerText = "LIVE RUNNING"; openP('list-p');
     }
 
-    // UPDATED: Logic to free staff but keep ID record in Customer GPS
-    async function finishTask(cid, tid) { 
-        if(!confirm("क्या काम पूरा हो गया है?")) return; 
-        document.getElementById('loader').style.display = 'flex'; 
-        try {
-            await Promise.all([
-                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`), 
-                (tid && tid !== "NA") ? fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()
-            ]); 
-            syncCounts(); 
-            closeP('list-p'); 
-        } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
-    }
-
+    async function finishTask(cid, tid) { if(!confirm("Work Done?")) return; document.getElementById('loader').style.display = 'flex'; await Promise.all([fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`), (tid && tid !== "NA") ? fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()]); syncCounts(); closeP('list-p'); }
     function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
-    function bulkWhatsApp() { let nos = lastData.map(x => "91" + x.Phone).join(","); if(nos) window.open(`https://wa.me/?phone=${nos}&text=AK SOLUTION HUB: Hello!`); }
+    function bulkWhatsApp() { let nos = lastData.map(x => "91" + x.Phone).join(","); if(nos) window.location.href = `whatsapp://send?phone=${nos}&text=Hello`; }
 
     window.onload = syncCounts;
 </script>
