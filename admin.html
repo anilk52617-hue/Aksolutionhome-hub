@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V11 FINAL</title>
+    <title>AK MASTER ADMIN - V11 FINAL UPDATED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -130,7 +130,7 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // सुधार: टीम को पूरा बुकिंग फॉर्मेट और कस्टमर को साफ मैसेज
+    // सुधार: टीम के लिए प्रोफेशनल मैसेज और कस्टमर को अलर्ट
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -147,13 +147,13 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
             
-            let mapLink = `https://www.google.com/maps?q=${encodeURIComponent(cust.Address)}`;
+            // सुधार: मैप लिंक और पूरा कस्टमर फॉर्मेट
+            let mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cust.Address)}`;
 
-            // टीम के लिए आपका पूरा बुकिंग फॉर्मेट (बिल्कुल वैसा ही जैसा आपको चाहिए)
             let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n` +
-                          `----------------------------\n\n` +
+                          `----------------------------\n` +
                           `🆔 *बुकिंग ID:* ${cust.ID}\n` +
-                          `📅 *तारीख:* ${formatAsDate(cust.Date)}\n` +
+                          `📅 *तारीख:* ${formatAsDate(cust.Date)}\n\n` +
                           `👤 *कस्टमर:* ${cust.Name}\n` +
                           `📞 *मोबाइल:* ${cust.Phone}\n` +
                           `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n` +
@@ -162,7 +162,6 @@
                           `----------------------------\n` +
                           `✅ *जल्द से जल्द संपर्क करें।*`;
 
-            // कस्टमर के लिए साफ संदेश
             let custMsgText = `*AK SOLUTION HUB*\n` +
                           `*एक्सपर्ट असाइन हो गया है*\n` +
                           `------------------------\n` +
@@ -271,10 +270,10 @@
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            // c.GPS में स्टोर स्टाफ आईडी से उसका नाम खोजें
             let staffID = c.GPS;
             let staffMember = fullTeamData.find(st => st.ID === staffID); 
-            let staffDisplayName = staffMember ? `${staffMember.Name} (${staffMember.ID})` : "EXPERT ASSIGNED";
+            // सुधार: नाम और आईडी दोनों को जोड़ दिया गया है
+            let staffDisplayName = staffMember ? `${staffMember.Name} [ID: ${staffMember.ID}]` : "EXPERT ASSIGNED";
 
             h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
                     <div style="display:flex; justify-content:space-between;">
@@ -283,7 +282,7 @@
                     </div>
                     <small>ID: ${c.ID} | ${c.Service || ''}</small>
                     <div style="margin-top:10px; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
-                        <small style="color:var(--danger); font-weight:bold; font-size:10px;">असाइन एक्सपर्ट:</small><br>
+                        <small style="color:var(--danger); font-weight:bold; font-size:10px;">असाइन एक्सपर्ट जानकारी:</small><br>
                         <b style="color:var(--primary); font-size:14px; text-transform:uppercase;">${staffDisplayName}</b>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:12px;">
