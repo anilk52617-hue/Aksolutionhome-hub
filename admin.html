@@ -146,30 +146,43 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
             
-            // टीम के लिए: पूरा बुकिंग फॉर्मेट (कस्टमर की डिटेल्स)
-            let teamMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
-                          `----------------------------%0A%0A` +
-                          `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
-                          `📅 *तारीख:* ${formatAsDate(cust.Date)}%0A` +
-                          `👤 *कस्टमर:* ${cust.Name}%0A` +
-                          `📞 *मोबाइल:* ${cust.Phone}%0A` +
-                          `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}%0A` +
-                          `📍 *पता:* ${cust.Address}%0A` +
-                          `🌍 *लोकेशन:* https://www.google.com/maps?q=$${encodeURIComponent(cust.Address)}%0A` +
-                          `----------------------------%0A` +
+            // सुधार: टीम के लिए सटीक गूगल मैप्स लिंक
+            let mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cust.Address)}`;
+
+            let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n` +
+                          `----------------------------\n\n` +
+                          `🆔 *बुकिंग ID:* ${cust.ID}\n` +
+                          `📅 *तारीख:* ${formatAsDate(cust.Date)}\n` +
+                          `👤 *कस्टमर:* ${cust.Name}\n` +
+                          `📞 *मोबाइल:* ${cust.Phone}\n` +
+                          `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n` +
+                          `📍 *पता:* ${cust.Address}\n` +
+                          `🌍 *लोकेशन:* ${mapLink}\n` +
+                          `----------------------------\n` +
                           `✅ *जल्द से जल्द संपर्क करें।*`;
 
-            // कस्टमर के लिए: टीम की डिटेल्स
-            let custMsg = `*AK SOLUTION HUB*%0A*एक्सपर्ट असाइन हो गया है*%0A------------------------%0Aनमस्ते, आपकी बुकिंग के लिए एक्सपर्ट असाइन कर दिया गया है।%0A%0A*नाम:* ${staff.Name}%0A*आईडी:* ${staff.ID}%0A*संपर्क:* ${staff.Phone}%0A------------------------%0A*हमारा एक्सपर्ट जल्द ही आपसे संपर्क करेगा। धन्यवाद!*`;
+            let custMsgText = `*AK SOLUTION HUB*\n` +
+                          `*एक्सपर्ट असाइन हो गया है*\n` +
+                          `------------------------\n` +
+                          `नमस्ते, आपकी बुकिंग के लिए एक्सपर्ट असाइन कर दिया गया है।\n\n` +
+                          `*नाम:* ${staff.Name}\n` +
+                          `*आईडी:* ${staff.ID}\n` +
+                          `*संपर्क:* ${staff.Phone}\n` +
+                          `------------------------\n` +
+                          `*हमारा एक्सपर्ट जल्द ही आपसे संपर्क करेगा। धन्यवाद!*`;
 
-            window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${teamMsg}`;
+            let finalTeamURL = `whatsapp://send?phone=91${staff.Phone}&text=${encodeURIComponent(teamMsgText)}`;
+            let finalCustURL = `whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsgText)}`;
+
+            window.location.href = finalTeamURL;
             
             document.getElementById('as-content').innerHTML = `
                 <div style="padding:20px; text-align:center;">
                     <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px;"></i>
-                    <h3 style="color:var(--success);">टीम को भेज दिया!</h3>
-                    <button class="status-btn" style="background:#25D366; width:100%; height:60px; font-size:16px; margin-top:10px;" 
-                        onclick="window.location.href='whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsg)}'; setTimeout(()=>location.reload(), 2000);">
+                    <h3 style="color:var(--success);">टीम को भेज दिया गया!</h3>
+                    <p style="font-size:14px; margin-bottom:10px;">अब नीचे क्लिक करके कस्टमर को जानकारी भेजें।</p>
+                    <button class="status-btn" style="background:#25D366; width:100%; height:60px; font-size:16px;" 
+                        onclick="window.location.href='${finalCustURL}'; setTimeout(()=>location.reload(), 2000);">
                         SEND TO CUSTOMER
                     </button>
                 </div>`;
@@ -251,14 +264,17 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
+    // सुधार: रनिंग लिस्ट में एक्सपर्ट की ID भी दिखाना
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            // हम 'Busy' स्टेटस वाली टीम ढूंढ रहे हैं
-            let staffMember = fullTeamData.find(st => st.Status === 'Busy'); 
-            let staffDisplayName = staffMember ? staffMember.Name : "Expert Assigned";
-            let staffID = staffMember ? staffMember.ID : "";
+            // उस स्टाफ को खोजें जिसे यह काम असाइन किया गया है (c.GPS में स्टाफ की ID स्टोर है)
+            let staffIDFromCust = c.GPS;
+            let staffMember = fullTeamData.find(st => st.ID === staffIDFromCust); 
+            
+            let staffDisplayName = staffMember ? `${staffMember.Name} (${staffMember.ID})` : "Expert Assigned";
+            let staffID = staffMember ? staffMember.ID : (staffIDFromCust || "");
 
             h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
                     <div style="display:flex; justify-content:space-between;">
@@ -276,7 +292,9 @@
                     </div>
                   </div>`;
         });
-        document.getElementById('lb').innerHTML = h || "No Running Tasks"; document.getElementById('lt').innerText = "LIVE RUNNING"; openP('list-p');
+        document.getElementById('lb').innerHTML = h || "No Running Tasks"; 
+        document.getElementById('lt').innerText = "LIVE RUNNING"; 
+        openP('list-p');
     }
 
     async function finishTask(cid, tid) {
