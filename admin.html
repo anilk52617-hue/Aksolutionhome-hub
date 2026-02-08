@@ -130,6 +130,7 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
+    // सुधार: टीम को पूरा बुकिंग फॉर्मेट और कस्टमर को साफ मैसेज
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -146,9 +147,9 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
             
-            // सुधार: टीम के लिए सटीक गूगल मैप्स लिंक
-            let mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cust.Address)}`;
+            let mapLink = `https://www.google.com/maps?q=${encodeURIComponent(cust.Address)}`;
 
+            // टीम के लिए आपका पूरा बुकिंग फॉर्मेट (बिल्कुल वैसा ही जैसा आपको चाहिए)
             let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n` +
                           `----------------------------\n\n` +
                           `🆔 *बुकिंग ID:* ${cust.ID}\n` +
@@ -157,10 +158,11 @@
                           `📞 *मोबाइल:* ${cust.Phone}\n` +
                           `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n` +
                           `📍 *पता:* ${cust.Address}\n` +
-                          `🌍 *लोकेशन:* ${mapLink}\n` +
+                          `🌍 *लोकेशन:* ${mapLink}\n\n` +
                           `----------------------------\n` +
                           `✅ *जल्द से जल्द संपर्क करें।*`;
 
+            // कस्टमर के लिए साफ संदेश
             let custMsgText = `*AK SOLUTION HUB*\n` +
                           `*एक्सपर्ट असाइन हो गया है*\n` +
                           `------------------------\n` +
@@ -264,17 +266,15 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // सुधार: रनिंग लिस्ट में एक्सपर्ट की ID भी दिखाना
+    // सुधार: रनिंग में एक्सपर्ट का नाम और आईडी दिखाना
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            // उस स्टाफ को खोजें जिसे यह काम असाइन किया गया है (c.GPS में स्टाफ की ID स्टोर है)
-            let staffIDFromCust = c.GPS;
-            let staffMember = fullTeamData.find(st => st.ID === staffIDFromCust); 
-            
-            let staffDisplayName = staffMember ? `${staffMember.Name} (${staffMember.ID})` : "Expert Assigned";
-            let staffID = staffMember ? staffMember.ID : (staffIDFromCust || "");
+            // c.GPS में स्टोर स्टाफ आईडी से उसका नाम खोजें
+            let staffID = c.GPS;
+            let staffMember = fullTeamData.find(st => st.ID === staffID); 
+            let staffDisplayName = staffMember ? `${staffMember.Name} (${staffMember.ID})` : "EXPERT ASSIGNED";
 
             h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
                     <div style="display:flex; justify-content:space-between;">
