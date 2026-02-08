@@ -130,7 +130,7 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // सुधार: टीम के लिए प्रोफेशनल मैसेज और कस्टमर को अलर्ट
+    // Assign: Sends the Original Customer Link
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -147,30 +147,20 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
             
-            // सुधार: मैप लिंक और पूरा कस्टमर फॉर्मेट
-            let mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cust.Address)}`;
+            let mapLink = cust.Address; // Customer's own link from Sheet
 
             let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n` +
-                          `----------------------------\n` +
+                          `----------------------------\n\n` +
                           `🆔 *बुकिंग ID:* ${cust.ID}\n` +
                           `📅 *तारीख:* ${formatAsDate(cust.Date)}\n\n` +
                           `👤 *कस्टमर:* ${cust.Name}\n` +
                           `📞 *मोबाइल:* ${cust.Phone}\n` +
                           `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n` +
-                          `📍 *पता:* ${cust.Address}\n` +
-                          `🌍 *लोकेशन:* ${mapLink}\n\n` +
+                          `📍 *लोकेशन:* ${mapLink}\n\n` +
                           `----------------------------\n` +
                           `✅ *जल्द से जल्द संपर्क करें।*`;
 
-            let custMsgText = `*AK SOLUTION HUB*\n` +
-                          `*एक्सपर्ट असाइन हो गया है*\n` +
-                          `------------------------\n` +
-                          `नमस्ते, आपकी बुकिंग के लिए एक्सपर्ट असाइन कर दिया गया है।\n\n` +
-                          `*नाम:* ${staff.Name}\n` +
-                          `*आईडी:* ${staff.ID}\n` +
-                          `*संपर्क:* ${staff.Phone}\n` +
-                          `------------------------\n` +
-                          `*हमारा एक्सपर्ट जल्द ही आपसे संपर्क करेगा। धन्यवाद!*`;
+            let custMsgText = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन हो गया है*\n------------------------\nनमस्ते, आपकी बुकिंग के लिए एक्सपर्ट असाइन कर दिया गया है।\n\n*नाम:* ${staff.Name}\n*आईडी:* ${staff.ID}\n*संपर्क:* ${staff.Phone}\n------------------------\n*हमारा एक्सपर्ट जल्द ही आपसे संपर्क करेगा। धन्यवाद!*`;
 
             let finalTeamURL = `whatsapp://send?phone=91${staff.Phone}&text=${encodeURIComponent(teamMsgText)}`;
             let finalCustURL = `whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsgText)}`;
@@ -181,7 +171,6 @@
                 <div style="padding:20px; text-align:center;">
                     <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px;"></i>
                     <h3 style="color:var(--success);">टीम को भेज दिया गया!</h3>
-                    <p style="font-size:14px; margin-bottom:10px;">अब नीचे क्लिक करके कस्टमर को जानकारी भेजें।</p>
                     <button class="status-btn" style="background:#25D366; width:100%; height:60px; font-size:16px;" 
                         onclick="window.location.href='${finalCustURL}'; setTimeout(()=>location.reload(), 2000);">
                         SEND TO CUSTOMER
@@ -201,11 +190,26 @@
         document.getElementById('otp-area').style.display = 'block';
     }
 
+    // Verify & Register: Fixes loader loop and shows Unique ID
     async function verifyAndRegister() {
         if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong Code!");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=registerTeam&name=${document.getElementById('rn').value}&father=${document.getElementById('rf').value}&phone=${document.getElementById('rp').value}&address=${document.getElementById('ra').value}&service=${document.getElementById('rs').value}`);
-        syncCounts(); closeP('reg-p');
+        try {
+            let response = await fetch(SCRIPT_URL + `?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`);
+            let raw = await response.text();
+            let result = JSON.parse(raw);
+            
+            await syncCounts();
+            document.getElementById('loader').style.display = 'none';
+            
+            if(result.id) alert("रजिस्ट्रेशन सफल! आपकी यूनिक आईडी है: " + result.id);
+            else alert("सफलतापूर्वक रजिस्टर हो गया!");
+            
+            closeP('reg-p');
+        } catch(e) {
+            document.getElementById('loader').style.display = 'none';
+            alert("Error in registration! Please check the list.");
+        }
     }
 
     function renderFree() {
@@ -265,14 +269,13 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // सुधार: रनिंग में एक्सपर्ट का नाम और आईडी दिखाना
+    // Running: Shows Staff Name and ID from Team List
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
             let staffID = c.GPS;
             let staffMember = fullTeamData.find(st => st.ID === staffID); 
-            // सुधार: नाम और आईडी दोनों को जोड़ दिया गया है
             let staffDisplayName = staffMember ? `${staffMember.Name} [ID: ${staffMember.ID}]` : "EXPERT ASSIGNED";
 
             h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
@@ -306,11 +309,7 @@
             ]);
             await syncCounts(); 
             closeP('list-p');
-        } catch(e) {
-            console.error("Update Error:", e);
-        } finally {
-            document.getElementById('loader').style.display = 'none';
-        }
+        } catch(e) { console.error("Update Error:", e); } finally { document.getElementById('loader').style.display = 'none'; }
     }
     
     function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
