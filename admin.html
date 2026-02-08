@@ -130,7 +130,6 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // --- FIX: ASSIGN WITH DIRECT WHATSAPP (MATCHING IMAGE) ---
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -147,18 +146,20 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
             
-            // व्हाट्सएप मैसेज फॉर्मेट इमेज के अनुसार
+            // टीम के लिए: पूरा बुकिंग फॉर्मेट (कस्टमर की डिटेल्स)
             let teamMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
                           `----------------------------%0A%0A` +
                           `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
-                          `📞 *मोबाइल:* ${cust.Phone}%0A` +
+                          `📅 *तारीख:* ${formatAsDate(cust.Date)}%0A` +
                           `👤 *कस्टमर:* ${cust.Name}%0A` +
+                          `📞 *मोबाइल:* ${cust.Phone}%0A` +
                           `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}%0A` +
                           `📍 *पता:* ${cust.Address}%0A` +
-                          `🌍 *लोकेशन:* https://www.google.com/maps?q=${encodeURIComponent(cust.Address)}%0A` +
+                          `🌍 *लोकेशन:* https://www.google.com/maps?q=$${encodeURIComponent(cust.Address)}%0A` +
                           `----------------------------%0A` +
-                          `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
+                          `✅ *जल्द से जल्द संपर्क करें।*`;
 
+            // कस्टमर के लिए: टीम की डिटेल्स
             let custMsg = `*AK SOLUTION HUB*%0A*एक्सपर्ट असाइन हो गया है*%0A------------------------%0Aनमस्ते, आपकी बुकिंग के लिए एक्सपर्ट असाइन कर दिया गया है।%0A%0A*नाम:* ${staff.Name}%0A*आईडी:* ${staff.ID}%0A*संपर्क:* ${staff.Phone}%0A------------------------%0A*हमारा एक्सपर्ट जल्द ही आपसे संपर्क करेगा। धन्यवाद!*`;
 
             window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${teamMsg}`;
@@ -250,14 +251,14 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // --- FIX: SMART RUNNING LOGIC (NAME FIX) ---
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
-            let rawStaffID = (c.GPS || "NA").toString().trim().toUpperCase();
-            let staffMember = fullTeamData.find(st => String(st.ID).trim().toUpperCase() === rawStaffID);
-            let staffDisplayName = staffMember ? staffMember.Name : "Expert (" + rawStaffID + ")";
+            // हम 'Busy' स्टेटस वाली टीम ढूंढ रहे हैं
+            let staffMember = fullTeamData.find(st => st.Status === 'Busy'); 
+            let staffDisplayName = staffMember ? staffMember.Name : "Expert Assigned";
+            let staffID = staffMember ? staffMember.ID : "";
 
             h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
                     <div style="display:flex; justify-content:space-between;">
@@ -271,14 +272,30 @@
                     </div>
                     <div style="display:flex; gap:10px; margin-top:12px;">
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                        <button onclick="finishTask('${c.ID}', '${rawStaffID}')" class="status-btn" style="background:var(--success); flex:2;">MARK DONE</button>
+                        <button onclick="finishTask('${c.ID}', '${staffID}')" class="status-btn" style="background:var(--success); flex:2;">MARK DONE</button>
                     </div>
                   </div>`;
         });
         document.getElementById('lb').innerHTML = h || "No Running Tasks"; document.getElementById('lt').innerText = "LIVE RUNNING"; openP('list-p');
     }
 
-    async function finishTask(cid, tid) { if(!confirm("Work Done?")) return; document.getElementById('loader').style.display = 'flex'; await Promise.all([fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`), (tid && tid !== "NA") ? fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()]); syncCounts(); closeP('list-p'); }
+    async function finishTask(cid, tid) {
+        if(!confirm("क्या काम पूरा हो गया है?")) return;
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            await Promise.all([
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`),
+                (tid) ? fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`) : Promise.resolve()
+            ]);
+            await syncCounts(); 
+            closeP('list-p');
+        } catch(e) {
+            console.error("Update Error:", e);
+        } finally {
+            document.getElementById('loader').style.display = 'none';
+        }
+    }
+    
     function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
     function bulkWhatsApp() { let nos = lastData.map(x => "91" + x.Phone).join(","); if(nos) window.location.href = `whatsapp://send?phone=${nos}&text=Hello`; }
 
