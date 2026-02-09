@@ -21,16 +21,14 @@
         .banner img.active { display: block; animation: fade 0.8s; }
         @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
 
-        /* NEW INDICATOR STYLE FOR CATEGORIES */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; background: var(--bg); }
         
-        /* Matching Admin Indicator Style */
         .box { 
             background: white; 
             padding: 15px 5px; 
             border-radius: 15px; 
             text-align: center; 
-            border-bottom: 4px solid #ddd; /* Admin style border */
+            border-bottom: 4px solid #ddd;
             cursor: pointer; 
             transition: 0.2s;
             display: flex;
@@ -43,7 +41,6 @@
         .box i { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
         .box span { font-size: 10px; color: #555; font-weight: bold; text-transform: uppercase; display: block; }
         
-        /* Modal & UI Elements */
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-page { display: block; }
         .input-box { width: 100%; padding: 14px; border: 2px solid #ddd; border-radius: 12px; font-size: 15px; margin-bottom: 15px; text-align: center; outline: none; }
@@ -126,11 +123,11 @@
 </div>
 
 <script>
+    // अपडेटेड यूआरएल और लॉजिक
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
 
-    // बैनर स्लाइडर
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
     setInterval(() => {
@@ -153,18 +150,7 @@
         'OTHER': ['पेंटर', 'राजमिस्त्री', 'वेल्डिंग', 'टाइल', 'गार्डन', 'हेल्पर', 'अन्य']
     };
     
-    // Borders to match Admin indicators
-    const colors = {
-        'PLUMBER':'#005eb8',
-        'ELECTRICIAN':'#f39c12',
-        'CARPENTER':'#e67e22',
-        'RO SERVICE':'#3498db',
-        'CCTV':'#e74c3c',
-        'AC SERVICE':'#1abc9c',
-        'CLEANING':'#27ae60',
-        'FITTING':'#9b59b6',
-        'OTHER':'#34495e'
-    };
+    const colors = {'PLUMBER':'#005eb8','ELECTRICIAN':'#f39c12','CARPENTER':'#e67e22','RO SERVICE':'#3498db','CCTV':'#e74c3c','AC SERVICE':'#1abc9c','CLEANING':'#27ae60','FITTING':'#9b59b6','OTHER':'#34495e'};
     const icons = {'PLUMBER':'faucet','ELECTRICIAN':'bolt','CARPENTER':'hammer','RO SERVICE':'tint','CCTV':'video','AC SERVICE':'snowflake','CLEANING':'broom','FITTING':'tools','OTHER':'plus-circle'};
 
     const grid = document.getElementById('mainGrid');
@@ -223,7 +209,9 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(addrVal)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
+            // यहाँ expertid= को खाली भेजा गया है ताकि नया कॉलम डिस्टर्ब न हो
+            let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(addrVal)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending&expertid=`;
+            
             fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
             let waMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
