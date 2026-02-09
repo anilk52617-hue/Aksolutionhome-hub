@@ -130,7 +130,7 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // Assign: Sends the Original Customer Link
+    // UPDATED ASSIGN: Now sends all data up to Column G (GPS)
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -147,7 +147,9 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
             
-            let mapLink = cust.Address; // Customer's own link from Sheet
+            // Getting Column G (GPS) and Column E (Address) explicitly
+            let mapLink = cust.GPS || 'लिंक उपलब्ध नहीं है'; 
+            let addressInfo = cust.Address || 'पता उपलब्ध नहीं है';
 
             let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n` +
                           `----------------------------\n\n` +
@@ -156,7 +158,8 @@
                           `👤 *कस्टमर:* ${cust.Name}\n` +
                           `📞 *मोबाइल:* ${cust.Phone}\n` +
                           `🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n` +
-                          `📍 *लोकेशन:* ${mapLink}\n\n` +
+                          `📍 *पता:* ${addressInfo}\n` +
+                          `🌐 *जीपीएस लिंक:* ${mapLink}\n\n` +
                           `----------------------------\n` +
                           `✅ *जल्द से जल्द संपर्क करें।*`;
 
@@ -190,7 +193,6 @@
         document.getElementById('otp-area').style.display = 'block';
     }
 
-    // Verify & Register: Fixes loader loop and shows Unique ID
     async function verifyAndRegister() {
         if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong Code!");
         document.getElementById('loader').style.display = 'flex';
@@ -269,7 +271,6 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // Running: Shows Staff Name and ID from Team List
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
