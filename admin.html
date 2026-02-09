@@ -236,9 +236,12 @@
             let staffID = "NA";
             let staffDisplayName = "EXPERT ASSIGNED";
 
-            // यहाँ आईडी निकालने का लॉजिक है
+            // यहाँ आईडी निकालने का लॉजिक है - यह GPS कॉलम में 'T-' वाली ID ढूंढेगा
             if (gData.includes("|")) {
                 staffID = gData.split("|").pop().trim();
+            } else if (gData.includes("T-")) {
+                let match = gData.match(/T-\d+/);
+                if(match) staffID = match[0];
             } else if (gData.startsWith("T-")) {
                 staffID = gData;
             }
@@ -267,18 +270,27 @@
     }
 
     async function finishTask(cid, tid) {
-        if(!confirm(`क्या काम पूरा हो गया है?\nID: ${cid}`)) return;
+        if(!confirm(`क्या काम पूरा हो गया है?\nकस्टमर ID: ${cid}`)) return;
         document.getElementById('loader').style.display = 'flex';
         try {
+            // स्टेप 1: कस्टमर को Done करना
             let updates = [fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`)];
-            if (tid && tid !== "NA") {
+            
+            // स्टेप 2: अगर स्टाफ ID मिली है, तो उसे Free करना
+            if (tid && tid !== "NA" && tid !== "undefined") {
                 updates.push(fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`));
             }
+            
             await Promise.all(updates);
             await syncCounts(); 
             closeP('list-p');
-            alert("सफल! कस्टमर 'Done' और स्टाफ 'Free' हुआ।");
-        } catch(e) { console.error(e); } finally { document.getElementById('loader').style.display = 'none'; }
+            alert("सफलतापूर्वक अपडेट हुआ!");
+        } catch(e) { 
+            console.error(e); 
+            alert("त्रुटि: अपडेट विफल रहा।");
+        } finally { 
+            document.getElementById('loader').style.display = 'none'; 
+        }
     }
     
     function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
