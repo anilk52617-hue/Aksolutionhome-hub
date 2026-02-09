@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - FINAL STABLE</title>
+    <title>AK MASTER ADMIN - FINAL PROFESSIONAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -11,26 +11,27 @@
         :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; }
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         body { background: #eef2f7; padding-bottom: 50px; }
-        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; }
+        .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; }
+        .ind-box:active { transform: scale(0.95); }
         .ind-box b { font-size: 18px; color: var(--dark); display: block; }
         .ind-box span { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
         .manual-box { background: white; margin: 0 15px 20px; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dde; border-radius: 10px; text-align: center; outline: none; }
+        .input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #dde; border-radius: 10px; text-align: center; outline: none; font-size: 14px; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .status-btn { padding: 10px; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 11px; text-align: center; text-decoration: none; display:flex; align-items:center; justify-content:center; gap:5px; }
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
-        .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:5px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:8px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
         .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
         .panel-box i { font-size: 22px; margin-bottom: 5px; }
         .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
 
-        /* ID Card Styles Same as before */
-        #id-card-render { width: 300px; height: 460px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; }
+        /* ORIGINAL PROFESSIONAL ID CARD DESIGN */
+        #id-card-render { width: 300px; height: 460px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
         #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
         .v-stamp-new { position: absolute; width: 75px; height: 75px; border: 2px solid rgba(0, 94, 184, 0.7); border-radius: 50%; top: 100px; right: 45px; z-index: 10; transform: rotate(-15deg); display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); color: rgba(0, 94, 184, 0.8); font-weight: bold; }
@@ -44,7 +45,7 @@
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • STABLE VERSION</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • PROFESSIONAL STABLE</p>
 </div>
 
 <div class="indicator-grid">
@@ -75,18 +76,16 @@
     <div class="panel-box" style="background:#34495e" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
-<div id="as-p" class="modal"><div class="modal-content" id="as-content">
+<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()"><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
+
+<div id="as-p" class="modal"><div class="modal-content">
     <h3>Assign Expert</h3>
     <div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px; text-align:left; background:#f9f9f9;"></div>
     <input id="as-tid" class="input" placeholder="Staff ID" readonly>
     <input id="as-cid" class="input" placeholder="Customer ID">
-    <button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN</button>
-    <button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none; cursor:pointer;">CANCEL</button>
+    <button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN & NOTIFY</button>
+    <button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none; font-weight:bold;">CANCEL</button>
 </div></div>
-
-<div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div style="display: flex; gap: 5px; margin: 10px 0;"><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()" style="margin-bottom:0; flex:3;"><button onclick="bulkWhatsApp()" class="status-btn" style="background:#25D366; flex:1; font-size:10px;"><i class="fab fa-whatsapp"></i> ALL</button></div><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
-
-<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP ON WHATSAPP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button></div></div>
 
 <div id="id-p" class="modal"><div class="modal-content">
     <h3>ID Generator</h3>
@@ -100,18 +99,18 @@
         <div style="position:absolute; bottom:45px; right:25px; text-align:center;"><div class="v-sign-text">Anil Kumar</div><div style="font-size:8px; font-weight:bold; border-top:1px solid #333; padding-top:2px; width:90px;">Authorized Sign</div></div>
         <div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div>
     </div>
-    <input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div>
+    <input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">TAKE PHOTO</button></div>
     <input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)">
     <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button>
     <button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button>
 </div></div>
 
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER NOW</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button></div></div>
+
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAsPogHhTu6kk8jh_cTgjrWFcHvJ4qGjMHMDUBWVpBrZsMT-FIgCEl5_n6yQCTP4anXA/exec";
-    let fullCustData = [], fullTeamData = [], lastData = [], lastType = "";
+    let fullCustData = [], fullTeamData = [], currentGeneratedOTP = "";
 
-    function formatAsDate(input) { if(!input) return ""; let d = new Date(input); return isNaN(d.getTime()) ? String(input).split('T')[0].trim() : `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; }
-    
     async function syncCounts() {
         document.getElementById('loader').style.display = 'flex';
         try {
@@ -126,16 +125,52 @@
     }
 
     function updateDashboard() {
-        let todayStr = formatAsDate(new Date());
-        document.getElementById('c-today-new').innerText = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending').length;
-        document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
+        document.getElementById('c-today-new').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
         document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
         document.getElementById('c-total').innerText = fullCustData.length;
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // FIXED: Single action to link Cust & Team in Column I
+    // RUNNING DETAILED VIEW
+    function loadRunningDetailed() {
+        let running = fullCustData.filter(x => x.Status === 'Running');
+        let h = "";
+        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>कोई काम रनिंग नहीं है।</p>"; openP('list-p'); return; }
+        
+        running.forEach(c => {
+            let staffID = c.TeamID || "N/A"; 
+            let staff = fullTeamData.find(s => s.ID === staffID);
+            let staffName = staff ? staff.Name : "ID: " + staffID;
+            
+            h += `<div class="data-card" style="border-left:8px solid var(--running);">
+                    <b>CUST: ${c.Name} [${c.ID}]</b><br>
+                    <div style="margin:8px 0; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db; font-size:12px;">
+                        असाइन एक्सपर्ट: <b>${staffName} [${staffID}]</b>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i> CALL</a>
+                        <button onclick="finishTask('${c.ID}', '${staffID}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE TEAM</button>
+                    </div>
+                  </div>`;
+        });
+        document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "LIVE RUNNING"; openP('list-p');
+    }
+
+    async function finishTask(cid, tid) {
+        if(!confirm(`काम पूरा हो गया? टीम ${tid} फ्री कर दी जाएगी।`)) return;
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            await Promise.all([
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`),
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`)
+            ]);
+            await syncCounts(); loadRunningDetailed();
+        } catch(e) { alert("Error updating status!"); } 
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
+
+    // PROFESSIONAL ASSIGN WITH TWO-WAY WHATSAPP
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -146,107 +181,122 @@
 
         document.getElementById('loader').style.display = 'flex';
         try {
-            // One call to handle both (ensure your Apps Script handles &teamid=)
             await Promise.all([
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
-            
+
+            let teamMsg = `*AK SOLUTION HUB - NEW JOB*%0A` +
+                          `--------------------------------%0A` +
+                          `🚀 *नया काम असाइन हुआ है*%0A%0A` +
+                          `🆔 *ID:* ${cust.ID}%0A` +
+                          `👤 *Cust:* ${encodeURIComponent(cust.Name)}%0A` +
+                          `📞 *Mob:* ${cust.Phone}%0A` +
+                          `📍 *Add:* ${encodeURIComponent(cust.Address || '-')}%0A` +
+                          `🔧 *Work:* ${encodeURIComponent(cust.Service || 'General')}%0A` +
+                          `--------------------------------%0A` +
+                          `📢 *Note:* तुरंत कस्टमर से बात करें।`;
+
+            let custMsg = `*AK SOLUTION HUB - UPDATE*%0A` +
+                          `--------------------------------%0A` +
+                          `✅ *नमस्ते ${encodeURIComponent(cust.Name)}*,%0A%0A` +
+                          `आपकी बुकिंग के लिए हमारे एक्सपर्ट को असाइन कर दिया गया है।%0A%0A` +
+                          `👨‍🔧 *Expert Name:* ${encodeURIComponent(staff.Name)}%0A` +
+                          `🆔 *Staff ID:* ${staff.ID}%0A` +
+                          `📞 *Contact:* ${staff.Phone}%0A%0A` +
+                          `वे जल्द ही आपसे संपर्क करेंगे। धन्यवाद।`;
+
             await syncCounts();
-            alert("असाइनमेंट सफल!");
+            window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${teamMsg}`;
+            
+            setTimeout(() => {
+                if(confirm("टीम को जानकारी भेज दी गई। क्या अब कस्टमर को अपडेट भेजें?")) {
+                    window.location.href = `whatsapp://send?phone=91${cust.Phone}&text=${custMsg}`;
+                }
+            }, 3500);
             closeP('as-p');
         } catch(e) { alert("Error!"); } 
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    // FIXED: Running panel linking Cust to Team via Column I
-    function loadRunningDetailed() {
-        let running = fullCustData.filter(x => x.Status === 'Running');
-        let h = "";
-        if (!running.length) { 
-            document.getElementById('lb').innerHTML = "<p style='padding:20px;'>कोई काम रनिंग नहीं है।</p>"; 
-            openP('list-p'); return; 
-        }
-
-        running.forEach(c => {
-            let staffID = c.TeamID || c.ExpertID || "N/A"; 
-            let staff = fullTeamData.find(s => s.ID === staffID);
-            let staffName = staff ? staff.Name : "ID: " + staffID;
-            
-            h += `<div class="data-card" style="border-left:8px solid var(--running);">
-                    <b>CUST: ${c.Name} [${c.ID}]</b><br>
-                    <div style="margin:10px 0; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
-                        <small>असाइन एक्सपर्ट (TEAM):</small><br><b>${staffName} [${staffID}]</b>
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                        <button onclick="finishTask('${c.ID}', '${staffID}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE TEAM</button>
-                    </div>
-                  </div>`;
-        });
-        document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "LIVE RUNNING"; openP('list-p');
-    }
-
-    // FIXED: Finish task frees both Cust and Team at once
-    async function finishTask(cid, tid) {
-        if(!confirm(`काम पूरा? टीम ${tid} फ्री हो जाएगी।`)) return;
-        document.getElementById('loader').style.display = 'flex';
-        try {
-            await Promise.all([
-                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`),
-                fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`)
-            ]);
-            await syncCounts(); 
-            loadRunningDetailed();
-        } catch(e) { alert("Error!"); } 
-        finally { document.getElementById('loader').style.display = 'none'; }
-    }
-
-    function renderFree() {
-        let b = document.getElementById('staff-picker-box'); b.innerHTML = "";
-        let free = fullTeamData.filter(x => x.Status === 'Free');
-        if(!free.length) { b.innerHTML = "<p style='padding:10px; color:red;'>कोई एक्सपर्ट खाली नहीं है</p>"; return; }
-        free.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:white;">🟢 ${t.Name} (${t.ID})</div>`; });
-    }
-
     function renderDataList(d, t, skipModal = false) {
-        lastData = d; lastType = t; let h = "";
+        d.sort((a, b) => {
+            let p = t === 'TEAM' ? 'Free' : 'Pending';
+            if (a.Status === p && b.Status !== p) return -1;
+            if (a.Status !== p && b.Status === p) return 1;
+            return 0;
+        });
+        let h = "";
         d.forEach(i => {
-            let sb = ""; let cc = "var(--primary)";
-            if(t === 'TEAM') {
-                if(i.Status === 'Free') { sb = "<span style='color:var(--success); font-weight:bold; font-size:10px;'>🟢 FREE</span>"; cc = "var(--success)"; }
-                else { sb = "<span style='color:var(--danger); font-weight:bold; font-size:10px;'>🔴 BUSY</span>"; cc = "var(--danger)"; }
-            } else { cc = i.Status === 'Done' ? 'var(--success)' : (i.Status === 'Running' ? 'var(--running)' : 'var(--danger)'); }
-            h += `<div class="data-card" style="border-left:5px solid ${cc};">
-                    <div style="display:flex; justify-content:space-between;"><b>${i.Name}</b> ${sb}</div>
+            let cc = (t==='TEAM') ? (i.Status==='Free'?'var(--success)':'var(--danger)') : (i.Status==='Done'?'var(--success)':(i.Status==='Running'?'var(--running)':'var(--danger)'));
+            h += `<div class="data-card" style="border-left-color:${cc};">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <b>${t==='TEAM'?'● ':''}${i.Name}</b>
+                        <span style="font-size:10px; font-weight:bold; background:#f0f0f0; padding:2px 8px; border-radius:10px;">${i.Status}</span>
+                    </div>
                     <small>ID: ${i.ID} | ${i.Service || ''}</small>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                        ${(i.Status==='Pending' && t==='CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : ''}
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i> CALL</a>
+                        <a href="https://wa.me/91${i.Phone}" target="_blank" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i> CHAT</a>
+                        ${(t==='CUST' && i.Status==='Pending') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : ''}
                     </div>
                   </div>`;
         });
-        document.getElementById('lb').innerHTML = h || "No Data"; document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
+        document.getElementById('lb').innerHTML = h || "कोई डेटा नहीं मिला";
+        document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
         if(!skipModal) openP('list-p');
     }
 
-    // Helper functions for OTP and ID card (kept same)
+    // ID CARD FUNCTIONS
+    function loadIDData() {
+        let tid = document.getElementById('id-tid').value.toUpperCase().trim();
+        let s = fullTeamData.find(x => x.ID === tid);
+        if(!s) return alert("ID नहीं मिली!");
+        document.getElementById('v-name').innerText = s.Name;
+        document.getElementById('v-id').innerText = "ID: " + s.ID;
+        document.getElementById('v-father').innerText = s.Father || "-";
+        document.getElementById('v-phone').innerText = s.Phone;
+        document.getElementById('v-address').innerText = s.Address || "-";
+        document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase();
+        document.getElementById('id-qr').innerHTML = "";
+        new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 });
+    }
+    function previewFile(e) { let r = new FileReader(); r.onload = function(){ document.getElementById('v-img').src = r.result; }; r.readAsDataURL(e.target.files[0]); }
+    function downloadID() { html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(c => { let l = document.createElement('a'); l.download = 'AK-ID-CARD.png'; l.href = c.toDataURL(); l.click(); }); }
+
+    // UTILS
+    function searchInList() {
+        let input = document.getElementById('listSearch').value.toUpperCase();
+        let cards = document.getElementsByClassName('data-card');
+        for (let i = 0; i < cards.length; i++) {
+            cards[i].style.display = cards[i].innerText.toUpperCase().indexOf(input) > -1 ? "" : "none";
+        }
+    }
     function handleOTP() {
         let p = document.getElementById('rp').value;
-        let n = document.getElementById('rn').value;
-        if(p.length < 10 || !n) return alert("नाम और नंबर डालें!");
-        let otp = Math.floor(1000 + Math.random() * 9000);
-        window.location.href = `whatsapp://send?phone=91${p}&text=नमस्ते *${n}*, आपका AK SOLUTION कोड है: *${otp}*`;
+        if(p.length < 10) return alert("नंबर सही डालें");
+        currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
+        window.location.href = `whatsapp://send?phone=91${p}&text=AK SOLUTION Registration OTP is: ${currentGeneratedOTP}`;
         document.getElementById('otp-area').style.display = 'block';
     }
-
+    async function verifyAndRegister() {
+        if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("OTP गलत है");
+        document.getElementById('loader').style.display = 'flex';
+        let url = `${SCRIPT_URL}?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`;
+        try { await fetch(url); alert("Registered Success!"); closeP('reg-p'); syncCounts(); } catch(e) { alert("Done! Check List."); syncCounts(); closeP('reg-p'); }
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
+    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
+    function renderFree() {
+        let b = document.getElementById('staff-picker-box'); b.innerHTML = "";
+        fullTeamData.filter(x => x.Status === 'Free').forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:#fff;">🟢 ${t.Name} (${t.ID})</div>`; });
+    }
     function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
     function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
-    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
-    
+
     window.onload = syncCounts;
 </script>
 </body>
