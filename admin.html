@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V11 FINAL FIXED</title>
+    <title>AK MASTER ADMIN - V11 FINAL UPDATED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -143,8 +143,8 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
-            let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n----------------------------\n🆔 *बुकिंग ID:* ${cust.ID}\n👤 *कस्टमर:* ${cust.Name}\n🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n📍 *पता:* ${cust.Address}\n----------------------------`;
-            let custMsgText = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन्ड*\n------------------------\n*नाम:* ${staff.Name}\n*आईडी:* ${staff.ID}\n*संपर्क:* ${staff.Phone}\n------------------------`;
+            let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n----------------------------\n🆔 *बुकिंग ID:* ${cust.ID}\n👤 *कस्टमर:* ${cust.Name}\n📞 *मोबाइल:* ${cust.Phone}\n🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n📍 *पता:* ${cust.Address}\n🌐 *जीपीएस लिंक:* ${cust.GPS || 'Link'}\n----------------------------`;
+            let custMsgText = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन हो गया है*\n------------------------\n*नाम:* ${staff.Name}\n*आईडी:* ${staff.ID}\n*संपर्क:* ${staff.Phone}\n------------------------`;
             window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${encodeURIComponent(teamMsgText)}`;
             document.getElementById('as-content').innerHTML = `<div style="padding:20px; text-align:center;"><i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px;"></i><h3 style="color:var(--success);">टीम को भेज दिया गया!</h3><button class="status-btn" style="background:#25D366; width:100%; height:60px;" onclick="window.location.href='whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsgText)}'; setTimeout(()=>location.reload(), 2000);">SEND TO CUSTOMER</button></div>`;
         } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
@@ -155,7 +155,7 @@
         let n = document.getElementById('rn').value;
         if(p.length < 10 || !n) return alert("नाम और नंबर डालें!");
         currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
-        window.location.href = `whatsapp://send?phone=91${p}&text=नमस्ते *${n}*, आपका AK कोड है: *${currentGeneratedOTP}*`;
+        window.location.href = `whatsapp://send?phone=91${p}&text=नमस्ते *${n}*, आपका AK SOLUTION कोड है: *${currentGeneratedOTP}*`;
         document.getElementById('otp-area').style.display = 'block';
     }
 
@@ -165,7 +165,7 @@
         try {
             await fetch(SCRIPT_URL + `?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`);
             await syncCounts();
-            alert("रजिस्टर सफल!");
+            alert("सफलतापूर्वक रजिस्टर हो गया!");
             closeP('reg-p');
         } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
@@ -227,36 +227,47 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // 🔥 सुधारा गया रनिंग पैनल - जो अब आईडी को पहचानेगा 🔥
+    // --- सुधारा गया रनिंग पैनल लॉजिक (टाइमर और फिक्सड आईडी लिंक के साथ) ---
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
+        
+        if (running.length === 0) {
+            document.getElementById('lb').innerHTML = "<div style='padding:20px; text-align:center;'>कोई रनिंग टास्क नहीं है।</div>";
+            document.getElementById('lt').innerText = "LIVE RUNNING";
+            openP('list-p');
+            return;
+        }
+
         running.forEach(c => {
             let gData = String(c.GPS || "").trim();
             let staffID = "NA";
-            let staffDisplayName = "EXPERT ASSIGNED";
+            let staffName = "EXPERT ASSIGNED";
 
-            // यहाँ आईडी निकालने का लॉजिक है - यह GPS कॉलम में 'T-' वाली ID ढूंढेगा
-            if (gData.includes("|")) {
-                staffID = gData.split("|").pop().trim();
-            } else if (gData.includes("T-")) {
-                let match = gData.match(/T-\d+/);
-                if(match) staffID = match[0];
-            } else if (gData.startsWith("T-")) {
-                staffID = gData;
+            // ID ढूंढने का पक्का तरीका (Regex)
+            let idMatch = gData.match(/T-\d+/); 
+            if (idMatch) {
+                staffID = idMatch[0];
+                let staff = fullTeamData.find(s => s.ID === staffID);
+                staffName = staff ? staff.Name : "ID: " + staffID;
             }
 
-            if (staffID !== "NA") {
-                let st = fullTeamData.find(s => s.ID === staffID);
-                staffDisplayName = st ? `${st.Name} [${staffID}]` : `ID: ${staffID}`;
-            }
+            // टाइमर कैलकुलेशन
+            let startTime = new Date(c.Date);
+            let now = new Date();
+            let diffMs = now - startTime;
+            let diffMins = Math.floor(diffMs / 60000);
+            let timeLabel = diffMins > 60 ? Math.floor(diffMins/60) + "h " + (diffMins%60) + "m" : diffMins + "m";
 
-            h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
-                    <div style="display:flex; justify-content:space-between;"><b>कस्टमर: ${c.Name}</b><span style="color:var(--running); font-size:10px; font-weight:bold;">● RUNNING</span></div>
+            h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fff; position:relative;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <b>${c.Name}</b>
+                        <span style="color:var(--danger); font-size:10px; font-weight:bold;"><i class="fas fa-clock"></i> ${timeLabel}</span>
+                    </div>
                     <small>ID: ${c.ID} | ${c.Service || ''}</small>
-                    <div style="margin-top:10px; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
-                        <small style="color:var(--danger); font-weight:bold; font-size:10px;">असाइन एक्सपर्ट जानकारी:</small><br>
-                        <b style="color:var(--primary); font-size:14px; text-transform:uppercase;">${staffDisplayName}</b>
+                    <div style="margin:10px 0; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
+                        <small style="color:#777; font-weight:bold; font-size:9px;">असाइन एक्सपर्ट:</small><br>
+                        <b style="color:var(--primary); font-size:14px;">${staffName} [${staffID}]</b>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:12px;">
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
@@ -264,33 +275,27 @@
                     </div>
                   </div>`;
         });
-        document.getElementById('lb').innerHTML = h || "No Running Tasks"; 
-        document.getElementById('lt').innerText = "LIVE RUNNING"; 
+        document.getElementById('lb').innerHTML = h; 
+        document.getElementById('lt').innerText = "LIVE RUNNING (" + running.length + ")"; 
         openP('list-p');
     }
 
     async function finishTask(cid, tid) {
-        if(!confirm(`क्या काम पूरा हो गया है?\nकस्टमर ID: ${cid}`)) return;
+        if(!confirm(`क्या काम पूरा हो गया है?\nID: ${cid}`)) return;
         document.getElementById('loader').style.display = 'flex';
         try {
-            // स्टेप 1: कस्टमर को Done करना
             let updates = [fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`)];
             
-            // स्टेप 2: अगर स्टाफ ID मिली है, तो उसे Free करना
-            if (tid && tid !== "NA" && tid !== "undefined") {
+            // अगर वैलिड एक्सपर्ट आईडी है, तो उसे फ्री करें
+            if (tid && tid !== "NA" && tid.startsWith("T-")) {
                 updates.push(fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`));
             }
             
             await Promise.all(updates);
             await syncCounts(); 
-            closeP('list-p');
-            alert("सफलतापूर्वक अपडेट हुआ!");
-        } catch(e) { 
-            console.error(e); 
-            alert("त्रुटि: अपडेट विफल रहा।");
-        } finally { 
-            document.getElementById('loader').style.display = 'none'; 
-        }
+            loadRunningDetailed(); // लिस्ट को ताज़ा करें
+            alert("सफलतापूर्वक अपडेट हो गया!");
+        } catch(e) { console.error(e); alert("सर्वर एरर!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
     
     function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
