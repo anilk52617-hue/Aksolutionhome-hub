@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - FIXED</title>
+    <title>AK MASTER ADMIN - FINAL</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -43,7 +43,7 @@
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • REPAIRED VERSION</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • FINAL VERSION</p>
 </div>
 
 <div class="indicator-grid">
@@ -106,7 +106,7 @@
 </div></div>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAsPogHhTu6kk8jh_cTgjrWFcHvJ4qGjMHMDUBWVpBrZsMT-FIgCEl5_n6yQCTP4anXA/exec";
     let fullCustData = [], fullTeamData = [], lastData = [], lastType = "", currentGeneratedOTP = "";
 
     function formatAsDate(input) { if(!input) return ""; let d = new Date(input); return isNaN(d.getTime()) ? String(input).split('T')[0].trim() : `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; }
@@ -134,7 +134,7 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // --- ASSIGN (Uses TeamID for Col I) ---
+    // POINT 3: Dual WhatsApp Message Logic
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -149,32 +149,48 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
+            
+            let teamMsg = `*AK SOLUTION - NEW TASK*%0A🆔 *ID:* ${cust.ID}%0A👤 *Cust:* ${encodeURIComponent(cust.Name)}%0A📞 *Mob:* ${cust.Phone}%0A📍 *Add:* ${encodeURIComponent(cust.Address)}%0A🌍 *Map:* ${encodeURIComponent(cust.GPS)}`;
+            let custMsg = `*AK SOLUTION HUB - UPDATE*%0A✅ नमस्ते *${encodeURIComponent(cust.Name)}*,%0Aआपकी बुकिंग (ID: ${cust.ID}) के लिए हमारे एक्सपर्ट *${encodeURIComponent(staff.Name)}* (ID: ${staff.ID}) को असाइन कर दिया गया है। वे जल्द आपसे संपर्क करेंगे।`;
+
             await syncCounts();
-            let teamMsg = `*AK SOLUTION - NEW TASK*%0A🆔 *ID:* ${cust.ID}%0A👤 *Cust:* ${encodeURIComponent(cust.Name)}%0A🌍 *Map:* ${encodeURIComponent(cust.GPS)}`;
+            
+            // First Message to Team
             window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${teamMsg}`;
+            
+            // Second Message to Customer after delay
+            setTimeout(() => {
+                if(confirm("अब कस्टमर को कन्फर्मेशन मैसेज भेजें?")) {
+                    window.location.href = `whatsapp://send?phone=91${cust.Phone}&text=${custMsg}`;
+                }
+            }, 3000);
+
             closeP('as-p');
         } catch(e) { alert("Error!"); } 
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    // --- RUNNING PANEL (Reading Col I) ---
+    // POINT 1: Running Panel with Cust + Team details
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>कोई काम रनिंग नहीं है।</p>"; openP('list-p'); return; }
 
         running.forEach(c => {
+            let custID = c.ID || "NA";
+            let custName = c.Name || "Unknown";
             let staffID = c.ExpertID || c.TeamID || "NA"; 
             let staff = fullTeamData.find(s => s.ID === staffID);
             let staffName = staff ? staff.Name : "ID: " + staffID;
+            
             h += `<div class="data-card" style="border-left:8px solid var(--running);">
-                    <b>${c.Name}</b> (${c.ID})<br>
+                    <b>CUST: ${custName} [${custID}]</b><br>
                     <div style="margin:10px 0; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
-                        <small>असाइन एक्सपर्ट:</small><br><b>${staffName} [${staffID}]</b>
+                        <small>असाइन एक्सपर्ट (TEAM):</small><br><b>${staffName} [${staffID}]</b>
                     </div>
                     <div style="display:flex; gap:10px;">
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
-                        <button onclick="finishTask('${c.ID}', '${staffID}')" class="status-btn" style="background:var(--success); flex:2;">DONE</button>
+                        <button onclick="finishTask('${custID}', '${staffID}')" class="status-btn" style="background:var(--success); flex:2;">DONE</button>
                     </div>
                   </div>`;
         });
@@ -193,7 +209,6 @@
         } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    // --- OTP & REGISTRATION (FIXED PEHIA PROBLEM) ---
     function handleOTP() {
         let p = document.getElementById('rp').value;
         let n = document.getElementById('rn').value;
@@ -203,29 +218,33 @@
         document.getElementById('otp-area').style.display = 'block';
     }
 
+    // POINT 2: Registration OTP + Unique ID + Reset
     async function verifyAndRegister() {
         if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("गलत कोड!");
-        document.getElementById('loader').style.display = 'flex'; // पहिया चालू
+        document.getElementById('loader').style.display = 'flex';
         try {
             let res = await fetch(SCRIPT_URL + `?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`);
             let data = await res.json();
+            
+            if(data.status === "success" || data.id) {
+                alert(`सफलतापूर्वक रजिस्टर हो गया!\nआपकी यूनिक ID है: ${data.id}`);
+                closeP('reg-p');
+                ['rn','rf','rp','ra','rs','otp-val'].forEach(id => document.getElementById(id).value = "");
+                document.getElementById('otp-area').style.display = 'none';
+            } else {
+                alert("रजिस्ट्रेशन सफल नहीं हुआ।");
+            }
             await syncCounts(); 
-            alert(`सफलतापूर्वक रजिस्टर हो गया!\nID: ${data.id || 'चेक लिस्ट'}`);
-            closeP('reg-p');
-            // फॉर्म साफ़ करें
-            ['rn','rf','rp','ra','rs','otp-val'].forEach(id => document.getElementById(id).value = "");
-            document.getElementById('otp-area').style.display = 'none';
         } catch(e) { 
             console.error(e);
-            alert("सफलतापूर्वक रजिस्टर हो गया! (नेटवर्क की वजह से पहिया घूम रहा था, अब बंद हो जाएगा)"); 
+            alert("प्रोसेस पूरा हुआ! कृपया टीम लिस्ट चेक करें।"); 
             syncCounts();
             closeP('reg-p');
         } finally { 
-            document.getElementById('loader').style.display = 'none'; // पहिया बंद (किसी भी हाल में)
+            document.getElementById('loader').style.display = 'none';
         }
     }
 
-    // Helper Functions
     function renderFree() {
         let b = document.getElementById('staff-picker-box'); b.innerHTML = "";
         let free = fullTeamData.filter(x => x.Status === 'Free');
