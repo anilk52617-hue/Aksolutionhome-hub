@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V11 FINAL UPDATED</title>
+    <title>AK MASTER ADMIN - V11 FINAL FIXED</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -143,8 +143,8 @@
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
-            let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n----------------------------\n🆔 *बुकिंग ID:* ${cust.ID}\n👤 *कस्टमर:* ${cust.Name}\n📞 *मोबाइल:* ${cust.Phone}\n🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n📍 *पता:* ${cust.Address}\n🌐 *जीपीएस लिंक:* ${cust.GPS || 'Link'}\n----------------------------`;
-            let custMsgText = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन हो गया है*\n------------------------\n*नाम:* ${staff.Name}\n*आईडी:* ${staff.ID}\n*संपर्क:* ${staff.Phone}\n------------------------`;
+            let teamMsgText = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n----------------------------\n🆔 *बुकिंग ID:* ${cust.ID}\n👤 *कस्टमर:* ${cust.Name}\n🛠️ *सर्विस:* ${cust.Service || 'FIELD EXPERT'}\n📍 *पता:* ${cust.Address}\n----------------------------`;
+            let custMsgText = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन्ड*\n------------------------\n*नाम:* ${staff.Name}\n*आईडी:* ${staff.ID}\n*संपर्क:* ${staff.Phone}\n------------------------`;
             window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${encodeURIComponent(teamMsgText)}`;
             document.getElementById('as-content').innerHTML = `<div style="padding:20px; text-align:center;"><i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px;"></i><h3 style="color:var(--success);">टीम को भेज दिया गया!</h3><button class="status-btn" style="background:#25D366; width:100%; height:60px;" onclick="window.location.href='whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsgText)}'; setTimeout(()=>location.reload(), 2000);">SEND TO CUSTOMER</button></div>`;
         } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
@@ -155,7 +155,7 @@
         let n = document.getElementById('rn').value;
         if(p.length < 10 || !n) return alert("नाम और नंबर डालें!");
         currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
-        window.location.href = `whatsapp://send?phone=91${p}&text=नमस्ते *${n}*, आपका AK SOLUTION कोड है: *${currentGeneratedOTP}*`;
+        window.location.href = `whatsapp://send?phone=91${p}&text=नमस्ते *${n}*, आपका AK कोड है: *${currentGeneratedOTP}*`;
         document.getElementById('otp-area').style.display = 'block';
     }
 
@@ -165,7 +165,7 @@
         try {
             await fetch(SCRIPT_URL + `?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`);
             await syncCounts();
-            alert("सफलतापूर्वक रजिस्टर हो गया!");
+            alert("रजिस्टर सफल!");
             closeP('reg-p');
         } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
@@ -227,24 +227,25 @@
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
     
-    // --- सुधारा गया रनिंग पैनल लॉजिक ---
+    // 🔥 सुधारा गया रनिंग पैनल - जो अब आईडी को पहचानेगा 🔥
     function loadRunningDetailed() {
         let running = fullCustData.filter(x => x.Status === 'Running');
         let h = "";
         running.forEach(c => {
             let gData = String(c.GPS || "").trim();
             let staffID = "NA";
-            let staffName = "EXPERT ASSIGNED";
+            let staffDisplayName = "EXPERT ASSIGNED";
 
-            if (gData.startsWith("T-") && gData.length < 12 && !gData.includes("http")) {
-                staffID = gData;
-            } else if (gData.includes("|")) {
+            // यहाँ आईडी निकालने का लॉजिक है
+            if (gData.includes("|")) {
                 staffID = gData.split("|").pop().trim();
+            } else if (gData.startsWith("T-")) {
+                staffID = gData;
             }
 
             if (staffID !== "NA") {
-                let staff = fullTeamData.find(s => s.ID === staffID);
-                staffName = staff ? `${staff.Name} [${staffID}]` : `ID: ${staffID}`;
+                let st = fullTeamData.find(s => s.ID === staffID);
+                staffDisplayName = st ? `${st.Name} [${staffID}]` : `ID: ${staffID}`;
             }
 
             h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fdfdfd;">
@@ -252,7 +253,7 @@
                     <small>ID: ${c.ID} | ${c.Service || ''}</small>
                     <div style="margin-top:10px; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
                         <small style="color:var(--danger); font-weight:bold; font-size:10px;">असाइन एक्सपर्ट जानकारी:</small><br>
-                        <b style="color:var(--primary); font-size:14px; text-transform:uppercase;">${staffName}</b>
+                        <b style="color:var(--primary); font-size:14px; text-transform:uppercase;">${staffDisplayName}</b>
                     </div>
                     <div style="display:flex; gap:10px; margin-top:12px;">
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
@@ -276,7 +277,7 @@
             await Promise.all(updates);
             await syncCounts(); 
             closeP('list-p');
-            alert("सफलतापूर्वक अपडेट हो गया!");
+            alert("सफल! कस्टमर 'Done' और स्टाफ 'Free' हुआ।");
         } catch(e) { console.error(e); } finally { document.getElementById('loader').style.display = 'none'; }
     }
     
