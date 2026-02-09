@@ -25,16 +25,11 @@
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
         .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:8px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        
-        /* LED Indicator Style */
         .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
-        
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
         .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
         .panel-box i { font-size: 22px; margin-bottom: 5px; }
         .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
-
-        /* ID CARD DESIGN MAINTAINED */
         #id-card-render { width: 300px; height: 460px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
         #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
@@ -114,13 +109,11 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // UPDATED: DATA LIST WITH LED INDICATORS
     function renderDataList(d, t) {
         let h = "";
         d.forEach(i => {
             let dotColor = "gray";
             let status = i.Status || "";
-
             if(status === 'Free' || status === 'Done') dotColor = "var(--success)";
             else if(status === 'Running') dotColor = "var(--running)";
             else if(status === 'Pending') dotColor = "var(--warning)";
@@ -134,9 +127,7 @@
                         </div>
                         <span style="font-size:9px; font-weight:bold; color:${dotColor}; border:1px solid ${dotColor}; padding:1px 6px; border-radius:10px;">${status}</span>
                     </div>
-                    <div style="font-size:11px; color:#666; margin-left:18px;">
-                        ID: ${i.ID} | ${i.Service || 'FIELD EXPERT'}
-                    </div>
+                    <div style="font-size:11px; color:#666; margin-left:18px;">ID: ${i.ID} | ${i.Service || 'FIELD EXPERT'}</div>
                     <div style="display:flex; gap:8px; margin-top:12px;">
                         <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1; height:35px;"><i class="fas fa-phone-alt"></i> CALL</a>
                         <a href="https://wa.me/91${i.Phone}" target="_blank" class="status-btn" style="background:#25D366; flex:1; height:35px;"><i class="fab fa-whatsapp"></i> WA</a>
@@ -149,71 +140,61 @@
         openP('list-p');
     }
 
-    // (All other functions loadRunningDetailed, processAssign, loadIDData, etc. stay exactly as before)
-    async function loadRunningDetailed() {
-        let running = fullCustData.filter(x => x.Status === 'Running');
-        let h = "";
-        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>No Running Jobs.</p>"; openP('list-p'); return; }
-        running.forEach(c => {
-            h += `<div class="data-card" style="border-left:8px solid var(--running);">
-                    <b>${c.Name} [${c.ID}]</b><br><small>Staff ID: ${c.TeamID || 'N/A'}</small>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;">CALL</a>
-                        <button onclick="finishTask('${c.ID}', '${c.TeamID}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE TEAM</button>
-                    </div>
-                  </div>`;
-        });
-        document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "LIVE RUNNING"; openP('list-p');
-    }
-
-    async function finishTask(cid, tid) {
-        if(!confirm("Finish job and free team?")) return;
-        document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`);
-        if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`);
-        await syncCounts(); closeP('list-p');
-    }
-
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
         if(!cid || !tid) return alert("Select IDs");
         document.getElementById('loader').style.display = 'flex';
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`);
-        await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`);
-        let cust = fullCustData.find(x => x.ID === cid);
-        let staff = fullTeamData.find(x => x.ID === tid);
-        let msg = `*AK SOLUTION HUB*%0A🆔ID: ${cust.ID}%0A👤Name: ${encodeURIComponent(cust.Name)}%0A📞Mob: ${cust.Phone}%0A📍Add: ${encodeURIComponent(cust.Address)}%0A🔧Work: ${encodeURIComponent(cust.Service)}`;
-        window.open(`https://wa.me/91${staff.Phone}?text=${msg}`, '_blank');
-        closeP('as-p'); syncCounts();
+        try {
+            await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`);
+            await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`);
+            let cust = fullCustData.find(x => x.ID === cid);
+            let staff = fullTeamData.find(x => x.ID === tid);
+            if(cust && staff) {
+                let eMsg = `*AK SOLUTION HUB*%0A📢 *NEW WORK ASSIGNED*%0A--------------------------%0A📅 *Date:* ${cust.Date || '-'}%0A🆔 *Cust ID:* ${cust.ID}%0A👤 *Name:* ${encodeURIComponent(cust.Name)}%0A📞 *Phone:* ${cust.Phone}%0A📍 *Add:* ${encodeURIComponent(cust.Address)}%0A🔧 *Work:* ${encodeURIComponent(cust.Service)}%0A--------------------------%0A🗺 *GPS LOCATION:*%0A${cust.GPS || '-'}`;
+                let cMsg = `*AK SOLUTION HUB*%0A✅ *EXPERT ASSIGNED*%0A--------------------------%0Aनमस्ते ${encodeURIComponent(cust.Name)}, एक्सपर्ट भेज दिया गया है:%0A👤 *Expert:* ${encodeURIComponent(staff.Name)}%0A📞 *Contact:* ${staff.Phone}%0A🆔 *Staff ID:* ${staff.ID}`;
+                window.open(`https://wa.me/91${staff.Phone}?text=${eMsg}`, '_blank');
+                setTimeout(() => {
+                    window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
+                    alert("✅ ASSIGN CONFIRMED!");
+                    closeP('as-p'); syncCounts();
+                }, 1500);
+            }
+        } catch(e) { alert("Error"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    function loadIDData() {
-        let tid = document.getElementById('id-tid').value.toUpperCase().trim();
-        let s = fullTeamData.find(x => x.ID === tid);
-        if(!s) return alert("ID Not Found");
-        document.getElementById('v-name').innerText = s.Name;
-        document.getElementById('v-id').innerText = "ID: " + s.ID;
-        document.getElementById('v-phone').innerText = s.Phone;
-        document.getElementById('v-father').innerText = s.Father || "-";
-        document.getElementById('v-address').innerText = s.Address || "-";
-        document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase();
-        document.getElementById('id-qr').innerHTML = "";
-        new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 });
+    function handleOTP() { 
+        let n = document.getElementById('rn').value, p = document.getElementById('rp').value, f = document.getElementById('rf').value, a = document.getElementById('ra').value, s = document.getElementById('rs').value;
+        if(!n || p.length < 10) return alert("Detail भरें");
+        currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
+        let msg = `*AK SOLUTION HUB*%0A*TEAM REGISTRATION*%0A--------------------------%0A👤 *Name:* ${encodeURIComponent(n)}%0A👨‍👦 *Father:* ${encodeURIComponent(f)}%0A📍 *Add:* ${encodeURIComponent(a)}%0A🛠 *Service:* ${encodeURIComponent(s)}%0A--------------------------%0A🔑 *OTP:* *${currentGeneratedOTP}*`;
+        window.open(`https://wa.me/91${p}?text=${msg}`, '_blank');
+        document.getElementById('otp-area').style.display = 'block';
     }
 
-    function previewFile(e) { let r = new FileReader(); r.onload = function(){ document.getElementById('v-img').src = r.result; }; r.readAsDataURL(e.target.files[0]); }
-    function downloadID() { html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(c => { let l = document.createElement('a'); l.download = 'ID-CARD.png'; l.href = c.toDataURL(); l.click(); }); }
-    function searchInList() { let v = document.getElementById('listSearch').value.toUpperCase(); let c = document.getElementsByClassName('data-card'); for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; }
+    async function verifyAndRegister() {
+        if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP");
+        document.getElementById('loader').style.display = 'flex';
+        let p = `action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`;
+        await fetch(`${SCRIPT_URL}?${p}`);
+        alert("Registered!"); closeP('reg-p'); syncCounts();
+    }
+
+    // (बाकी के Helper Functions loadIDData, previewFile, downloadID, filterStatus, quickUpdate आदि यहाँ रहेंगे)
     function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
+    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
     function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; }); }
     function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
     function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
     async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
-    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    function handleOTP() { let p = document.getElementById('rp').value; if(p.length < 10) return alert("Enter Number"); currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000); window.open(`https://wa.me/91${p}?text=Registration OTP: ${currentGeneratedOTP}`, '_blank'); document.getElementById('otp-area').style.display = 'block'; }
-    async function verifyAndRegister() { if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP"); document.getElementById('loader').style.display = 'flex'; await fetch(`${SCRIPT_URL}?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`); syncCounts(); closeP('reg-p'); }
+    function searchInList() { let v = document.getElementById('listSearch').value.toUpperCase(); let c = document.getElementsByClassName('data-card'); for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; }
+    function loadIDData() { let tid = document.getElementById('id-tid').value.toUpperCase(); let s = fullTeamData.find(x => x.ID === tid); if(!s) return alert("Not Found"); document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: " + s.ID; document.getElementById('v-phone').innerText = s.Phone; document.getElementById('v-father').innerText = s.Father || "-"; document.getElementById('v-address').innerText = s.Address || "-"; document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); }
+    function previewFile(e) { let r = new FileReader(); r.onload = function(){ document.getElementById('v-img').src = r.result; }; r.readAsDataURL(e.target.files[0]); }
+    function downloadID() { html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(c => { let l = document.createElement('a'); l.download = 'ID-CARD.png'; l.href = c.toDataURL(); l.click(); }); }
+    async function loadRunningDetailed() { let running = fullCustData.filter(x => x.Status === 'Running'); let h = ""; if (!running.length) { document.getElementById('lb').innerHTML = "<p>No Running.</p>"; openP('list-p'); return; } running.forEach(c => { h += `<div class="data-card"><b>${c.Name} [${c.ID}]</b><br><button onclick="finishTask('${c.ID}', '${c.TeamID}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button></div>`; }); document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); }
+    async function finishTask(cid, tid) { document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); await syncCounts(); closeP('list-p'); }
 
     window.onload = syncCounts;
 </script>
