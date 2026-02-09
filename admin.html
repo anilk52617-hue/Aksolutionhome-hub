@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AK MASTER ADMIN - V12 FIXED</title>
+    <title>AK MASTER ADMIN - FINAL REPAIR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -28,6 +28,7 @@
         .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
         .panel-box i { font-size: 22px; margin-bottom: 5px; }
         .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
+
         #id-card-render { width: 300px; height: 460px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
         #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
@@ -42,15 +43,15 @@
 
 <div class="header">
     <h2>AK MASTER ADMIN</h2>
-    <p style="font-size: 10px;">AKSOLUTION HUB • V12 STABLE</p>
+    <p style="font-size: 10px;">AKSOLUTION HUB • REPAIRED VERSION</p>
 </div>
 
 <div class="indicator-grid">
-    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="filterStatus('Today')"><span>आज</span><b id="c-today-new">0</b></div>
+    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="filterStatus('Today')"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
     <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
     <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
     <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
-    <div class="ind-box" style="border-color:var(--warning)" onclick="loadList('CUST')"><span>Total</span><b id="c-total">0</b></div>
+    <div class="ind-box" style="border-color:var(--warning)" onclick="loadList('CUST')"><span>Total Cust</span><b id="c-total">0</b></div>
     <div class="ind-box" style="background:#fff3cd" onclick="loadList('TEAM')"><span>Team</span><b id="c-team">0</b></div>
 </div>
 
@@ -60,7 +61,7 @@
         <button class="status-btn" style="background:var(--success)" onclick="quickUpdate('Done')">DONE</button>
         <button class="status-btn" style="background:var(--danger)" onclick="quickUpdate('Reject')">REJECT</button>
         <button class="status-btn" style="background:var(--running)" onclick="quickUpdate('Running')">RUNNING</button>
-        <button class="status-btn" style="background:var(--dark);" onclick="quickUpdate('Free')">FREE</button>
+        <button class="status-btn" style="background:var(--dark);" onclick="quickUpdate('Free')">FREE (TEAM)</button>
     </div>
 </div>
 
@@ -84,7 +85,7 @@
 
 <div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><div style="display: flex; gap: 5px; margin: 10px 0;"><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()" style="margin-bottom:0; flex:3;"><button onclick="bulkWhatsApp()" class="status-btn" style="background:#25D366; flex:1; font-size:10px;"><i class="fab fa-whatsapp"></i> ALL</button></div><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
 
-<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="OTP"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button></div></div>
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP ON WHATSAPP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button></div></div>
 
 <div id="id-p" class="modal"><div class="modal-content">
     <h3>ID Generator</h3>
@@ -101,7 +102,7 @@
     <input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div>
     <input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)">
     <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button>
-    <button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none;">CLOSE</button>
+    <button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button>
 </div></div>
 
 <script>
@@ -113,27 +114,23 @@
     async function syncCounts() {
         document.getElementById('loader').style.display = 'flex';
         try {
-            let [cr, tr] = await Promise.all([
-                fetch(SCRIPT_URL + "?action=getList&type=CUST").then(r => r.json()), 
-                fetch(SCRIPT_URL + "?action=getList&type=TEAM").then(r => r.json())
-            ]);
+            let [cr, tr] = await Promise.all([fetch(SCRIPT_URL + "?action=getList&type=CUST").then(r => r.json()), fetch(SCRIPT_URL + "?action=getList&type=TEAM").then(r => r.json())]);
             fullCustData = cr; fullTeamData = tr;
             updateDashboard();
-        } catch(e) { console.error("Sync Error", e); }
-        finally { document.getElementById('loader').style.display = 'none'; }
+        } finally { document.getElementById('loader').style.display = 'none'; }
     }
 
+    // --- फिक्स किया गया डैशबोर्ड (कलम H के हिसाब से) ---
     function updateDashboard() {
         let todayStr = formatAsDate(new Date());
-        document.getElementById('c-today-new').innerText = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && x.Status === 'Pending').length;
-        document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
-        document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
-        document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
+        document.getElementById('c-today-new').innerText = fullCustData.filter(x => formatAsDate(x.Date) === todayStr && String(x.Status).trim() === 'Pending').length;
+        document.getElementById('c-old-pend').innerText = fullCustData.filter(x => String(x.Status).trim() === 'Pending').length;
+        document.getElementById('c-run').innerText = fullCustData.filter(x => String(x.Status).trim() === 'Running').length;
+        document.getElementById('c-done').innerText = fullCustData.filter(x => String(x.Status).trim() === 'Done').length;
         document.getElementById('c-total').innerText = fullCustData.length;
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // --- मजबूत ASSIGN फंक्शन ---
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
@@ -141,120 +138,183 @@
         
         let cust = fullCustData.find(x => x.ID === cid);
         let staff = fullTeamData.find(x => x.ID === tid);
-        if(!cust || !staff) return alert("डाटा नहीं मिला!");
-
-        // 1. स्थानीय अपडेट (UI पर तुरंत असर के लिए)
-        cust.Status = 'Running';
-        cust.GPS = (cust.GPS || 'Link') + " | " + staff.ID; // ID जोड़ना ताकि [NA] न आये
-        staff.Status = 'Busy';
-        updateDashboard(); // डैशबोर्ड अपडेट करें
+        if(!cust || !staff) return alert("Data mismatch!");
 
         document.getElementById('loader').style.display = 'flex';
         try {
-            // 2. व्हाट्सएप मैसेज (प्रोफेशनल फॉर्मेट)
-            let teamMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️\n----------------------------\n🆔 ID: ${cust.ID}\n👤 नाम: ${cust.Name}\n📞 मोबाइल: ${cust.Phone}\n📍 पता: ${cust.Address}\n🛠️ सर्विस: ${cust.Service || 'FIELD EXPERT'}\n🌐 मैप: ${cust.GPS.split(' | ')[0]}\n----------------------------`;
-            let custMsg = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन हो गया है*\n------------------------\nनाम: ${staff.Name}\nआईडी: ${staff.ID}\nसंपर्क: ${staff.Phone}\n------------------------`;
+            let gpsData = `${cust.GPS || 'No Map'} | ${staff.ID}`;
             
-            // 3. सर्वर अपडेट (Sheet Update)
-            let apiCall = fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${encodeURIComponent(cust.GPS)}`);
-            let staffCall = fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`);
+            await Promise.all([
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&gps=${encodeURIComponent(gpsData)}`),
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
+            ]);
 
-            window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${encodeURIComponent(teamMsg)}`;
+            let teamMsgText = `*AK SOLUTION HUB - NEW TASK* 🛠️\n----------------------------\n🆔 *ID:* ${cust.ID}\n👤 *Name:* ${cust.Name}\n📞 *Phone:* ${cust.Phone}\n📍 *Address:* ${cust.Address}\n🛠️ *Service:* ${cust.Service || 'FIELD EXPERT'}\n🌐 *Map:* ${cust.GPS || 'Not Provided'}\n----------------------------`;
+            let custMsgText = `*AK SOLUTION HUB*\n*एक्सपर्ट असाइन हो गया है*\n------------------------\n*नाम:* ${staff.Name}\n*आईडी:* ${staff.ID}\n*संपर्क:* ${staff.Phone}\n------------------------`;
+            
+            cust.Status = 'Running';
+            cust.GPS = gpsData;
+            staff.Status = 'Busy';
+            updateDashboard();
+
+            window.location.href = `whatsapp://send?phone=91${staff.Phone}&text=${encodeURIComponent(teamMsgText)}`;
             
             document.getElementById('as-content').innerHTML = `
                 <div style="padding:20px; text-align:center;">
                     <i class="fab fa-whatsapp fa-4x" style="color:#25D366; margin-bottom:15px;"></i>
-                    <h3 style="color:var(--success);">भेज दिया गया!</h3>
+                    <h3 style="color:var(--success);">टीम को भेज दिया गया!</h3>
                     <p>अब कस्टमर को व्हाट्सएप करें</p>
                     <button class="status-btn" style="background:#25D366; width:100%; height:60px; margin-top:10px;" 
-                        onclick="window.location.href='whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsg)}'; setTimeout(()=>location.reload(), 2000);">
+                        onclick="window.location.href='whatsapp://send?phone=91${cust.Phone}&text=${encodeURIComponent(custMsgText)}'; setTimeout(()=>location.reload(), 2000);">
                         SEND TO CUSTOMER & REFRESH
                     </button>
                 </div>`;
-            
-            await Promise.all([apiCall, staffCall]); // बैकग्राउंड में सर्वर अपडेट होने दें
-        } catch(e) { 
-            console.error(e); 
-            alert("व्हाट्सएप भेज दिया गया है, लेकिन शीट अपडेट में समस्या हो सकती है।"); 
-        } finally { 
-            document.getElementById('loader').style.display = 'none'; 
-        }
+        } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
+    }
+
+    function handleOTP() {
+        let p = document.getElementById('rp').value;
+        let n = document.getElementById('rn').value;
+        if(p.length < 10 || !n) return alert("नाम और नंबर डालें!");
+        currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
+        window.location.href = `whatsapp://send?phone=91${p}&text=नमस्ते *${n}*, आपका AK SOLUTION कोड है: *${currentGeneratedOTP}*`;
+        document.getElementById('otp-area').style.display = 'block';
+    }
+
+    async function verifyAndRegister() {
+        if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong Code!");
+        document.getElementById('loader').style.display = 'flex';
+        try {
+            await fetch(SCRIPT_URL + `?action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`);
+            await syncCounts();
+            alert("सफलतापूर्वक रजिस्टर हो गया!");
+            closeP('reg-p');
+        } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     function renderFree() {
         let b = document.getElementById('staff-picker-box'); b.innerHTML = "";
         let free = fullTeamData.filter(x => x.Status === 'Free');
-        if(!free.length) { b.innerHTML = "<p style='padding:10px; color:red;'>कोई एक्सपर्ट फ्री नहीं है</p>"; return; }
+        if(!free.length) { b.innerHTML = "<p style='padding:10px; color:red;'>No Staff Free</p>"; return; }
         free.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer; background:white;">🟢 ${t.Name} (${t.ID})</div>`; });
     }
 
-    function loadRunningDetailed() {
-        let running = fullCustData.filter(x => x.Status === 'Running');
-        let h = "";
-        if (!running.length) {
-            document.getElementById('lb').innerHTML = "<div style='padding:20px;'>कोई रनिंग टास्क नहीं है।</div>";
-            document.getElementById('lt').innerText = "LIVE RUNNING";
-            openP('list-p'); return;
-        }
-        running.forEach(c => {
-            let staffID = "NA"; let staffName = "EXPERT";
-            if(String(c.GPS).includes("|")) staffID = c.GPS.split("|").pop().trim();
-            if(staffID !== "NA") {
-                let s = fullTeamData.find(t => t.ID === staffID);
-                if(s) staffName = s.Name;
-            }
-            let diff = Math.floor((new Date() - new Date(c.Date)) / 60000);
-            h += `<div class="data-card" style="border-left:8px solid var(--running);">
-                    <div style="display:flex; justify-content:space-between;"><b>${c.Name}</b><span style="color:red; font-size:10px;">${diff}m</span></div>
-                    <small>ID: ${c.ID} | ${c.Service || ''}</small>
-                    <div style="margin-top:8px; padding:8px; background:#f0f8ff; border-radius:8px;">
-                        <b>एक्सपर्ट: ${staffName} [${staffID}]</b>
-                    </div>
+    function renderDataList(d, t, skipModal = false) {
+        lastData = d; lastType = t; let h = "";
+        d.forEach(i => {
+            let statusBadge = ""; let cardColor = "var(--primary)";
+            if(t === 'TEAM') {
+                if(i.Status === 'Free' || i.Status === 'Done') { statusBadge = "<span style='color:var(--success); font-weight:bold; font-size:10px;'>🟢 FREE</span>"; cardColor = "var(--success)"; }
+                else { statusBadge = "<span style='color:var(--danger); font-weight:bold; font-size:10px;'>🔴 BUSY</span>"; cardColor = "var(--danger)"; }
+            } else { cardColor = i.Status === 'Done' ? 'var(--success)' : (i.Status === 'Running' ? 'var(--running)' : 'var(--danger)'); }
+            h += `<div class="data-card" style="border-left:5px solid ${cardColor};">
+                    <div style="display:flex; justify-content:space-between; align-items:center;"><b>${i.Name}</b> ${statusBadge}</div>
+                    <small>ID: ${i.ID} | ${i.Service || ''}</small>
                     <div style="display:flex; gap:10px; margin-top:10px;">
+                        <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
+                        <a href="whatsapp://send?phone=91${i.Phone}" class="status-btn" style="background:#25D366; flex:1;"><i class="fab fa-whatsapp"></i></a>
+                        ${(String(i.Status).trim()==='Pending' && t==='CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : ''}
+                    </div>
+                  </div>`;
+        });
+        document.getElementById('lb').innerHTML = h || "No Data"; document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
+        if(!skipModal) openP('list-p');
+    }
+
+    function loadIDData() {
+        let tid = document.getElementById('id-tid').value.toUpperCase().trim();
+        let t = fullTeamData.find(x => x.ID === tid);
+        if(t) {
+            document.getElementById('v-name').innerText = t.Name; document.getElementById('v-id').innerText = "ID: " + t.ID;
+            document.getElementById('v-work-label').innerText = t.Service || "FIELD EXPERT";
+            document.getElementById('v-father').innerText = t.Father || "-";
+            document.getElementById('v-phone').innerText = t.Phone || "-";
+            document.getElementById('v-address').innerText = t.Address || "-";
+            document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById('id-qr'), { text: tid, width: 60, height: 60 });
+        } else alert("Not Found!");
+    }
+
+    function previewFile(e) { let r = new FileReader(); r.onload = () => document.getElementById('v-img').src = r.result; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); }
+    async function downloadID() { 
+        document.getElementById('loader').style.display = 'flex';
+        const canvas = await html2canvas(document.getElementById('id-card-render'), { useCORS: true, scale: 3 });
+        const l = document.createElement('a'); l.download = "AK_ID_CARD.png"; l.href = canvas.toDataURL(); l.click();
+        document.getElementById('loader').style.display = 'none';
+    }
+
+    function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
+    function closeP(id) { document.getElementById(id).style.display = 'none'; }
+    function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
+    function filterStatus(s) { renderDataList(fullCustData.filter(x => String(x.Status).trim() === s), 'CUST'); }
+    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
+    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
+    
+    // --- फिक्स किया गया रनिंग पैनल ---
+    function loadRunningDetailed() {
+        let running = fullCustData.filter(x => String(x.Status).trim() === 'Running');
+        let h = "";
+        
+        if (running.length === 0) {
+            document.getElementById('lb').innerHTML = "<div style='padding:20px; text-align:center; color:#888;'>कोई काम अभी रनिंग में नहीं है।</div>";
+            document.getElementById('lt').innerText = "LIVE RUNNING (0)";
+            openP('list-p');
+            return;
+        }
+
+        running.forEach(c => {
+            let gData = String(c.GPS || "").trim();
+            let staffID = "ID NOT FOUND";
+            let staffName = "EXPERT ASSIGNED";
+
+            if(gData.includes("|")) {
+                staffID = gData.split("|").pop().trim();
+            }
+
+            let staff = fullTeamData.find(s => s.ID === staffID);
+            staffName = staff ? staff.Name : staffID;
+
+            let startTime = new Date(c.Date);
+            let diffMins = Math.floor((new Date() - startTime) / 60000);
+            let timeLabel = diffMins > 60 ? Math.floor(diffMins/60) + "h " + (diffMins%60) + "m" : diffMins + "m";
+
+            h += `<div class="data-card" style="border-left:8px solid var(--running); background:#fff;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <b>${c.Name}</b>
+                        <span style="color:var(--danger); font-size:10px; font-weight:bold;"><i class="fas fa-clock"></i> ${timeLabel}</span>
+                    </div>
+                    <small>ID: ${c.ID} | ${c.Service || ''}</small>
+                    <div style="margin:10px 0; padding:10px; background:#f0f8ff; border-radius:10px; border:1px dashed #3498db;">
+                        <small style="color:#777; font-weight:bold; font-size:9px;">ASSIGNED TO:</small><br>
+                        <b style="color:var(--primary); font-size:14px;">${staffName}</b>
+                    </div>
+                    <div style="display:flex; gap:10px; margin-top:12px;">
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
                         <button onclick="finishTask('${c.ID}', '${staffID}')" class="status-btn" style="background:var(--success); flex:2;">MARK DONE</button>
                     </div>
                   </div>`;
         });
-        document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "RUNNING ("+running.length+")";
+        document.getElementById('lb').innerHTML = h; 
+        document.getElementById('lt').innerText = "LIVE RUNNING (" + running.length + ")"; 
         openP('list-p');
     }
 
     async function finishTask(cid, tid) {
-        if(!confirm("काम पूरा हो गया?")) return;
+        if(!confirm(`क्या काम पूरा हो गया है?`)) return;
         document.getElementById('loader').style.display = 'flex';
         try {
             await Promise.all([
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`)
             ]);
-            await syncCounts(); loadRunningDetailed(); alert("Done!");
-        } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; }
+            await syncCounts(); 
+            loadRunningDetailed(); 
+            alert("सफलतापूर्वक अपडेट हो गया!");
+        } catch(e) { alert("सर्वर एरर!"); } finally { document.getElementById('loader').style.display = 'none'; }
     }
-
-    function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
-    function closeP(id) { document.getElementById(id).style.display = 'none'; }
-    function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
-    function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
-    function renderDataList(d, t, skipModal = false) {
-        lastData = d; lastType = t; let h = "";
-        d.forEach(i => {
-            let col = i.Status === 'Done' ? 'var(--success)' : (i.Status === 'Running' ? 'var(--running)' : 'var(--danger)');
-            h += `<div class="data-card" style="border-left:5px solid ${col};">
-                    <b>${i.Name}</b><br><small>ID: ${i.ID} | ${i.Status}</small>
-                    <div style="display:flex; gap:10px; margin-top:10px;">
-                        <a href="tel:${i.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone"></i></a>
-                        ${(i.Status==='Pending' && t==='CUST') ? `<button onclick="fillAs('${i.ID}')" class="status-btn" style="background:var(--dark); flex:1;">ASSIGN</button>` : ''}
-                    </div>
-                  </div>`;
-        });
-        document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = t;
-        if(!skipModal) openP('list-p');
-    }
-    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
-    function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
     
+    function searchInList() { let q = document.getElementById('listSearch').value.toLowerCase(); let filtered = lastData.filter(x => (x.Name && x.Name.toLowerCase().includes(q)) || (x.ID && x.ID.toLowerCase().includes(q))); renderDataList(filtered, lastType, true); }
+    function bulkWhatsApp() { let nos = lastData.map(x => "91" + x.Phone).join(","); if(nos) window.location.href = `whatsapp://send?phone=${nos}&text=Hello`; }
+
     window.onload = syncCounts;
 </script>
 </body>
