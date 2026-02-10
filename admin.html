@@ -49,7 +49,17 @@
 </div>
 
 <div class="indicator-grid">
-    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="showTodayWork()"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
+    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="flipTodayBox()">
+        <div id="today-main-face">
+            <span>आज बुकिंग</span>
+            <b id="c-today-new">0</b>
+        </div>
+        <div id="today-stats-face" style="display:none; grid-template-columns: repeat(3, 1fr); width:100%; gap:2px;">
+            <div style="text-align:center;"><b id="in-done" style="color:var(--success); font-size:14px;">0</b><span style="font-size:7px;">DONE</span></div>
+            <div style="text-align:center;"><b id="in-run" style="color:var(--running); font-size:14px;">0</b><span style="font-size:7px;">RUN</span></div>
+            <div style="text-align:center;"><b id="in-pend" style="color:var(--danger); font-size:14px;">0</b><span style="font-size:7px;">PEND</span></div>
+        </div>
+    </div>
     <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
     <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
     <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
@@ -88,13 +98,12 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAsPogHhTu6kk8jh_cTgjrWFcHvJ4qGjMHMDUBWVpBrZsMT-FIgCEl5_n6yQCTP4anXA/exec";
     let fullCustData = [], fullTeamData = [], currentGeneratedOTP = "";
 
-    // तारीख को सुरक्षित रूप से निकालने के लिए फंक्शन
     function getTodayFormatted() {
         let now = new Date();
         let d = String(now.getDate()).padStart(2, '0');
         let m = String(now.getMonth() + 1).padStart(2, '0');
         let y = now.getFullYear();
-        return `${d}/${m}/${y}`; // 10/02/2026 फॉर्मेट
+        return `${d}/${m}/${y}`;
     }
 
     async function syncCounts() {
@@ -111,11 +120,22 @@
     }
 
     function updateDashboard() {
+        let now = new Date();
         let todayStr = getTodayFormatted();
-        // डैशबोर्ड का 'आज बुकिंग' बॉक्स सिर्फ आज की तारीख वाली एंट्री दिखाएगा
-        let todayCount = fullCustData.filter(x => x.Date && x.Date.toString().includes(todayStr)).length;
+        let todaySystemStr = now.toLocaleDateString('en-GB'); 
 
-        document.getElementById('c-today-new').innerText = todayCount;
+        let todayData = fullCustData.filter(x => {
+            if (!x.Date) return false;
+            let recordDate = new Date(x.Date);
+            let recordDateStr = recordDate.toLocaleDateString('en-GB');
+            return recordDateStr === todaySystemStr || x.Date.toString().includes(todayStr);
+        });
+
+        document.getElementById('c-today-new').innerText = todayData.length;
+        document.getElementById('in-done').innerText = todayData.filter(x => x.Status === 'Done').length;
+        document.getElementById('in-run').innerText = todayData.filter(x => x.Status === 'Running').length;
+        document.getElementById('in-pend').innerText = todayData.filter(x => x.Status === 'Pending').length;
+
         document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
         document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
@@ -123,28 +143,48 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    function showTodayWork() {
-        let todayStr = getTodayFormatted();
-        let todayData = fullCustData.filter(x => x.Date && x.Date.toString().includes(todayStr));
-        
-        // अगर आज की कोई नई बुकिंग नहीं है, तो पेंडिंग/रनिंग काम दिखाएं
-        if(todayData.length === 0) {
-            todayData = fullCustData.filter(x => x.Status === 'Pending' || x.Status === 'Running');
-        }
+    function flipTodayBox() {
+        const main = document.getElementById('today-main-face');
+        const stats = document.getElementById('today-stats-face');
+        if (main.style.display !== 'none') { main.style.display = 'none'; stats.style.display = 'grid'; } 
+        else { main.style.display = 'block'; stats.style.display = 'none'; showTodayWork(); }
+    }
 
+    async function loadRunningDetailed() { 
+        let running = fullCustData.filter(x => x.Status === 'Running'); 
+        let h = ""; 
+        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px; color:#888;'>कोई काम रनिंग नहीं है।</p>"; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); return; } 
+        running.forEach(c => { 
+            let expert = fullTeamData.find(t => t.ID === c.TeamID);
+            let expertName = expert ? expert.Name : "अज्ञात";
+            h += `<div class="data-card" style="border-left-color:var(--running);">
+                    <b style="font-size:15px;">${c.Name} [${c.ID}]</b><br>
+                    <div style="margin-top:5px; padding:5px; background:#f0f7ff; border-radius:5px; font-size:11px;">
+                        <i class="fas fa-user-cog"></i> <b>एक्सपर्ट:</b> ${expertName} (${c.TeamID || 'N/A'})
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        <button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE TEAM</button>
+                        <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
+                    </div>
+                  </div>`; 
+        }); 
+        document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "रनिंग वर्क (लाइव)"; openP('list-p'); 
+    }
+
+    function showTodayWork() {
+        let now = new Date();
+        let todayStr = getTodayFormatted();
+        let todaySystemStr = now.toLocaleDateString('en-GB');
+        let todayData = fullCustData.filter(x => {
+            if (!x.Date) return false;
+            let recordDate = new Date(x.Date);
+            let recordDateStr = recordDate.toLocaleDateString('en-GB');
+            return recordDateStr === todaySystemStr || x.Date.toString().includes(todayStr);
+        });
+        if(todayData.length === 0) todayData = fullCustData.filter(x => x.Status === 'Pending' || x.Status === 'Running');
         let doneCount = todayData.filter(x => x.Status === 'Done').length;
         let pendingCount = todayData.filter(x => x.Status === 'Pending' || x.Status === 'Running').length;
-
-        let summaryHtml = `
-            <div style="background:var(--dark); color:white; padding:12px; border-radius:15px; margin-bottom:15px; font-size:11px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
-                <div style="text-align:left;"><b>आज कुल: ${todayData.length}</b><br><span style="font-size:9px;">${todayStr}</span></div>
-                <div style="text-align:right;">
-                    <span style="color:#27ae60;">✔ डन: ${doneCount}</span> | 
-                    <span style="color:#f39c12;">⏳ बाकी: ${pendingCount}</span>
-                </div>
-            </div>
-        `;
-
+        let summaryHtml = `<div style="background:var(--dark); color:white; padding:12px; border-radius:15px; margin-bottom:15px; font-size:11px; display:flex; justify-content:space-between; align-items:center;"><div style="text-align:left;"><b>आज कुल: ${todayData.length}</b><br><span style="font-size:9px;">${todayStr}</span></div><div style="text-align:right;"><span style="color:#27ae60;">✔ डन: ${doneCount}</span> | <span style="color:#f39c12;">⏳ बाकी: ${pendingCount}</span></div></div>`;
         renderDataList(todayData, 'CUST', summaryHtml);
         document.getElementById('lt').innerText = "TODAY'S SUMMARY";
     }
@@ -154,20 +194,14 @@
         d.forEach(i => {
             let dotColor = "gray";
             let status = i.Status || "";
-            // Done वाले काम थोड़े हल्के दिखेंगे (Opacity)
             let opacity = (status === 'Done') ? "0.6" : "1";
-            
             if(status === 'Free' || status === 'Done') dotColor = "var(--success)";
             else if(status === 'Running') dotColor = "var(--running)";
             else if(status === 'Pending') dotColor = "var(--warning)";
             else if(status === 'Busy' || status === 'Reject') dotColor = "var(--danger)";
-
             h += `<div class="data-card" style="border-left-color:${dotColor}; opacity:${opacity};">
                     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:5px;">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <span class="status-dot" style="background-color:${dotColor};"></span>
-                            <b style="font-size:14px; text-transform:uppercase;">${i.Name}</b>
-                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;"><span class="status-dot" style="background-color:${dotColor};"></span><b style="font-size:14px; text-transform:uppercase;">${i.Name}</b></div>
                         <span style="font-size:9px; font-weight:bold; color:${dotColor}; border:1px solid ${dotColor}; padding:1px 6px; border-radius:10px;">${status}</span>
                     </div>
                     <div style="font-size:11px; color:#666; margin-left:18px;">ID: ${i.ID} | ${i.Service || 'FIELD EXPERT'}</div>
@@ -186,10 +220,11 @@
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
-        if(!cid || !tid) return alert("दोनों ID चुनें!");
-        if(!confirm("क्या आप इस स्टाफ को यह काम सौंपना चाहते हैं?")) return;
+        if(!cid || !tid) return alert("कृपया दोनों ID चुनें!");
+
         document.getElementById('loader').style.display = 'flex';
         try {
+            // 1. डेटाबेस अपडेट
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`);
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`);
             
@@ -197,35 +232,48 @@
             let staff = fullTeamData.find(x => x.ID === tid);
             
             if(cust && staff) {
-                let eMsg = `*AK SOLUTION HUB - JOB DATA*%0A🆔 *ID:* ${cust.ID}%0A👤 *NAME:* ${encodeURIComponent(cust.Name)}%0A📞 *PHONE:* ${cust.Phone}%0A🔧 *WORK:* ${encodeURIComponent(cust.Service)}%0A📍 *ADDR:* ${encodeURIComponent(cust.Address)}%0A✅ *काम तुरंत शुरू करें।*`;
-                let cMsg = `*AK SOLUTION HUB - CONFIRMED*%0Aनमस्ते *${encodeURIComponent(cust.Name)}*,%0Aआपकी बुकिंग कन्फर्म हो गई है।%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}`;
+                let mapLink = cust.GPS || "https://www.google.com/maps";
 
-                window.open(`https://wa.me/91${staff.Phone}?text=${eMsg}`, '_blank');
+                // टीम के लिए मैसेज (स्क्रीनशॉट वाला)
+                let teamMsg = `📍 *लोकेशन:* ${mapLink}%0A` +
+                              `----------------------------------%0A` +
+                              `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
+                              `----------------------------------%0A` +
+                              `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
+                              `📞 *मोबाइल:* ${cust.Phone}%0A` +
+                              `👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A` +
+                              `🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A` +
+                              `📍 *पता:* ${encodeURIComponent(cust.Address)}%0A` +
+                              `🌍 *लोकेशन:* ${mapLink}%0A` +
+                              `----------------------------------%0A` +
+                              `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
+
+                // कस्टमर के लिए मैसेज
+                let custMsg = `*AK SOLUTION HUB - बुकिंग कंफर्म* ✅%0A` +
+                              `----------------------------------%0A` +
+                              `नमस्ते *${encodeURIComponent(cust.Name)}*, आपकी सर्विस बुकिंग कंफर्म हो गई है।%0A%0A` +
+                              `👤 *एक्सपर्ट नाम:* ${encodeURIComponent(staff.Name)}%0A` +
+                              `📞 *संपर्क नंबर:* ${staff.Phone}%0A` +
+                              `🆔 *आपकी ID:* ${cust.ID}%0A%0A` +
+                              `🛠️ हमारा एक्सपर्ट जल्द ही आपके पते पर पहुँचेगा।%0A` +
+                              `धन्यवाद।`;
+
+                // वन-बाय-वन व्हाट्सएप खोलना
+                window.open(`https://wa.me/91${staff.Phone}?text=${teamMsg}`, '_blank');
+
                 setTimeout(() => {
-                    if(confirm("स्टाफ को भेज दिया। क्या कस्टमर को मैसेज भेजें?")) {
-                        window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
-                    }
-                    alert("ASSIGNED SUCCESSFUL!");
-                    closeP('as-p'); syncCounts();
-                }, 1500);
+                    window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank');
+                    
+                    // कन्फर्मेशन दिखाना और रिफ्रेश करना
+                    setTimeout(() => {
+                        alert("✅ असाइन और मैसेज प्रक्रिया पूरी हुई!");
+                        closeP('as-p'); 
+                        syncCounts();
+                    }, 1000);
+                }, 2000);
             }
-        } catch(e) { alert("Assignment Failed!"); }
+        } catch(e) { alert("Assignment Error!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
-    }
-
-    async function loadRunningDetailed() { 
-        let running = fullCustData.filter(x => x.Status === 'Running'); 
-        let h = ""; 
-        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>No Work Running.</p>"; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); return; } 
-        running.forEach(c => { 
-            h += `<div class="data-card" style="border-left-color:var(--running);">
-                    <b>${c.Name} [${c.ID}]</b><br><span style="font-size:11px; color:#666;">Expert ID: ${c.TeamID || 'N/A'}</span>
-                    <button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button>
-                  </div>`; 
-        }); 
-        document.getElementById('lb').innerHTML = h; 
-        document.getElementById('lt').innerText = "RUNNING WORK"; 
-        openP('list-p'); 
     }
 
     async function finishTask(cid, tid) { 
@@ -234,8 +282,7 @@
         try {
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
             if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
-            await syncCounts(); 
-            closeP('list-p'); 
+            await syncCounts(); closeP('list-p'); 
         } catch(e) { alert("Task Finished!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
