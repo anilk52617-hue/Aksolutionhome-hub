@@ -163,7 +163,7 @@
                         <i class="fas fa-user-cog"></i> <b>एक्सपर्ट:</b> ${expertName} (${c.TeamID || 'N/A'})
                     </div>
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        <button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE TEAM</button>
+                        <button onclick="finishTask('${c.ID}', '${c.TeamID}')" class="status-btn" style="background:var(--success); flex:2;">DONE & FREE TEAM</button>
                         <a href="tel:${c.Phone}" class="status-btn" style="background:var(--primary); flex:1;"><i class="fas fa-phone-alt"></i></a>
                     </div>
                   </div>`; 
@@ -224,9 +224,10 @@
 
         document.getElementById('loader').style.display = 'flex';
         try {
-            // 1. डेटाबेस अपडेट
-            await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`);
-            await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`);
+            await Promise.all([
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
+                fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
+            ]);
             
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
@@ -234,7 +235,6 @@
             if(cust && staff) {
                 let mapLink = cust.GPS || "https://www.google.com/maps";
 
-                // टीम के लिए मैसेज (स्क्रीनशॉट वाला)
                 let teamMsg = `📍 *लोकेशन:* ${mapLink}%0A` +
                               `----------------------------------%0A` +
                               `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
@@ -244,46 +244,44 @@
                               `👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A` +
                               `🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A` +
                               `📍 *पता:* ${encodeURIComponent(cust.Address)}%0A` +
-                              `🌍 *लोकेशन:* ${mapLink}%0A` +
                               `----------------------------------%0A` +
                               `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
 
-                // कस्टमर के लिए मैसेज
                 let custMsg = `*AK SOLUTION HUB - बुकिंग कंफर्म* ✅%0A` +
                               `----------------------------------%0A` +
                               `नमस्ते *${encodeURIComponent(cust.Name)}*, आपकी सर्विस बुकिंग कंफर्म हो गई है।%0A%0A` +
                               `👤 *एक्सपर्ट नाम:* ${encodeURIComponent(staff.Name)}%0A` +
                               `📞 *संपर्क नंबर:* ${staff.Phone}%0A` +
-                              `🆔 *आपकी ID:* ${cust.ID}%0A%0A` +
-                              `🛠️ हमारा एक्सपर्ट जल्द ही आपके पते पर पहुँचेगा।%0A` +
-                              `धन्यवाद।`;
+                              `🛠️ हमारा एक्सपर्ट जल्द ही आपके पते पर पहुँचेगा।`;
 
-                // वन-बाय-वन व्हाट्सएप खोलना
                 window.open(`https://wa.me/91${staff.Phone}?text=${teamMsg}`, '_blank');
 
                 setTimeout(() => {
                     window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank');
                     
-                    // कन्फर्मेशन दिखाना और रिफ्रेश करना
                     setTimeout(() => {
-                        alert("✅ असाइन और मैसेज प्रक्रिया पूरी हुई!");
+                        document.getElementById('loader').style.display = 'none';
+                        alert("✅ असाइनमेंट सफल! टीम और कस्टमर दोनों को मैसेज भेज दिए गए हैं।");
                         closeP('as-p'); 
                         syncCounts();
                     }, 1000);
                 }, 2000);
             }
-        } catch(e) { alert("Assignment Error!"); }
-        finally { document.getElementById('loader').style.display = 'none'; }
+        } catch(e) { alert("Assignment Error!"); document.getElementById('loader').style.display = 'none'; }
     }
 
     async function finishTask(cid, tid) { 
-        if(!confirm("काम पूरा हो गया है?")) return;
+        if(!confirm("क्या काम पूरा हो गया है और टीम को फ्री करना है?")) return;
         document.getElementById('loader').style.display = 'flex'; 
         try {
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
-            if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
-            await syncCounts(); closeP('list-p'); 
-        } catch(e) { alert("Task Finished!"); }
+            if(tid && tid !== 'undefined' && tid !== 'null') {
+                await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
+            }
+            alert("✅ काम पूरा हुआ और टीम अब फ्री है!");
+            await syncCounts(); 
+            closeP('list-p'); 
+        } catch(e) { alert("अपडेट में समस्या आई!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
