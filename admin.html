@@ -25,7 +25,7 @@
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { position:relative; top:50%; left:50%; transform:translate(-50%,-50%); width:94%; max-height: 90vh; background:white; padding:20px; border-radius:25px; overflow-y: auto; text-align: center; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10001; justify-content:center; align-items:center; flex-direction: column; }
-        .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:8px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .data-card { padding:15px; background:#fff; border-radius:15px; margin-bottom:12px; border-left:8px solid var(--primary); text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: 0.3s; }
         .status-dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; }
         .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
@@ -49,7 +49,7 @@
 </div>
 
 <div class="indicator-grid">
-    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="filterStatus('Pending')"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
+    <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="showTodayWork()"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
     <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
     <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
     <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
@@ -102,6 +102,7 @@
     }
 
     function updateDashboard() {
+        // Dashboard logic shows total pending
         document.getElementById('c-today-new').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
@@ -110,17 +111,51 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    function renderDataList(d, t) {
-        let h = "";
+    // "आज बुकिंग" के लिए खास स्मार्ट फंक्शन
+    function showTodayWork() {
+        let today = new Date().toLocaleDateString('en-GB'); // DD/MM/YYYY
+        
+        // आज की तारीख का डेटा
+        let todayData = fullCustData.filter(x => x.Date === today);
+        
+        // अगर आज की तारीख में कुछ नहीं है, तो सिर्फ पेंडिंग दिखाएं
+        if(todayData.length === 0) {
+            todayData = fullCustData.filter(x => x.Status === 'Pending');
+        }
+
+        let done = todayData.filter(x => x.Status === 'Done').length;
+        let pending = todayData.filter(x => x.Status === 'Pending').length;
+        let running = todayData.filter(x => x.Status === 'Running').length;
+
+        // स्मार्ट समरी बार
+        let summaryHtml = `
+            <div style="background:var(--dark); color:white; padding:12px; border-radius:15px; margin-bottom:15px; font-size:11px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 8px rgba(0,0,0,0.2);">
+                <div style="text-align:left;"><b>आज कुल: ${todayData.length}</b><br><span style="font-size:9px;">Report: ${today}</span></div>
+                <div style="text-align:right;">
+                    <span style="color:#27ae60;">✔ डन: ${done}</span> | 
+                    <span style="color:#f39c12;">⏳ बाकी: ${pending + running}</span>
+                </div>
+            </div>
+        `;
+
+        renderDataList(todayData, 'CUST', summaryHtml);
+        document.getElementById('lt').innerText = "TODAY'S SUMMARY";
+    }
+
+    // renderDataList में extraHtml का सपोर्ट जोड़ा गया
+    function renderDataList(d, t, extraHtml = "") {
+        let h = extraHtml;
         d.forEach(i => {
             let dotColor = "gray";
             let status = i.Status || "";
+            let opacity = (status === 'Done') ? "0.55" : "1"; // Done काम थोड़े धुंधले दिखेंगे
+            
             if(status === 'Free' || status === 'Done') dotColor = "var(--success)";
             else if(status === 'Running') dotColor = "var(--running)";
             else if(status === 'Pending') dotColor = "var(--warning)";
             else if(status === 'Busy' || status === 'Reject') dotColor = "var(--danger)";
 
-            h += `<div class="data-card" style="border-left-color:${dotColor};">
+            h += `<div class="data-card" style="border-left-color:${dotColor}; opacity:${opacity};">
                     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:5px;">
                         <div style="display:flex; align-items:center; gap:8px;">
                             <span class="status-dot" style="background-color:${dotColor}; box-shadow: 0 0 5px ${dotColor};"></span>
@@ -137,10 +172,11 @@
                   </div>`;
         });
         document.getElementById('lb').innerHTML = h || "कोई डेटा नहीं मिला";
-        document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
+        if(!extraHtml) document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
         openP('list-p');
     }
 
+    // Rest of your functions (processAssign, finishTask, loadRunningDetailed, etc.) remain exactly the same
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
@@ -155,21 +191,28 @@
             let staff = fullTeamData.find(x => x.ID === tid);
             
             if(cust && staff) {
-                // प्रोफेशनल मैसेज एक्सपर्ट के लिए
-                let eMsg = `*AK SOLUTION HUB - NEW TASK* 🔨%0A--------------------------%0A🆔 *BOOKING ID:* ${cust.ID}%0A👤 *CUSTOMER:* ${encodeURIComponent(cust.Name)}%0A📞 *PHONE:* ${cust.Phone}%0A🔧 *SERVICE:* ${encodeURIComponent(cust.Service)}%0A📍 *ADDRESS:* ${encodeURIComponent(cust.Address)}%0A--------------------------%0A✅ *काम तुरंत शुरू करें।*`;
+                let cA = cust.ID || "-";
+                let cB = cust.Date || "-";
+                let cC = cust.Name || "-";
+                let cD = cust.Phone || "-";
+                let cE = cust.Service || "-";
+                let cF = cust.Address || "-";
+                let cG = cust.GPS || ""; 
+                let mapsLink = cG ? `https://www.google.com/maps?q=$${cG}` : "उपलब्ध नहीं";
+
+                let eMsg = `*AK SOLUTION HUB - JOB DATA* 📋%0A--------------------------%0A🆔 *ID:* ${cA}%0A📅 *DATE:* ${cB}%0A👤 *NAME:* ${encodeURIComponent(cC)}%0A📞 *PHONE:* ${cD}%0A🔧 *WORK:* ${encodeURIComponent(cE)}%0A📍 *ADDR:* ${encodeURIComponent(cF)}%0A🌐 *GPS:* ${mapsLink}%0A--------------------------%0A✅ *काम तुरंत शुरू करें।*`;
                 
-                // प्रोफेशनल मैसेज कस्टमर के लिए
-                let cMsg = `*AK SOLUTION HUB - BOOKING CONFIRMED* ✅%0A--------------------------------%0Aप्रिय *${encodeURIComponent(cust.Name)}*,%0Aआपकी बुकिंग (ID: ${cust.ID}) सफलतापूर्वक कन्फर्म हो गई है।%0A%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A🆔 *एक्सपर्ट ID:* ${staff.ID}%0A📞 *संपर्क:* ${staff.Phone}%0A%0A*सुरक्षा टिप:* कृपया एक्सपर्ट के आने पर उनका ID कार्ड ज़रूर चेक करें।%0A--------------------------------%0A🏠 *AK SOLUTION HUB*`;
+                let cMsg = `*AK SOLUTION HUB - CONFIRMED* ✅%0A--------------------------%0Aनमस्ते *${encodeURIComponent(cC)}*,%0Aआपकी बुकिंग (ID: ${cA}) सफलतापूर्वक कन्फर्म हो गई है।%0A%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}%0A🆔 *स्टाफ ID:* ${staff.ID}%0A%0A*सुरक्षा टिप:* कृपया एक्सपर्ट के आने पर उनका ID कार्ड ज़रूर चेक करें।%0A--------------------------%0A🏠 *AK SOLUTION HUB*`;
 
                 window.open(`https://wa.me/91${staff.Phone}?text=${eMsg}`, '_blank');
                 
                 setTimeout(() => {
-                    if(confirm("एक्सपर्ट को मैसेज भेज दिया गया है। क्या आप कस्टमर को प्रोफेशनल कन्फर्मेशन भेजना चाहते हैं?")) {
+                    if(confirm("टीम को डेटा भेज दिया गया है। क्या अब कस्टमर को प्रोफेशनल कन्फर्मेशन भेजें?")) {
                         window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
                     }
-                    alert("✅ ASSIGN CONFIRMED!");
+                    alert("✅ ASSIGNMENT SUCCESSFUL!");
                     closeP('as-p'); syncCounts();
-                }, 1200);
+                }, 1500);
             }
         } catch(e) { alert("Assignment Failed!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
