@@ -97,7 +97,7 @@
             ]);
             fullCustData = cr; fullTeamData = tr;
             updateDashboard();
-        } catch(e) { alert("Data Sync Failed! Check Internet."); }
+        } catch(e) { alert("Data Sync Failed!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
@@ -141,7 +141,6 @@
         openP('list-p');
     }
 
-    // UPDATED LOGIC FOR WHATSAPP NOTIFICATION
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
@@ -151,20 +150,62 @@
         try {
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`);
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`);
+            
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
+            
             if(cust && staff) {
-                // Formatting exact like your reference image
-                let eMsg = `*AK SOLUTION HUB - नई बुकिंग* 🔨%0A--------------------------%0A🆔 *बुकिंग ID:* ${cust.ID}%0A📞 *मोबाइल:* ${cust.Phone}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A📍 *पता:* ${encodeURIComponent(cust.Address)}%0A🌐 *लोकेशन:* https://www.google.com/maps?q=${cust.GPS || ''}%0A--------------------------%0A✅ *टीम जल्द आपसे संपर्क करेगी।*`;
+                // प्रोफेशनल मैसेज एक्सपर्ट के लिए
+                let eMsg = `*AK SOLUTION HUB - NEW TASK* 🔨%0A--------------------------%0A🆔 *BOOKING ID:* ${cust.ID}%0A👤 *CUSTOMER:* ${encodeURIComponent(cust.Name)}%0A📞 *PHONE:* ${cust.Phone}%0A🔧 *SERVICE:* ${encodeURIComponent(cust.Service)}%0A📍 *ADDRESS:* ${encodeURIComponent(cust.Address)}%0A--------------------------%0A✅ *काम तुरंत शुरू करें।*`;
                 
+                // प्रोफेशनल मैसेज कस्टमर के लिए
+                let cMsg = `*AK SOLUTION HUB - BOOKING CONFIRMED* ✅%0A--------------------------------%0Aप्रिय *${encodeURIComponent(cust.Name)}*,%0Aआपकी बुकिंग (ID: ${cust.ID}) सफलतापूर्वक कन्फर्म हो गई है।%0A%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A🆔 *एक्सपर्ट ID:* ${staff.ID}%0A📞 *संपर्क:* ${staff.Phone}%0A%0A*सुरक्षा टिप:* कृपया एक्सपर्ट के आने पर उनका ID कार्ड ज़रूर चेक करें।%0A--------------------------------%0A🏠 *AK SOLUTION HUB*`;
+
                 window.open(`https://wa.me/91${staff.Phone}?text=${eMsg}`, '_blank');
                 
                 setTimeout(() => {
+                    if(confirm("एक्सपर्ट को मैसेज भेज दिया गया है। क्या आप कस्टमर को प्रोफेशनल कन्फर्मेशन भेजना चाहते हैं?")) {
+                        window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
+                    }
                     alert("✅ ASSIGN CONFIRMED!");
                     closeP('as-p'); syncCounts();
                 }, 1200);
             }
         } catch(e) { alert("Assignment Failed!"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
+
+    async function loadRunningDetailed() { 
+        let running = fullCustData.filter(x => x.Status === 'Running'); 
+        let h = ""; 
+        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>No Work Running.</p>"; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); return; } 
+        
+        running.forEach(c => { 
+            let s = fullTeamData.find(t => t.ID === c.TeamID);
+            let expertName = s ? s.Name : "Staff Assigned";
+            
+            h += `<div class="data-card" style="border-left-color:var(--running);">
+                    <b>${c.Name} [${c.ID}]</b><br>
+                    <span style="font-size:11px; color:var(--primary);">
+                        <i class="fas fa-user-cog"></i> Expert: ${expertName} (${c.TeamID || 'N/A'})
+                    </span>
+                    <button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button>
+                  </div>`; 
+        }); 
+        document.getElementById('lb').innerHTML = h; 
+        document.getElementById('lt').innerText = "RUNNING WORK"; 
+        openP('list-p'); 
+    }
+
+    async function finishTask(cid, tid) { 
+        if(!confirm("काम पूरा हो गया है?")) return;
+        document.getElementById('loader').style.display = 'flex'; 
+        try {
+            await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
+            if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
+            await syncCounts(); 
+            closeP('list-p'); 
+        } catch(e) { alert("Error finishing task"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
@@ -249,36 +290,6 @@
             l.href = c.toDataURL(); 
             l.click(); 
         }); 
-    }
-
-    // UPDATED RUNNING WORK LOGIC TO SHOW EXPERT NAME
-    async function loadRunningDetailed() { 
-        let running = fullCustData.filter(x => x.Status === 'Running'); 
-        let h = ""; 
-        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>No Work Running.</p>"; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); return; } 
-        running.forEach(c => { 
-            let s = fullTeamData.find(t => t.ID === c.TeamID) || {Name: "Staff Assigned"};
-            h += `<div class="data-card" style="border-left-color:var(--running);">
-                    <b>${c.Name} [${c.ID}]</b><br>
-                    <span style="font-size:11px; color:var(--primary);">Expert: ${s.Name} (${c.TeamID || 'N/A'})</span>
-                    <button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button>
-                  </div>`; 
-        }); 
-        document.getElementById('lb').innerHTML = h; 
-        document.getElementById('lt').innerText = "RUNNING WORK"; 
-        openP('list-p'); 
-    }
-
-    async function finishTask(cid, tid) { 
-        if(!confirm("काम पूरा हो गया है?")) return;
-        document.getElementById('loader').style.display = 'flex'; 
-        try {
-            await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
-            if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
-            await syncCounts(); 
-            closeP('list-p'); 
-        } catch(e) { alert("Error finishing task"); }
-        finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     window.onload = syncCounts;
