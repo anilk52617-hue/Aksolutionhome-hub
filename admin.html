@@ -141,6 +141,7 @@
         openP('list-p');
     }
 
+    // UPDATED LOGIC FOR WHATSAPP NOTIFICATION
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
@@ -153,15 +154,12 @@
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
             if(cust && staff) {
-                let eMsg = `*AK SOLUTION HUB*%0A📢 *NEW WORK ASSIGNED*%0A--------------------------%0A📅 *Date:* ${cust.Date || '-'}%0A🆔 *Cust ID:* ${cust.ID}%0A👤 *Name:* ${encodeURIComponent(cust.Name)}%0A📞 *Phone:* ${cust.Phone}%0A📍 *Add:* ${encodeURIComponent(cust.Address)}%0A🔧 *Work:* ${encodeURIComponent(cust.Service)}%0A--------------------------%0A🗺 *GPS LOCATION:*%0A${cust.GPS || '-'}`;
+                // Formatting exact like your reference image
+                let eMsg = `*AK SOLUTION HUB - नई बुकिंग* 🔨%0A--------------------------%0A🆔 *बुकिंग ID:* ${cust.ID}%0A📞 *मोबाइल:* ${cust.Phone}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A📍 *पता:* ${encodeURIComponent(cust.Address)}%0A🌐 *लोकेशन:* https://www.google.com/maps?q=${cust.GPS || ''}%0A--------------------------%0A✅ *टीम जल्द आपसे संपर्क करेगी।*`;
                 
                 window.open(`https://wa.me/91${staff.Phone}?text=${eMsg}`, '_blank');
                 
                 setTimeout(() => {
-                    let cMsg = `*AK SOLUTION HUB*%0A✅ *EXPERT ASSIGNED*%0A--------------------------%0Aनमस्ते ${encodeURIComponent(cust.Name)}, एक्सपर्ट भेज दिया गया है:%0A👤 *Expert:* ${encodeURIComponent(staff.Name)}%0A📞 *Contact:* ${staff.Phone}%0A🆔 *Staff ID:* ${staff.ID}`;
-                    if(confirm("स्टाफ को मैसेज चला गया। क्या कस्टमर को सूचना भेजनी है?")) {
-                        window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
-                    }
                     alert("✅ ASSIGN CONFIRMED!");
                     closeP('as-p'); syncCounts();
                 }, 1200);
@@ -182,28 +180,12 @@
     async function verifyAndRegister() {
         if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP");
         document.getElementById('loader').style.display = 'flex';
-        
         let teamID = "T-" + Math.floor(1000 + Math.random() * 9999);
-        
-        // GS कोड के पैरामीटर्स (Capital N, F, P आदि) के अनुसार मैच किया गया
-        let p = `action=addTeam` +
-                `&ID=${encodeURIComponent(teamID)}` +
-                `&Name=${encodeURIComponent(document.getElementById('rn').value)}` +
-                `&Father=${encodeURIComponent(document.getElementById('rf').value)}` +
-                `&Phone=${encodeURIComponent(document.getElementById('rp').value)}` +
-                `&Address=${encodeURIComponent(document.getElementById('ra').value)}` +
-                `&Service=${encodeURIComponent(document.getElementById('rs').value)}`;
-
+        let p = `action=addTeam&ID=${encodeURIComponent(teamID)}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${encodeURIComponent(document.getElementById('rp').value)}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}`;
         try {
             let res = await fetch(`${SCRIPT_URL}?${p}`);
             let data = await res.text();
-            if(data.includes("Success")) {
-               alert("टीम रजिस्टर हो गई! ID: " + teamID);
-               closeP('reg-p'); 
-               syncCounts();
-            } else {
-               alert("Server Says: " + data);
-            }
+            if(data.includes("Success")) { alert("टीम रजिस्टर हो गई! ID: " + teamID); closeP('reg-p'); syncCounts(); }
         } catch(e) { alert("Registration Error!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
@@ -230,10 +212,7 @@
         if(!id) return alert("ID दर्ज करें"); 
         if(!confirm(`क्या आप स्टेटस ${s} करना चाहते हैं?`)) return;
         document.getElementById('loader').style.display = 'flex'; 
-        try {
-            await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); 
-            syncCounts(); 
-        } catch(e) { alert("Update Failed"); }
+        try { await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); } catch(e) { alert("Update Failed"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
@@ -272,12 +251,18 @@
         }); 
     }
 
+    // UPDATED RUNNING WORK LOGIC TO SHOW EXPERT NAME
     async function loadRunningDetailed() { 
         let running = fullCustData.filter(x => x.Status === 'Running'); 
         let h = ""; 
         if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>No Work Running.</p>"; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); return; } 
         running.forEach(c => { 
-            h += `<div class="data-card"><b>${c.Name} [${c.ID}]</b><br><button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button></div>`; 
+            let s = fullTeamData.find(t => t.ID === c.TeamID) || {Name: "Staff Assigned"};
+            h += `<div class="data-card" style="border-left-color:var(--running);">
+                    <b>${c.Name} [${c.ID}]</b><br>
+                    <span style="font-size:11px; color:var(--primary);">Expert: ${s.Name} (${c.TeamID || 'N/A'})</span>
+                    <button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button>
+                  </div>`; 
         }); 
         document.getElementById('lb').innerHTML = h; 
         document.getElementById('lt').innerText = "RUNNING WORK"; 
