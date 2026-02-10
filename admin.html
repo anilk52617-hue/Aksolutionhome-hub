@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AK MASTER ADMIN - FINAL PROFESSIONAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -79,9 +80,9 @@
 
 <div id="as-p" class="modal"><div class="modal-content"><h3>Assign Expert</h3><div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px; text-align:left; background:#f9f9f9;"></div><input id="as-tid" class="input" placeholder="Staff ID" readonly><input id="as-cid" class="input" placeholder="Customer ID"><button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN & NOTIFY</button><button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none; font-weight:bold;">CANCEL</button></div></div>
 
-<div id="id-p" class="modal"><div class="modal-content"><h3>ID Generator</h3><div id="id-card-render"><div class="v-header-id">AK SOLUTION HUB</div><img id="v-img" src="https://via.placeholder.com/110"><div class="v-stamp-new"><div class="v-stamp-inner"><span style="font-size: 6px;">AK SOLUTION</span><b style="font-size: 10px; border-top:1px solid #005eb8; border-bottom:1px solid #005eb8;">HUB</b><span style="font-size: 6px;">VERIFIED</span></div></div><div style="margin-top:115px; text-align:center; padding:10px;"><b id="v-name" style="font-size:18px; text-transform:uppercase;">NAME</b><br><span id="v-work-label" style="color:var(--primary); font-weight:800; font-size:12px;">FIELD EXPERT</span><div style="font-size:10px; font-weight:bold; color:#777; margin-top:3px;" id="v-id">ID: -</div></div><div style="padding:0 30px; font-size:11px; line-height:1.7;"><b>FATHER:</b> <span id="v-father">-</span><br><b>PHONE:</b> <span id="v-phone">-</span><br><b>ADDRESS:</b> <span id="v-address" style="font-size:9px;">-</span></div><div id="id-qr" style="position:absolute; bottom:50px; left:25px; background:white;"></div><div style="position:absolute; bottom:45px; right:25px; text-align:center;"><div class="v-sign-text">Anil Kumar</div><div style="font-size:8px; font-weight:bold; border-top:1px solid #333; padding-top:2px; width:90px;">Authorized Sign</div></div><div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div></div><input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div><input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)"><button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button><button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button></div></div>
+<div id="id-p" class="modal"><div class="modal-content"><h3>ID Generator</h3><div id="id-card-render"><div class="v-header-id">AK SOLUTION HUB</div><img id="v-img" src="https://via.placeholder.com/110" crossorigin="anonymous"><div class="v-stamp-new"><div class="v-stamp-inner"><span style="font-size: 6px;">AK SOLUTION</span><b style="font-size: 10px; border-top:1px solid #005eb8; border-bottom:1px solid #005eb8;">HUB</b><span style="font-size: 6px;">VERIFIED</span></div></div><div style="margin-top:115px; text-align:center; padding:10px;"><b id="v-name" style="font-size:18px; text-transform:uppercase;">NAME</b><br><span id="v-work-label" style="color:var(--primary); font-weight:800; font-size:12px;">FIELD EXPERT</span><div style="font-size:10px; font-weight:bold; color:#777; margin-top:3px;" id="v-id">ID: -</div></div><div style="padding:0 30px; font-size:11px; line-height:1.7;"><b>FATHER:</b> <span id="v-father">-</span><br><b>PHONE:</b> <span id="v-phone">-</span><br><b>ADDRESS:</b> <span id="v-address" style="font-size:9px;">-</span></div><div id="id-qr" style="position:absolute; bottom:50px; left:25px; background:white;"></div><div style="position:absolute; bottom:45px; right:25px; text-align:center;"><div class="v-sign-text">Anil Kumar</div><div style="font-size:8px; font-weight:bold; border-top:1px solid #333; padding-top:2px; width:90px;">Authorized Sign</div></div><div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div></div><input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div><input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)"><button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button><button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button></div></div>
 
-<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER NOW</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button></div></div>
+<div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" type="tel" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" type="number" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER NOW</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button></div></div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAsPogHhTu6kk8jh_cTgjrWFcHvJ4qGjMHMDUBWVpBrZsMT-FIgCEl5_n6yQCTP4anXA/exec";
@@ -96,7 +97,7 @@
             ]);
             fullCustData = cr; fullTeamData = tr;
             updateDashboard();
-        } catch(e) { console.error("Sync Error", e); }
+        } catch(e) { alert("Data Sync Failed! Check Internet."); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
@@ -143,7 +144,8 @@
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
-        if(!cid || !tid) return alert("Select IDs");
+        if(!cid || !tid) return alert("दोनों ID चुनें!");
+        if(!confirm("क्या आप इस स्टाफ को यह काम सौंपना चाहते हैं?")) return;
         document.getElementById('loader').style.display = 'flex';
         try {
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`);
@@ -152,23 +154,27 @@
             let staff = fullTeamData.find(x => x.ID === tid);
             if(cust && staff) {
                 let eMsg = `*AK SOLUTION HUB*%0A📢 *NEW WORK ASSIGNED*%0A--------------------------%0A📅 *Date:* ${cust.Date || '-'}%0A🆔 *Cust ID:* ${cust.ID}%0A👤 *Name:* ${encodeURIComponent(cust.Name)}%0A📞 *Phone:* ${cust.Phone}%0A📍 *Add:* ${encodeURIComponent(cust.Address)}%0A🔧 *Work:* ${encodeURIComponent(cust.Service)}%0A--------------------------%0A🗺 *GPS LOCATION:*%0A${cust.GPS || '-'}`;
-                let cMsg = `*AK SOLUTION HUB*%0A✅ *EXPERT ASSIGNED*%0A--------------------------%0Aनमस्ते ${encodeURIComponent(cust.Name)}, एक्सपर्ट भेज दिया गया है:%0A👤 *Expert:* ${encodeURIComponent(staff.Name)}%0A📞 *Contact:* ${staff.Phone}%0A🆔 *Staff ID:* ${staff.ID}`;
+                
                 window.open(`https://wa.me/91${staff.Phone}?text=${eMsg}`, '_blank');
+                
                 setTimeout(() => {
-                    window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
+                    let cMsg = `*AK SOLUTION HUB*%0A✅ *EXPERT ASSIGNED*%0A--------------------------%0Aनमस्ते ${encodeURIComponent(cust.Name)}, एक्सपर्ट भेज दिया गया है:%0A👤 *Expert:* ${encodeURIComponent(staff.Name)}%0A📞 *Contact:* ${staff.Phone}%0A🆔 *Staff ID:* ${staff.ID}`;
+                    if(confirm("स्टाफ को मैसेज चला गया। क्या कस्टमर को सूचना भेजनी है?")) {
+                        window.open(`https://wa.me/91${cust.Phone}?text=${cMsg}`, '_blank');
+                    }
                     alert("✅ ASSIGN CONFIRMED!");
                     closeP('as-p'); syncCounts();
-                }, 1500);
+                }, 1200);
             }
-        } catch(e) { alert("Error"); }
+        } catch(e) { alert("Assignment Failed!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     function handleOTP() { 
-        let n = document.getElementById('rn').value, p = document.getElementById('rp').value, f = document.getElementById('rf').value, a = document.getElementById('ra').value, s = document.getElementById('rs').value;
-        if(!n || p.length < 10) return alert("Detail भरें");
+        let n = document.getElementById('rn').value, p = document.getElementById('rp').value;
+        if(!n || p.length < 10) return alert("पूरा विवरण भरें");
         currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
-        let msg = `*AK SOLUTION HUB*%0A*TEAM REGISTRATION*%0A--------------------------%0A👤 *Name:* ${encodeURIComponent(n)}%0A👨‍👦 *Father:* ${encodeURIComponent(f)}%0A📍 *Add:* ${encodeURIComponent(a)}%0A🛠 *Service:* ${encodeURIComponent(s)}%0A--------------------------%0A🔑 *OTP:* *${currentGeneratedOTP}*`;
+        let msg = `*AK SOLUTION HUB*%0A*TEAM REGISTRATION OTP*%0A--------------------------%0A🔑 *OTP:* *${currentGeneratedOTP}*`;
         window.open(`https://wa.me/91${p}?text=${msg}`, '_blank');
         document.getElementById('otp-area').style.display = 'block';
     }
@@ -176,25 +182,119 @@
     async function verifyAndRegister() {
         if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP");
         document.getElementById('loader').style.display = 'flex';
-        let p = `action=registerTeam&name=${encodeURIComponent(document.getElementById('rn').value)}&father=${encodeURIComponent(document.getElementById('rf').value)}&phone=${document.getElementById('rp').value}&address=${encodeURIComponent(document.getElementById('ra').value)}&service=${encodeURIComponent(document.getElementById('rs').value)}`;
-        await fetch(`${SCRIPT_URL}?${p}`);
-        alert("Registered!"); closeP('reg-p'); syncCounts();
+        
+        let teamID = "T-" + Math.floor(1000 + Math.random() * 9999);
+        
+        // GS कोड के पैरामीटर्स (Capital N, F, P आदि) के अनुसार मैच किया गया
+        let p = `action=addTeam` +
+                `&ID=${encodeURIComponent(teamID)}` +
+                `&Name=${encodeURIComponent(document.getElementById('rn').value)}` +
+                `&Father=${encodeURIComponent(document.getElementById('rf').value)}` +
+                `&Phone=${encodeURIComponent(document.getElementById('rp').value)}` +
+                `&Address=${encodeURIComponent(document.getElementById('ra').value)}` +
+                `&Service=${encodeURIComponent(document.getElementById('rs').value)}`;
+
+        try {
+            let res = await fetch(`${SCRIPT_URL}?${p}`);
+            let data = await res.text();
+            if(data.includes("Success")) {
+               alert("टीम रजिस्टर हो गई! ID: " + teamID);
+               closeP('reg-p'); 
+               syncCounts();
+            } else {
+               alert("Server Says: " + data);
+            }
+        } catch(e) { alert("Registration Error!"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    // (बाकी के Helper Functions loadIDData, previewFile, downloadID, filterStatus, quickUpdate आदि यहाँ रहेंगे)
     function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    function renderFree() { let b = document.getElementById('staff-picker-box'); b.innerHTML = ""; fullTeamData.filter(x => x.Status === 'Free').forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; }); }
+    
+    function renderFree() { 
+        let b = document.getElementById('staff-picker-box'); 
+        let freeStaff = fullTeamData.filter(x => x.Status === 'Free');
+        if(freeStaff.length === 0) { b.innerHTML = "<p style='padding:10px; color:red;'>No Free Expert</p>"; return; }
+        b.innerHTML = ""; 
+        freeStaff.forEach(t => { 
+            b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; 
+        }); 
+    }
+
     function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
     function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
-    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return; document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); }
-    function searchInList() { let v = document.getElementById('listSearch').value.toUpperCase(); let c = document.getElementsByClassName('data-card'); for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; }
-    function loadIDData() { let tid = document.getElementById('id-tid').value.toUpperCase(); let s = fullTeamData.find(x => x.ID === tid); if(!s) return alert("Not Found"); document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: " + s.ID; document.getElementById('v-phone').innerText = s.Phone; document.getElementById('v-father').innerText = s.Father || "-"; document.getElementById('v-address').innerText = s.Address || "-"; document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); }
-    function previewFile(e) { let r = new FileReader(); r.onload = function(){ document.getElementById('v-img').src = r.result; }; r.readAsDataURL(e.target.files[0]); }
-    function downloadID() { html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(c => { let l = document.createElement('a'); l.download = 'ID-CARD.png'; l.href = c.toDataURL(); l.click(); }); }
-    async function loadRunningDetailed() { let running = fullCustData.filter(x => x.Status === 'Running'); let h = ""; if (!running.length) { document.getElementById('lb').innerHTML = "<p>No Running.</p>"; openP('list-p'); return; } running.forEach(c => { h += `<div class="data-card"><b>${c.Name} [${c.ID}]</b><br><button onclick="finishTask('${c.ID}', '${c.TeamID}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button></div>`; }); document.getElementById('lb').innerHTML = h; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); }
-    async function finishTask(cid, tid) { document.getElementById('loader').style.display = 'flex'; await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); await syncCounts(); closeP('list-p'); }
+    
+    async function quickUpdate(s) { 
+        let id = document.getElementById('man-id').value.toUpperCase(); 
+        if(!id) return alert("ID दर्ज करें"); 
+        if(!confirm(`क्या आप स्टेटस ${s} करना चाहते हैं?`)) return;
+        document.getElementById('loader').style.display = 'flex'; 
+        try {
+            await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); 
+            syncCounts(); 
+        } catch(e) { alert("Update Failed"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
+
+    function searchInList() { 
+        let v = document.getElementById('listSearch').value.toUpperCase(); 
+        let c = document.getElementsByClassName('data-card'); 
+        for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; 
+    }
+
+    function loadIDData() { 
+        let tid = document.getElementById('id-tid').value.toUpperCase(); 
+        let s = fullTeamData.find(x => x.ID === tid); 
+        if(!s) return alert("ID Not Found"); 
+        document.getElementById('v-name').innerText = s.Name; 
+        document.getElementById('v-id').innerText = "ID: " + s.ID; 
+        document.getElementById('v-phone').innerText = s.Phone; 
+        document.getElementById('v-father').innerText = s.Father || "-"; 
+        document.getElementById('v-address').innerText = s.Address || "-"; 
+        document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); 
+        document.getElementById('id-qr').innerHTML = ""; 
+        new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); 
+    }
+
+    function previewFile(e) { 
+        let r = new FileReader(); 
+        r.onload = function(){ document.getElementById('v-img').src = r.result; }; 
+        r.readAsDataURL(e.target.files[0]); 
+    }
+
+    function downloadID() { 
+        html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true, allowTaint: true }).then(c => { 
+            let l = document.createElement('a'); 
+            l.download = `ID-${document.getElementById('v-id').innerText}.png`; 
+            l.href = c.toDataURL(); 
+            l.click(); 
+        }); 
+    }
+
+    async function loadRunningDetailed() { 
+        let running = fullCustData.filter(x => x.Status === 'Running'); 
+        let h = ""; 
+        if (!running.length) { document.getElementById('lb').innerHTML = "<p style='padding:20px;'>No Work Running.</p>"; document.getElementById('lt').innerText = "RUNNING"; openP('list-p'); return; } 
+        running.forEach(c => { 
+            h += `<div class="data-card"><b>${c.Name} [${c.ID}]</b><br><button onclick="finishTask('${c.ID}', '${c.TeamID || ''}')" class="status-btn" style="background:var(--success); width:100%; margin-top:10px;">DONE & FREE TEAM</button></div>`; 
+        }); 
+        document.getElementById('lb').innerHTML = h; 
+        document.getElementById('lt').innerText = "RUNNING WORK"; 
+        openP('list-p'); 
+    }
+
+    async function finishTask(cid, tid) { 
+        if(!confirm("काम पूरा हो गया है?")) return;
+        document.getElementById('loader').style.display = 'flex'; 
+        try {
+            await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
+            if(tid) await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
+            await syncCounts(); 
+            closeP('list-p'); 
+        } catch(e) { alert("Error finishing task"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
 
     window.onload = syncCounts;
 </script>
