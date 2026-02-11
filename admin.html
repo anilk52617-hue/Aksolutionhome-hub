@@ -31,10 +31,15 @@
         .panel-box { border-radius: 15px; padding: 15px 5px; display: flex; flex-direction: column; align-items: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white; border:none; transition: 0.3s; }
         .panel-box i { font-size: 22px; margin-bottom: 5px; }
         .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
-        #id-card-render { width: 300px; height: 460px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        /* FIXED ID CARD STYLE */
+        #id-card-render { width: 300px; height: 500px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
-        #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 40px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
-        .v-stamp-new { position: absolute; width: 75px; height: 75px; border: 2px solid rgba(0, 94, 184, 0.7); border-radius: 50%; top: 100px; right: 45px; z-index: 10; transform: rotate(-15deg); display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); color: rgba(0, 94, 184, 0.8); font-weight: bold; }
+        
+        /* PHOTO Position adjusted to 60px for a small gap from header */
+        #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 60px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
+        
+        .v-stamp-new { position: absolute; width: 75px; height: 75px; border: 2px solid rgba(0, 94, 184, 0.7); border-radius: 50%; top: 105px; right: 45px; z-index: 10; transform: rotate(-15deg); display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); color: rgba(0, 94, 184, 0.8); font-weight: bold; }
         .v-stamp-inner { border: 1px dashed rgba(0, 94, 184, 0.5); width: 65px; height: 65px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .v-sign-text { font-family: 'Brush Script MT', cursive, sans-serif; font-size: 22px; color: #1a2a6c; margin-bottom: -8px; }
     </style>
@@ -50,10 +55,7 @@
 
 <div class="indicator-grid">
     <div class="ind-box" style="border-color:var(--primary); background:#e3f2fd;" onclick="flipTodayBox()">
-        <div id="today-main-face">
-            <span>आज बुकिंग</span>
-            <b id="c-today-new">0</b>
-        </div>
+        <div id="today-main-face"><span>आज बुकिंग</span><b id="c-today-new">0</b></div>
         <div id="today-stats-face" style="display:none; grid-template-columns: repeat(3, 1fr); width:100%; gap:2px;">
             <div style="text-align:center;"><b id="in-done" style="color:var(--success); font-size:14px;">0</b><span style="font-size:7px;">DONE</span></div>
             <div style="text-align:center;"><b id="in-run" style="color:var(--running); font-size:14px;">0</b><span style="font-size:7px;">RUN</span></div>
@@ -86,26 +88,57 @@
     <div class="panel-box" style="background:#34495e" onclick="syncCounts()"><i class="fas fa-sync-alt"></i><span>REFRESH</span></div>
 </div>
 
+<div id="id-p" class="modal">
+    <div class="modal-content">
+        <h3>ID Generator</h3>
+        <div id="id-card-render">
+            <div class="v-header-id">AK SOLUTION HUB</div>
+            <img id="v-img" src="https://via.placeholder.com/110" crossorigin="anonymous">
+            <div class="v-stamp-new"><div class="v-stamp-inner"><span style="font-size: 6px;">AK SOLUTION</span><b style="font-size: 10px; border-top:1px solid #005eb8; border-bottom:1px solid #005eb8;">HUB</b><span style="font-size: 6px;">VERIFIED</span></div></div>
+            
+            <div style="margin-top:115px; text-align:center; padding:10px;">
+                <b id="v-name" style="font-size:18px; text-transform:uppercase;">NAME</b><br>
+                <span id="v-work-label" style="color:var(--primary); font-weight:800; font-size:12px;">FIELD EXPERT</span>
+                <div style="font-size:10px; font-weight:bold; color:#777; margin-top:3px;" id="v-id">ID: -</div>
+            </div>
+
+            <div style="padding:0 30px; font-size:11px; line-height:1.6;">
+                <b>FATHER:</b> <span id="v-father">-</span><br>
+                <b>PHONE:</b> <span id="v-phone">-</span><br>
+                <b>ADDRESS:</b> <span id="v-address" style="font-size:9px;">-</span><br>
+                <b style="color:var(--primary);">ISSUE:</b> <span id="v-iss-out" style="font-weight:bold;">--/--/----</span><br>
+                <b style="color:var(--danger);">EXPIRY:</b> <span id="v-exp-out" style="font-weight:bold;">--/--/----</span>
+            </div>
+            
+            <div id="id-qr" style="position:absolute; bottom:42px; left:25px; background:white;"></div>
+            <div style="position:absolute; bottom:45px; right:25px; text-align:center;">
+                <div class="v-sign-text">Anil Kumar</div>
+                <div style="font-size:8px; font-weight:bold; border-top:1px solid #333; padding-top:2px; width:90px;">Authorized Sign</div>
+            </div>
+            <div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div>
+        </div>
+        
+        <input type="text" id="id-tid" class="input" placeholder="Staff ID">
+        <div class="btn-grid">
+            <button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button>
+            <button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button>
+        </div>
+        <input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)">
+        <button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button>
+        <button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button>
+    </div>
+</div>
+
 <div id="list-p" class="modal"><div class="modal-content"><h3 id="lt"></h3><input type="text" id="listSearch" class="input" placeholder="खोजें..." onkeyup="searchInList()"><div id="lb"></div><button onclick="closeP('list-p')" class="status-btn" style="background:var(--dark); width:100%; margin-top:10px;">CLOSE</button></div></div>
-
 <div id="as-p" class="modal"><div class="modal-content"><h3>Assign Expert</h3><div id="staff-picker-box" style="max-height:150px; overflow-y:auto; border:1px solid #eee; margin-bottom:10px; border-radius:10px; text-align:left; background:#f9f9f9;"></div><input id="as-tid" class="input" placeholder="Staff ID" readonly><input id="as-cid" class="input" placeholder="Customer ID"><button class="status-btn" style="background:var(--primary); width:100%; height:50px;" onclick="processAssign()">CONFIRM ASSIGN & NOTIFY</button><button onclick="closeP('as-p')" style="margin-top:15px; border:none; color:red; background:none; font-weight:bold;">CANCEL</button></div></div>
-
-<div id="id-p" class="modal"><div class="modal-content"><h3>ID Generator</h3><div id="id-card-render"><div class="v-header-id">AK SOLUTION HUB</div><img id="v-img" src="https://via.placeholder.com/110" crossorigin="anonymous"><div class="v-stamp-new"><div class="v-stamp-inner"><span style="font-size: 6px;">AK SOLUTION</span><b style="font-size: 10px; border-top:1px solid #005eb8; border-bottom:1px solid #005eb8;">HUB</b><span style="font-size: 6px;">VERIFIED</span></div></div><div style="margin-top:115px; text-align:center; padding:10px;"><b id="v-name" style="font-size:18px; text-transform:uppercase;">NAME</b><br><span id="v-work-label" style="color:var(--primary); font-weight:800; font-size:12px;">FIELD EXPERT</span><div style="font-size:10px; font-weight:bold; color:#777; margin-top:3px;" id="v-id">ID: -</div></div><div style="padding:0 30px; font-size:11px; line-height:1.7;"><b>FATHER:</b> <span id="v-father">-</span><br><b>PHONE:</b> <span id="v-phone">-</span><br><b>ADDRESS:</b> <span id="v-address" style="font-size:9px;">-</span></div><div id="id-qr" style="position:absolute; bottom:50px; left:25px; background:white;"></div><div style="position:absolute; bottom:45px; right:25px; text-align:center;"><div class="v-sign-text">Anil Kumar</div><div style="font-size:8px; font-weight:bold; border-top:1px solid #333; padding-top:2px; width:90px;">Authorized Sign</div></div><div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div></div><input type="text" id="id-tid" class="input" placeholder="Staff ID"><div class="btn-grid"><button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button><button class="status-btn" style="background:var(--dark);" onclick="document.getElementById('cam').click()">PHOTO</button></div><input type="file" id="cam" capture="environment" accept="image/*" style="display:none" onchange="previewFile(event)"><button class="status-btn" style="background:var(--success); width:100%; margin-top:10px; height:50px;" onclick="downloadID()">DOWNLOAD HD CARD</button><button onclick="closeP('id-p')" style="margin-top:10px; border:none; color:red; background:none; font-weight:bold;">CLOSE</button></div></div>
-
 <div id="reg-p" class="modal"><div class="modal-content"><h3>Team Registration</h3><input id="rn" class="input" placeholder="Name"><input id="rf" class="input" placeholder="Father Name"><input id="rp" class="input" type="tel" placeholder="WhatsApp Number"><input id="ra" class="input" placeholder="Address"><input id="rs" class="input" placeholder="Service"><button class="status-btn" style="background:var(--warning); width:100%" onclick="handleOTP()">SEND OTP</button><div id="otp-area" style="display:none; margin-top:10px;"><input id="otp-val" class="input" type="number" placeholder="Enter Code"><button class="status-btn" style="background:var(--success); width:100%" onclick="verifyAndRegister()">REGISTER NOW</button></div><button onclick="closeP('reg-p')" style="margin-top:15px; border:none; color:red; background:none;">CLOSE</button></div></div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAsPogHhTu6kk8jh_cTgjrWFcHvJ4qGjMHMDUBWVpBrZsMT-FIgCEl5_n6yQCTP4anXA/exec";
     let fullCustData = [], fullTeamData = [], currentGeneratedOTP = "";
 
-    function getTodayFormatted() {
-        let now = new Date();
-        let d = String(now.getDate()).padStart(2, '0');
-        let m = String(now.getMonth() + 1).padStart(2, '0');
-        let y = now.getFullYear();
-        return `${d}/${m}/${y}`;
-    }
-
+    function getTodayFormatted() { let now = new Date(); return `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`; }
+    
     async function syncCounts() {
         document.getElementById('loader').style.display = 'flex';
         try {
@@ -123,19 +156,15 @@
         let now = new Date();
         let todayStr = getTodayFormatted();
         let todaySystemStr = now.toLocaleDateString('en-GB'); 
-
         let todayData = fullCustData.filter(x => {
             if (!x.Date) return false;
             let recordDate = new Date(x.Date);
-            let recordDateStr = recordDate.toLocaleDateString('en-GB');
-            return recordDateStr === todaySystemStr || x.Date.toString().includes(todayStr);
+            return recordDate.toLocaleDateString('en-GB') === todaySystemStr || x.Date.toString().includes(todayStr);
         });
-
         document.getElementById('c-today-new').innerText = todayData.length;
         document.getElementById('in-done').innerText = todayData.filter(x => x.Status === 'Done').length;
         document.getElementById('in-run').innerText = todayData.filter(x => x.Status === 'Running').length;
         document.getElementById('in-pend').innerText = todayData.filter(x => x.Status === 'Pending').length;
-
         document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
         document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
@@ -143,12 +172,7 @@
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    function flipTodayBox() {
-        const main = document.getElementById('today-main-face');
-        const stats = document.getElementById('today-stats-face');
-        if (main.style.display !== 'none') { main.style.display = 'none'; stats.style.display = 'grid'; } 
-        else { main.style.display = 'block'; stats.style.display = 'none'; showTodayWork(); }
-    }
+    function flipTodayBox() { const m = document.getElementById('today-main-face'), s = document.getElementById('today-stats-face'); if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}else{m.style.display='block'; s.style.display='none'; showTodayWork();} }
 
     async function loadRunningDetailed() { 
         let running = fullCustData.filter(x => x.Status === 'Running'); 
@@ -178,13 +202,10 @@
         let todayData = fullCustData.filter(x => {
             if (!x.Date) return false;
             let recordDate = new Date(x.Date);
-            let recordDateStr = recordDate.toLocaleDateString('en-GB');
-            return recordDateStr === todaySystemStr || x.Date.toString().includes(todayStr);
+            return recordDate.toLocaleDateString('en-GB') === todaySystemStr || x.Date.toString().includes(todayStr);
         });
         if(todayData.length === 0) todayData = fullCustData.filter(x => x.Status === 'Pending' || x.Status === 'Running');
-        let doneCount = todayData.filter(x => x.Status === 'Done').length;
-        let pendingCount = todayData.filter(x => x.Status === 'Pending' || x.Status === 'Running').length;
-        let summaryHtml = `<div style="background:var(--dark); color:white; padding:12px; border-radius:15px; margin-bottom:15px; font-size:11px; display:flex; justify-content:space-between; align-items:center;"><div style="text-align:left;"><b>आज कुल: ${todayData.length}</b><br><span style="font-size:9px;">${todayStr}</span></div><div style="text-align:right;"><span style="color:#27ae60;">✔ डन: ${doneCount}</span> | <span style="color:#f39c12;">⏳ बाकी: ${pendingCount}</span></div></div>`;
+        let summaryHtml = `<div style="background:var(--dark); color:white; padding:12px; border-radius:15px; margin-bottom:15px; font-size:11px; display:flex; justify-content:space-between; align-items:center;"><div><b>आज कुल: ${todayData.length}</b></div></div>`;
         renderDataList(todayData, 'CUST', summaryHtml);
         document.getElementById('lt').innerText = "TODAY'S SUMMARY";
     }
@@ -194,12 +215,11 @@
         d.forEach(i => {
             let dotColor = "gray";
             let status = i.Status || "";
-            let opacity = (status === 'Done') ? "0.6" : "1";
             if(status === 'Free' || status === 'Done') dotColor = "var(--success)";
             else if(status === 'Running') dotColor = "var(--running)";
             else if(status === 'Pending') dotColor = "var(--warning)";
             else if(status === 'Busy' || status === 'Reject') dotColor = "var(--danger)";
-            h += `<div class="data-card" style="border-left-color:${dotColor}; opacity:${opacity};">
+            h += `<div class="data-card" style="border-left-color:${dotColor};">
                     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:5px;">
                         <div style="display:flex; align-items:center; gap:8px;"><span class="status-dot" style="background-color:${dotColor};"></span><b style="font-size:14px; text-transform:uppercase;">${i.Name}</b></div>
                         <span style="font-size:9px; font-weight:bold; color:${dotColor}; border:1px solid ${dotColor}; padding:1px 6px; border-radius:10px;">${status}</span>
@@ -213,7 +233,6 @@
                   </div>`;
         });
         document.getElementById('lb').innerHTML = h || "कोई डेटा नहीं मिला";
-        if(!extraHtml) document.getElementById('lt').innerText = t === 'CUST' ? "CUSTOMERS" : "TEAM LIST";
         openP('list-p');
     }
 
@@ -221,73 +240,37 @@
         let cid = document.getElementById('as-cid').value.toUpperCase();
         let tid = document.getElementById('as-tid').value.toUpperCase();
         if(!cid || !tid) return alert("कृपया दोनों ID चुनें!");
-
         document.getElementById('loader').style.display = 'flex';
         try {
             await Promise.all([
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
-            
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
-            
             if(cust && staff) {
                 let mapLink = cust.GPS || "https://www.google.com/maps";
-
-                let teamMsg = `📍 *लोकेशन:* ${mapLink}%0A` +
-                              `----------------------------------%0A` +
-                              `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
-                              `----------------------------------%0A` +
-                              `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
-                              `📞 *मोबाइल:* ${cust.Phone}%0A` +
-                              `👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A` +
-                              `🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}%0A` +
-                              `📍 *पता:* ${encodeURIComponent(cust.Address)}%0A` +
-                              `----------------------------------%0A` +
-                              `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
-
-                let custMsg = `*AK SOLUTION HUB - बुकिंग कंफर्म* ✅%0A` +
-                              `----------------------------------%0A` +
-                              `नमस्ते *${encodeURIComponent(cust.Name)}*, आपकी सर्विस बुकिंग कंफर्म हो गई है।%0A%0A` +
-                              `👤 *एक्सपर्ट नाम:* ${encodeURIComponent(staff.Name)}%0A` +
-                              `📞 *संपर्क नंबर:* ${staff.Phone}%0A` +
-                              `🛠️ हमारा एक्सपर्ट जल्द ही आपके पते पर पहुँचेगा।`;
-
+                let teamMsg = `📍 *लोकेशन:* ${mapLink}%0A🆔 *बुकिंग ID:* ${cust.ID}%0A📞 *मोबाइल:* ${cust.Phone}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}`;
+                let custMsg = `नमस्ते *${encodeURIComponent(cust.Name)}*, आपकी सर्विस बुकिंग कंफर्म हो गई है।%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}`;
                 window.open(`https://wa.me/91${staff.Phone}?text=${teamMsg}`, '_blank');
-
-                setTimeout(() => {
-                    window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank');
-                    
-                    setTimeout(() => {
-                        document.getElementById('loader').style.display = 'none';
-                        alert("✅ असाइनमेंट सफल! टीम और कस्टमर दोनों को मैसेज भेज दिए गए हैं।");
-                        closeP('as-p'); 
-                        syncCounts();
-                    }, 1000);
-                }, 2000);
+                setTimeout(() => { window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank'); syncCounts(); closeP('as-p'); document.getElementById('loader').style.display = 'none'; }, 2000);
             }
         } catch(e) { alert("Assignment Error!"); document.getElementById('loader').style.display = 'none'; }
     }
 
     async function finishTask(cid, tid) { 
-        if(!confirm("क्या काम पूरा हो गया है और टीम को फ्री करना है?")) return;
+        if(!confirm("क्या काम पूरा हो गया है?")) return;
         document.getElementById('loader').style.display = 'flex'; 
         try {
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
-            if(tid && tid !== 'undefined' && tid !== 'null') {
-                await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
-            }
-            alert("✅ काम पूरा हुआ और टीम अब फ्री है!");
-            await syncCounts(); 
-            closeP('list-p'); 
-        } catch(e) { alert("अपडेट में समस्या आई!"); }
+            if(tid && tid !== 'undefined') await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
+            syncCounts(); closeP('list-p'); 
+        } catch(e) { alert("Error!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     function handleOTP() { 
         let n = document.getElementById('rn').value, p = document.getElementById('rp').value;
-        if(!n || p.length < 10) return alert("विवरण सही भरें");
         currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
         window.open(`https://wa.me/91${p}?text=OTP: ${currentGeneratedOTP}`, '_blank');
         document.getElementById('otp-area').style.display = 'block';
@@ -298,33 +281,10 @@
         document.getElementById('loader').style.display = 'flex';
         let teamID = "T-" + Math.floor(1000 + Math.random() * 9999);
         let p = `action=addTeam&ID=${encodeURIComponent(teamID)}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${encodeURIComponent(document.getElementById('rp').value)}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}`;
-        try { await fetch(`${SCRIPT_URL}?${p}`); alert("रजिस्टर सफल! ID: " + teamID); closeP('reg-p'); syncCounts(); } catch(e) { alert("Error!"); }
+        try { await fetch(`${SCRIPT_URL}?${p}`); closeP('reg-p'); syncCounts(); } catch(e) { alert("Error!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
-    function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
-    function closeP(id) { document.getElementById(id).style.display = 'none'; }
-    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    function renderFree() { 
-        let b = document.getElementById('staff-picker-box'); 
-        let freeStaff = fullTeamData.filter(x => x.Status === 'Free');
-        b.innerHTML = freeStaff.length ? "" : "<p style='padding:10px;'>कोई फ्री स्टाफ नहीं</p>";
-        freeStaff.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; }); 
-    }
-    function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
-    function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
-    async function quickUpdate(s) { 
-        let id = document.getElementById('man-id').value.toUpperCase(); 
-        if(!id) return alert("ID लिखें"); 
-        document.getElementById('loader').style.display = 'flex'; 
-        try { await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); alert("अपडेट सफल!"); } catch(e) { alert("Error!"); }
-        finally { document.getElementById('loader').style.display = 'none'; }
-    }
-    function searchInList() { 
-        let v = document.getElementById('listSearch').value.toUpperCase(); 
-        let c = document.getElementsByClassName('data-card'); 
-        for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; 
-    }
     function loadIDData() { 
         let tid = document.getElementById('id-tid').value.toUpperCase(); 
         let s = fullTeamData.find(x => x.ID === tid); 
@@ -335,50 +295,49 @@
         document.getElementById('v-father').innerText = s.Father || "-"; 
         document.getElementById('v-address').innerText = s.Address || "-"; 
         document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); 
+        
+        let now = new Date();
+        let iss = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear();
+        now.setMonth(now.getMonth() + 6);
+        let exp = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear();
+        document.getElementById('v-iss-out').innerText = iss;
+        document.getElementById('v-exp-out').innerText = exp;
+
         document.getElementById('id-qr').innerHTML = ""; 
         new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); 
     }
-    function previewFile(e) { 
-        let r = new FileReader(); 
-        r.onload = function(){ document.getElementById('v-img').src = r.result; }; 
-        r.readAsDataURL(e.target.files[0]); 
+
+    function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
+    function closeP(id) { document.getElementById(id).style.display = 'none'; }
+    function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
+    function renderFree() { 
+        let b = document.getElementById('staff-picker-box'); 
+        let freeStaff = fullTeamData.filter(x => x.Status === 'Free');
+        b.innerHTML = freeStaff.length ? "" : "<p>कोई फ्री स्टाफ नहीं</p>";
+        freeStaff.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; }); 
     }
-    
-    // --- यहाँ सुधार किया गया है: अब फॉर्म कंप्लीट होने पर ही डाउनलोड होगा ---
+    function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
+    function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
+    async function quickUpdate(s) { 
+        let id = document.getElementById('man-id').value.toUpperCase(); 
+        if(!id) return alert("ID लिखें"); 
+        document.getElementById('loader').style.display = 'flex'; 
+        try { await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); } catch(e) { alert("Error!"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
+    }
+    function searchInList() { 
+        let v = document.getElementById('listSearch').value.toUpperCase(); 
+        let c = document.getElementsByClassName('data-card'); 
+        for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; 
+    }
+    function previewFile(e) { let r = new FileReader(); r.onload = function(){ document.getElementById('v-img').src = r.result; }; r.readAsDataURL(e.target.files[0]); }
     function downloadID() { 
         let tid = document.getElementById('id-tid').value.toUpperCase();
-        let currentName = document.getElementById('v-name').innerText;
-
-        // नियम: अगर आईडी खाली है या नाम अभी तक डिफॉल्ट 'NAME' ही है, तो अलर्ट आएगा
-        if (!tid || tid === "" || currentName === "NAME") {
-            alert("⚠️ फॉर्म अधूरा है! कृपया पहले Staff ID डालकर 'LOAD DATA' बटन दबाएँ।");
-            return; // यहीं से कोड रुक जाएगा
-        }
-
+        if (!tid || document.getElementById('v-name').innerText === "NAME") return alert("Data Load करें");
         document.getElementById('loader').style.display = 'flex';
-        
-        html2canvas(document.getElementById('id-card-render'), { 
-            scale: 3, 
-            useCORS: true,
-            allowTaint: true 
-        }).then(canvas => { 
-            // Blob का उपयोग ताकि फाइल का नाम सही प्रोफेशनल तरीके से आए
-            canvas.toBlob(function(blob) {
-                let link = document.createElement('a');
-                let url = URL.createObjectURL(blob);
-                link.href = url;
-                link.download = `AK-ID-${tid}.png`; 
-                document.body.appendChild(link);
-                link.click(); 
-                
-                setTimeout(function() {
-                    document.body.removeChild(link);
-                    window.URL.revokeObjectURL(url);
-                    document.getElementById('loader').style.display = 'none';
-                }, 150);
-            }, 'image/png');
-        }).catch(e => {
-            alert("Error!");
+        html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(canvas => { 
+            let link = document.createElement('a');
+            link.download = `AK-ID-${tid}.png`; link.href = canvas.toDataURL(); link.click();
             document.getElementById('loader').style.display = 'none';
         });
     }
