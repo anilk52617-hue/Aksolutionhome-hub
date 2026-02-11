@@ -10,7 +10,6 @@
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         body { background: #fff; padding-bottom: 80px; text-align: center; overflow-x: hidden; }
         
-        /* Header & Banner Styles */
         .header { padding: 15px; background: #fff; position: sticky; top:0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .logo-img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary); padding: 3px; cursor: pointer; object-fit: cover; }
         .brand-title { color: var(--primary); font-size: 22px; font-weight: bold; margin: 5px 0; }
@@ -47,13 +46,15 @@
         .main-btn { width: 100%; padding: 15px; background: var(--primary); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
         
         .nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; border-top: 1px solid #ddd; height: 70px; z-index: 1000; }
-        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 11px; cursor: pointer; }
+        .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 10px; cursor: pointer; }
         .nav-item.active { color: var(--primary); border-top: 4px solid var(--primary); font-weight: bold; }
         
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
         .modal-content { background:#fff; width:92%; margin:15% auto; border-radius:25px; padding:20px; text-align: center; max-height: 80vh; overflow-y: auto; }
         #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
         .status-result { margin-top: 20px; padding: 15px; border-radius: 15px; background: #f9f9f9; border: 1px dashed var(--primary); display: none; text-align: left;}
+        
+        .p-card { background:#f8f9fa; padding:15px; border-radius:15px; text-align:left; margin-bottom:10px; border-left:4px solid var(--primary); font-size: 13px; }
     </style>
 </head>
 <body>
@@ -98,11 +99,26 @@
     <button class="main-btn" onclick="sendReview()">रिव्यू भेजें</button>
 </div>
 
+<div id="privacy" class="page">
+    <h2 style="color:var(--primary); margin-bottom:20px;"><i class="fas fa-user-shield"></i> Privacy Policy</h2>
+    <div class="p-card"><b>Data Security:</b> We collect your name and mobile number only to provide and confirm your requested home services. Your data is stored securely.</div>
+    <div class="p-card"><b>GPS Location:</b> We access your GPS location solely to guide our service experts to your address for timely service delivery.</div>
+    <div class="p-card"><b>Data Deletion:</b> You have the right to request the deletion of your personal data from our records at any time.</div>
+    
+    <button class="main-btn" style="background:#e74c3c; margin-bottom:15px; font-size: 14px;" 
+            onclick="window.location.href='https://wa.me/919927464530?text=I%20request%20to%20delete%20my%20data%20from%20AK%20Solution%20Hub.'">
+        <i class="fas fa-trash-alt"></i> Request Data Deletion
+    </button>
+    
+    <button class="main-btn" onclick="go('home', document.querySelectorAll('.nav-item')[0])" style="background:var(--dark);">Back to Home</button>
+</div>
+
 <div class="nav">
     <div class="nav-item active" onclick="go('home', this)"><i class="fas fa-home"></i>Home</div>
-    <div class="nav-item" onclick="go('booking', this)"><i class="fas fa-calendar-check"></i>Booking</div>
+    <div class="nav-item" onclick="go('booking', this)"><i class="fas fa-calendar-check"></i>Book</div>
     <div class="nav-item" onclick="go('track', this)"><i class="fas fa-search-location"></i>Track</div>
     <div class="nav-item" onclick="go('review', this)"><i class="fas fa-star"></i>Review</div>
+    <div class="nav-item" onclick="go('privacy', this)"><i class="fas fa-user-shield"></i>Privacy</div>
 </div>
 
 <div id="subModal" class="modal">
@@ -123,7 +139,6 @@
 </div>
 
 <script>
-    // अपडेटेड यूआरएल और लॉजिक
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
     let userGPS = "Not Provided";
     let tapCount = 0;
@@ -185,7 +200,7 @@
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
-                userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                userGPS = `http://maps.google.com/?q=${p.coords.latitude},${p.coords.longitude}`;
                 document.getElementById('finalSubmit').style.display = 'block';
                 document.getElementById('loader').style.display = 'none';
                 alert("📍 लोकेशन कन्फर्म हो गई!");
@@ -209,21 +224,10 @@
         const date = new Date().toLocaleDateString('en-GB');
 
         try {
-            // यहाँ expertid= को खाली भेजा गया है ताकि नया कॉलम डिस्टर्ब न हो
             let params = `?action=addBooking&Date=${date}&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(addrVal)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending&expertid=`;
-            
             fetch(SCRIPT_URL + params, {mode: 'no-cors'});
             
-            let waMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A` +
-                        `------------------------------------%0A` +
-                        `🆔 *बुकिंग ID:* ${id}%0A` +
-                        `📞 *मोबाइल:* ${phoneVal}%0A` +
-                        `👤 *कस्टमर:* ${encodeURIComponent(nameVal)}%0A` +
-                        `🛠️ *सर्विस:* ${encodeURIComponent(svcVal)}%0A` +
-                        `📍 *पता:* ${encodeURIComponent(addrVal)}%0A` +
-                        `🌍 *लोकेशन:* ${encodeURIComponent(userGPS)}%0A` +
-                        `------------------------------------%0A` +
-                        `✅ *टीम जल्द आपसे संपर्क करेगी।*`;
+            let waMsg = `*AK SOLUTION HUB - नई बुकिंग* 🛠️%0A🆔 *ID:* ${id}%0A📞 *मोबाइल:* ${phoneVal}%0A👤 *नाम:* ${encodeURIComponent(nameVal)}%0A🛠️ *सर्विस:* ${encodeURIComponent(svcVal)}%0A📍 *पता:* ${encodeURIComponent(addrVal)}%0A🌍 *लोकेशन:* ${encodeURIComponent(userGPS)}`;
             
             setTimeout(() => {
                 document.getElementById('loader').style.display = 'none';
@@ -251,7 +255,7 @@
             let resDiv = document.getElementById('statusResult');
             resDiv.style.display = 'block';
             if(found) {
-                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>नाम:</b> ${found.Name}<br><b>सर्विस:</b> ${found.Service}<br><b>स्टेटस:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
+                resDiv.innerHTML = `<b>ID:</b> ${found.ID}<br><b>नाम:</b> ${found.Name}<br><b>स्टेटस:</b> <span style="color:var(--primary); font-weight:bold;">${found.Status}</span>`;
             } else {
                 resDiv.innerHTML = "<span style='color:red;'>ID नहीं मिली!</span>";
             }

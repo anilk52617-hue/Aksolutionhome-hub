@@ -343,12 +343,46 @@
         r.onload = function(){ document.getElementById('v-img').src = r.result; }; 
         r.readAsDataURL(e.target.files[0]); 
     }
+    
+    // --- यहाँ सुधार किया गया है: अब फॉर्म कंप्लीट होने पर ही डाउनलोड होगा ---
     function downloadID() { 
-        html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(c => { 
-            let l = document.createElement('a'); l.download = `ID-${document.getElementById('v-id').innerText}.png`; 
-            l.href = c.toDataURL(); l.click(); 
-        }); 
+        let tid = document.getElementById('id-tid').value.toUpperCase();
+        let currentName = document.getElementById('v-name').innerText;
+
+        // नियम: अगर आईडी खाली है या नाम अभी तक डिफॉल्ट 'NAME' ही है, तो अलर्ट आएगा
+        if (!tid || tid === "" || currentName === "NAME") {
+            alert("⚠️ फॉर्म अधूरा है! कृपया पहले Staff ID डालकर 'LOAD DATA' बटन दबाएँ।");
+            return; // यहीं से कोड रुक जाएगा
+        }
+
+        document.getElementById('loader').style.display = 'flex';
+        
+        html2canvas(document.getElementById('id-card-render'), { 
+            scale: 3, 
+            useCORS: true,
+            allowTaint: true 
+        }).then(canvas => { 
+            // Blob का उपयोग ताकि फाइल का नाम सही प्रोफेशनल तरीके से आए
+            canvas.toBlob(function(blob) {
+                let link = document.createElement('a');
+                let url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = `AK-ID-${tid}.png`; 
+                document.body.appendChild(link);
+                link.click(); 
+                
+                setTimeout(function() {
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                    document.getElementById('loader').style.display = 'none';
+                }, 150);
+            }, 'image/png');
+        }).catch(e => {
+            alert("Error!");
+            document.getElementById('loader').style.display = 'none';
+        });
     }
+    
     window.onload = syncCounts;
 </script>
 </body>
