@@ -35,10 +35,7 @@
         /* FIXED ID CARD STYLE */
         #id-card-render { width: 300px; height: 500px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
-        
-        /* PHOTO Position adjusted to 60px for a small gap from header */
         #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 60px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
-        
         .v-stamp-new { position: absolute; width: 75px; height: 75px; border: 2px solid rgba(0, 94, 184, 0.7); border-radius: 50%; top: 105px; right: 45px; z-index: 10; transform: rotate(-15deg); display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); color: rgba(0, 94, 184, 0.8); font-weight: bold; }
         .v-stamp-inner { border: 1px dashed rgba(0, 94, 184, 0.5); width: 65px; height: 65px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .v-sign-text { font-family: 'Brush Script MT', cursive, sans-serif; font-size: 22px; color: #1a2a6c; margin-bottom: -8px; }
@@ -95,13 +92,11 @@
             <div class="v-header-id">AK SOLUTION HUB</div>
             <img id="v-img" src="https://via.placeholder.com/110" crossorigin="anonymous">
             <div class="v-stamp-new"><div class="v-stamp-inner"><span style="font-size: 6px;">AK SOLUTION</span><b style="font-size: 10px; border-top:1px solid #005eb8; border-bottom:1px solid #005eb8;">HUB</b><span style="font-size: 6px;">VERIFIED</span></div></div>
-            
             <div style="margin-top:115px; text-align:center; padding:10px;">
                 <b id="v-name" style="font-size:18px; text-transform:uppercase;">NAME</b><br>
                 <span id="v-work-label" style="color:var(--primary); font-weight:800; font-size:12px;">FIELD EXPERT</span>
                 <div style="font-size:10px; font-weight:bold; color:#777; margin-top:3px;" id="v-id">ID: -</div>
             </div>
-
             <div style="padding:0 30px; font-size:11px; line-height:1.6;">
                 <b>FATHER:</b> <span id="v-father">-</span><br>
                 <b>PHONE:</b> <span id="v-phone">-</span><br>
@@ -109,7 +104,6 @@
                 <b style="color:var(--primary);">ISSUE:</b> <span id="v-iss-out" style="font-weight:bold;">--/--/----</span><br>
                 <b style="color:var(--danger);">EXPIRY:</b> <span id="v-exp-out" style="font-weight:bold;">--/--/----</span>
             </div>
-            
             <div id="id-qr" style="position:absolute; bottom:42px; left:25px; background:white;"></div>
             <div style="position:absolute; bottom:45px; right:25px; text-align:center;">
                 <div class="v-sign-text">Anil Kumar</div>
@@ -117,7 +111,6 @@
             </div>
             <div style="position:absolute; bottom:0; width:100%; height:32px; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">WWW.AKSOLUTIONHUB.COM</div>
         </div>
-        
         <input type="text" id="id-tid" class="input" placeholder="Staff ID">
         <div class="btn-grid">
             <button class="status-btn" style="background:var(--primary);" onclick="loadIDData()">LOAD DATA</button>
@@ -236,26 +229,73 @@
         openP('list-p');
     }
 
+    // UPDATED FUNCTION: PROFESSIONAL WHATSAPP FORMATS & DIRECT TRIGGER
     async function processAssign() {
-        let cid = document.getElementById('as-cid').value.toUpperCase();
-        let tid = document.getElementById('as-tid').value.toUpperCase();
+        let cid = document.getElementById('as-cid').value.toUpperCase().trim();
+        let tid = document.getElementById('as-tid').value.toUpperCase().trim();
         if(!cid || !tid) return alert("कृपया दोनों ID चुनें!");
+
         document.getElementById('loader').style.display = 'flex';
         try {
             await Promise.all([
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
+
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
+
             if(cust && staff) {
-                let mapLink = cust.GPS || "https://www.google.com/maps";
-                let teamMsg = `📍 *लोकेशन:* ${mapLink}%0A🆔 *बुकिंग ID:* ${cust.ID}%0A📞 *मोबाइल:* ${cust.Phone}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}`;
-                let custMsg = `नमस्ते *${encodeURIComponent(cust.Name)}*, आपकी सर्विस बुकिंग कंफर्म हो गई है।%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}`;
-                window.open(`https://wa.me/91${staff.Phone}?text=${teamMsg}`, '_blank');
-                setTimeout(() => { window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank'); syncCounts(); closeP('as-p'); document.getElementById('loader').style.display = 'none'; }, 2000);
+                // Formatting phone numbers
+                let sPhone = staff.Phone.toString().replace(/\D/g, '');
+                if(sPhone.length === 10) sPhone = "91" + sPhone;
+                
+                let cPhone = cust.Phone.toString().replace(/\D/g, '');
+                if(cPhone.length === 10) cPhone = "91" + cPhone;
+
+                // TEAM MESSAGE FORMAT
+                let teamMsg = `*AK SOLUTION HUB (Work Order)*%0A` +
+                              `━━━━━━━━━━━━━━━━━━%0A` +
+                              `🚩 *नया कार्य असाइन हुआ है*%0A` +
+                              `━━━━━━━━━━━━━━━━━━%0A` +
+                              `📅 *तारीख:* ${cust.Date || '-'}%0A` +
+                              `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
+                              `👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A` +
+                              `📞 *संपर्क:* ${cust.Phone}%0A` +
+                              `🛠️ *सेवा:* ${encodeURIComponent(cust.Service)}%0A` +
+                              `📍 *पता:* ${encodeURIComponent(cust.Address)}%0A` +
+                              `━━━━━━━━━━━━━━━━━━%0A` +
+                              `🌍 *लोकेशन लिंक:* ${cust.GPS || 'लिंक नहीं है'}%0A` +
+                              `━━━━━━━━━━━━━━━━━━`;
+
+                // CUSTOMER MESSAGE FORMAT
+                let custMsg = `*AK SOLUTION HUB (Confirmed)*%0A` +
+                              `━━━━━━━━━━━━━━━━━━%0A` +
+                              `नमस्ते *${encodeURIComponent(cust.Name)}*,%0A` +
+                              `आपकी बुकिंग (ID: ${cust.ID}) कन्फर्म हो गई है।%0A%0A` +
+                              `👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A` +
+                              `📞 *संपर्क:* ${staff.Phone}%0A` +
+                              `🆔 *स्टाफ ID:* ${staff.ID}%0A` +
+                              `━━━━━━━━━━━━━━━━━━%0A` +
+                              `🙏 *AK Solution पर भरोसा करने के लिए धन्यवाद।*`;
+
+                // Step 1: Notify Team
+                window.location.href = `whatsapp://send?phone=${sPhone}&text=${teamMsg}`;
+
+                // Step 2: Confirmation for Customer Message
+                setTimeout(() => {
+                    if(confirm("टीम को जानकारी भेज दी गई है। क्या अब कस्टमर को एक्सपर्ट की डिटेल भेजें?")) {
+                        window.location.href = `whatsapp://send?phone=${cPhone}&text=${custMsg}`;
+                    }
+                    syncCounts(); 
+                    closeP('as-p');
+                    document.getElementById('loader').style.display = 'none';
+                }, 2500);
             }
-        } catch(e) { alert("Assignment Error!"); document.getElementById('loader').style.display = 'none'; }
+        } catch(e) { 
+            alert("Assignment Error: " + e); 
+            document.getElementById('loader').style.display = 'none';
+        }
     }
 
     async function finishTask(cid, tid) { 
