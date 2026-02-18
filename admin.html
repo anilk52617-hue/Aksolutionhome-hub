@@ -9,12 +9,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; }
+        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; --advance: #9b59b6; }
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         body { background: #eef2f7; padding-bottom: 50px; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .ind-box:active { transform: scale(0.95); }
         .ind-box b { font-size: 18px; color: var(--dark); display: block; }
         .ind-box span { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
@@ -59,7 +59,15 @@
             <div style="text-align:center;"><b id="in-pend" style="color:var(--danger); font-size:14px;">0</b><span style="font-size:7px;">PEND</span></div>
         </div>
     </div>
-    <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
+    
+    <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="flipPendingBox()">
+        <div id="pend-main-face"><span>Pending</span><b id="c-old-pend">0</b></div>
+        <div id="pend-stats-face" style="display:none; grid-template-columns: repeat(2, 1fr); width:100%; gap:2px;">
+            <div onclick="showSmartPendList('today')" style="text-align:center;"><b id="p-today-small" style="color:var(--danger); font-size:14px;">0</b><span style="font-size:7px;">TODAY</span></div>
+            <div onclick="showSmartPendList('adv')" style="text-align:center;"><b id="p-adv-small" style="color:var(--advance); font-size:14px;">0</b><span style="font-size:7px;">ADVANCE</span></div>
+        </div>
+    </div>
+
     <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
     <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
     <div class="ind-box" style="border-color:var(--warning)" onclick="loadList('CUST')"><span>Total Cust</span><b id="c-total">0</b></div>
@@ -154,18 +162,69 @@
             let recordDate = new Date(x.Date);
             return recordDate.toLocaleDateString('en-GB') === todaySystemStr || x.Date.toString().includes(todayStr);
         });
+
+        // Today Box
         document.getElementById('c-today-new').innerText = todayData.length;
         document.getElementById('in-done').innerText = todayData.filter(x => x.Status === 'Done').length;
         document.getElementById('in-run').innerText = todayData.filter(x => x.Status === 'Running').length;
         document.getElementById('in-pend').innerText = todayData.filter(x => x.Status === 'Pending').length;
-        document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
+
+        // Pending Smart Box
+        let totalPending = fullCustData.filter(x => x.Status === 'Pending');
+        document.getElementById('c-old-pend').innerText = totalPending.length;
+        
+        // Today Pending Count
+        document.getElementById('p-today-small').innerText = todayData.filter(x => x.Status === 'Pending').length;
+        
+        // Advance Pending Count (Any date in future)
+        let tStr = now.toISOString().split('T')[0];
+        document.getElementById('p-adv-small').innerText = totalPending.filter(x => {
+            let d = new Date(x.Date).toISOString().split('T')[0];
+            return d > tStr;
+        }).length;
+
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
         document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
         document.getElementById('c-total').innerText = fullCustData.length;
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    function flipTodayBox() { const m = document.getElementById('today-main-face'), s = document.getElementById('today-stats-face'); if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}else{m.style.display='block'; s.style.display='none'; showTodayWork();} }
+    // Flip Functions
+    function flipTodayBox() { 
+        const m = document.getElementById('today-main-face'), s = document.getElementById('today-stats-face'); 
+        if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}
+        else{m.style.display='block'; s.style.display='none'; showTodayWork();} 
+    }
+
+    function flipPendingBox() {
+        event.stopPropagation();
+        const m = document.getElementById('pend-main-face'), s = document.getElementById('pend-stats-face');
+        if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}
+        else{m.style.display='block'; s.style.display='none'; filterStatus('Pending');}
+    }
+
+    // Smart List Filtering
+    function showSmartPendList(type) {
+        event.stopPropagation();
+        let todayStr = getTodayFormatted();
+        let filtered = [];
+        let title = "";
+
+        if(type === 'today') {
+            filtered = fullCustData.filter(x => x.Status === 'Pending' && x.Date.toString().includes(todayStr));
+            title = "आज की पेंडिंग बुकिंग";
+        } else {
+            let tStr = new Date().toISOString().split('T')[0];
+            filtered = fullCustData.filter(x => {
+                let d = new Date(x.Date).toISOString().split('T')[0];
+                return x.Status === 'Pending' && d > tStr;
+            });
+            title = "एडवांस पेंडिंग बुकिंग";
+        }
+
+        renderDataList(filtered, 'CUST');
+        document.getElementById('lt').innerText = title;
+    }
 
     async function loadRunningDetailed() { 
         let running = fullCustData.filter(x => x.Status === 'Running'); 
@@ -203,6 +262,7 @@
         document.getElementById('lt').innerText = "TODAY'S SUMMARY";
     }
 
+    // ORIGINAL PROFESSIONAL LIST DESIGN
     function renderDataList(d, t, extraHtml = "") {
         let h = extraHtml;
         d.forEach(i => {
@@ -229,73 +289,35 @@
         openP('list-p');
     }
 
-    // UPDATED FUNCTION: PROFESSIONAL WHATSAPP FORMATS & DIRECT TRIGGER
     async function processAssign() {
         let cid = document.getElementById('as-cid').value.toUpperCase().trim();
         let tid = document.getElementById('as-tid').value.toUpperCase().trim();
         if(!cid || !tid) return alert("कृपया दोनों ID चुनें!");
-
         document.getElementById('loader').style.display = 'flex';
         try {
             await Promise.all([
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
                 fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
             ]);
-
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
-
             if(cust && staff) {
-                // Formatting phone numbers
                 let sPhone = staff.Phone.toString().replace(/\D/g, '');
                 if(sPhone.length === 10) sPhone = "91" + sPhone;
-                
                 let cPhone = cust.Phone.toString().replace(/\D/g, '');
                 if(cPhone.length === 10) cPhone = "91" + cPhone;
-
-                // TEAM MESSAGE FORMAT
-                let teamMsg = `*AK SOLUTION HUB (Work Order)*%0A` +
-                              `━━━━━━━━━━━━━━━━━━%0A` +
-                              `🚩 *नया कार्य असाइन हुआ है*%0A` +
-                              `━━━━━━━━━━━━━━━━━━%0A` +
-                              `📅 *तारीख:* ${cust.Date || '-'}%0A` +
-                              `🆔 *बुकिंग ID:* ${cust.ID}%0A` +
-                              `👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A` +
-                              `📞 *संपर्क:* ${cust.Phone}%0A` +
-                              `🛠️ *सेवा:* ${encodeURIComponent(cust.Service)}%0A` +
-                              `📍 *पता:* ${encodeURIComponent(cust.Address)}%0A` +
-                              `━━━━━━━━━━━━━━━━━━%0A` +
-                              `🌍 *लोकेशन लिंक:* ${cust.GPS || 'लिंक नहीं है'}%0A` +
-                              `━━━━━━━━━━━━━━━━━━`;
-
-                // CUSTOMER MESSAGE FORMAT
-                let custMsg = `*AK SOLUTION HUB (Confirmed)*%0A` +
-                              `━━━━━━━━━━━━━━━━━━%0A` +
-                              `नमस्ते *${encodeURIComponent(cust.Name)}*,%0A` +
-                              `आपकी बुकिंग (ID: ${cust.ID}) कन्फर्म हो गई है।%0A%0A` +
-                              `👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A` +
-                              `📞 *संपर्क:* ${staff.Phone}%0A` +
-                              `🆔 *स्टाफ ID:* ${staff.ID}%0A` +
-                              `━━━━━━━━━━━━━━━━━━%0A` +
-                              `🙏 *AK Solution पर भरोसा करने के लिए धन्यवाद।*`;
-
-                // Step 1: Notify Team
+                let teamMsg = `*AK SOLUTION HUB (Work Order)*%0A🚩 *नया कार्य असाइन हुआ है*%0A📅 *तारीख:* ${cust.Date || '-'}%0A🆔 *बुकिंग ID:* ${cust.ID}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🛠️ *सेवा:* ${encodeURIComponent(cust.Service)}%0A📍 *पता:* ${encodeURIComponent(cust.Address)}`;
+                let custMsg = `*AK SOLUTION HUB (Confirmed)*%0Aनमस्ते *${encodeURIComponent(cust.Name)}*,%0Aआपकी बुकिंग (ID: ${cust.ID}) कन्फर्म हो गई है।%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}`;
                 window.location.href = `whatsapp://send?phone=${sPhone}&text=${teamMsg}`;
-
-                // Step 2: Confirmation for Customer Message
                 setTimeout(() => {
-                    if(confirm("टीम को जानकारी भेज दी गई है। क्या अब कस्टमर को एक्सपर्ट की डिटेल भेजें?")) {
+                    if(confirm("टीम को जानकारी भेज दी गई है। क्या अब कस्टमर को डिटेल भेजें?")) {
                         window.location.href = `whatsapp://send?phone=${cPhone}&text=${custMsg}`;
                     }
-                    syncCounts(); 
-                    closeP('as-p');
-                    document.getElementById('loader').style.display = 'none';
+                    syncCounts(); closeP('as-p');
                 }, 2500);
             }
-        } catch(e) { 
-            alert("Assignment Error: " + e); 
-            document.getElementById('loader').style.display = 'none';
-        }
+        } catch(e) { alert("Assignment Error"); }
+        finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     async function finishTask(cid, tid) { 
@@ -335,14 +357,12 @@
         document.getElementById('v-father').innerText = s.Father || "-"; 
         document.getElementById('v-address').innerText = s.Address || "-"; 
         document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); 
-        
         let now = new Date();
         let iss = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear();
         now.setMonth(now.getMonth() + 6);
         let exp = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear();
         document.getElementById('v-iss-out').innerText = iss;
         document.getElementById('v-exp-out').innerText = exp;
-
         document.getElementById('id-qr').innerHTML = ""; 
         new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); 
     }
@@ -381,7 +401,6 @@
             document.getElementById('loader').style.display = 'none';
         });
     }
-    
     window.onload = syncCounts;
 </script>
 </body>
