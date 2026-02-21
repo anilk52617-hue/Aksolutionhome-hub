@@ -15,17 +15,17 @@
         .brand-title { color: var(--primary); font-size: 22px; font-weight: bold; margin: 5px 0; }
         .call-btn { background: #27ae60; color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 16px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
         .ticker { background: var(--primary); color: #fff; padding: 6px; font-size: 12px; overflow: hidden; }
-        
+
+        /* Rolling Banner Style */
         .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: 160px; position: relative; }
         .banner img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .banner img.active { display: block; animation: fade 0.8s; }
         @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
 
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; background: var(--bg); }
-        .box { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .box:active { transform: scale(0.95); }
+        .box { background: white; padding: 15px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .box i { font-size: 24px; color: var(--primary); margin-bottom: 8px; }
-        .box span { font-size: 10px; color: #555; font-weight: bold; text-transform: uppercase; display: block; }
+        .box span { font-size: 10px; color: #555; font-weight: bold; text-transform: uppercase; }
         
         .page { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
         .active-page { display: block; }
@@ -37,117 +37,86 @@
         .nav-item.active { color: var(--primary); border-top: 4px solid var(--primary); font-weight: bold; }
         
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; backdrop-filter: blur(5px); }
-        .modal-content { background:#fff; width:92%; margin:10% auto; border-radius:25px; padding:20px; text-align: center; max-height: 85vh; overflow-y: auto; }
-        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
-        .star-btn { font-size: 30px; color: #ddd; cursor: pointer; margin: 0 5px; }
+        .modal-content { background:#fff; width:92%; margin:15% auto; border-radius:25px; padding:20px; text-align: center; max-height: 80vh; overflow-y: auto; }
+        .p-card { background:#f8f9fa; padding:15px; border-radius:15px; text-align:left; margin-bottom:10px; border-left:4px solid var(--primary); font-size: 13px; color: #333; line-height: 1.5; }
         
-        /* Privacy Cards Style */
-        .p-card { background:#f8f9fa; padding:15px; border-radius:15px; text-align:left; margin-bottom:12px; border-left:5px solid var(--primary); font-size: 13px; line-height: 1.6; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
-        .p-card b { color: var(--primary); display: block; margin-bottom: 3px; font-size: 14px; }
+        .rating-stars { margin-bottom: 15px; font-size: 28px; }
+        .fa-star { color: #ddd; cursor: pointer; transition: 0.2s; }
+        .fa-star.active { color: #f1c40f; }
+        
+        .dateTime-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .dateTime-row input { flex: 1; margin-bottom: 0; padding: 10px; }
+        #loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); z-index:10000; justify-content:center; align-items:center; flex-direction: column; }
     </style>
 </head>
 <body>
 
-<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><br><p>Loading...</p></div>
+<div id="loader"><i class="fas fa-sync fa-spin fa-3x" style="color:var(--primary);"></i><br><p>लोड हो रहा है...</p></div>
 
 <div class="header">
-    <img src="57255.jpg" class="logo-img" onclick="adminCheck()" onerror="this.src='https://via.placeholder.com/90?text=LOGO'">
+    <img src="57255.jpg" class="logo-img" onclick="adminCheck()">
     <div class="brand-title">AK SOLUTION HUB</div>
-    <a href="tel:9927464530" class="call-btn"><i class="fas fa-phone-alt"></i> Call Now</a>
+    <a href="tel:9927464530" class="call-btn"><i class="fas fa-phone-alt"></i> अभी कॉल करें</a>
 </div>
 
-<div class="ticker"><marquee>🚀 Best Home Services | Plumber | Electrician | RO | CCTV | Contact: 9927464530</marquee></div>
+<div class="ticker"><marquee>🚀 बेस्ट होम सर्विस | प्लंबर | इलेक्ट्रीशियन | आरओ | सीसीटीवी | संपर्क: 9927464530</marquee></div>
 
 <div id="home" class="page active-page">
     <div class="banner" id="bannerSlider">
-        <img src="1.jpg" class="active"><img src="2.jpg"><img src="3.jpg"><img src="4.jpg"><img src="5.jpg">
+        <img src="1.jpg" class="active">
+        <img src="2.jpg">
+        <img src="3.jpg">
+        <img src="4.jpg">
+        <img src="5.jpg">
     </div>
     <div class="grid" id="mainGrid"></div>
 </div>
 
 <div id="booking" class="page">
-    <h2 style="color:var(--primary); margin-bottom:15px;">Booking Form</h2>
+    <h2 style="color:var(--primary); margin-bottom:15px;">बुकिंग फॉर्म</h2>
     <input type="text" id="svc" class="input-box" readonly style="background:#eef5ff; font-weight:bold; color:var(--primary);">
-    <input type="text" id="name" class="input-box" placeholder="Your Name">
-    <input type="tel" id="phone" class="input-box" placeholder="Mobile Number">
+    <input type="text" id="name" class="input-box" placeholder="आपका नाम">
+    <input type="tel" id="phone" class="input-box" placeholder="मोबाइल नंबर">
+    <textarea id="addr" class="input-box" rows="3" placeholder="पूरा पता (गली, लैंडमार्क)"></textarea>
     
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-        <input type="text" id="hNo" class="input-box" placeholder="House No.">
-        <input type="text" id="gali" class="input-box" placeholder="Street / Gali">
-        <input type="text" id="village" class="input-box" placeholder="Village / Mohalla">
-        <input type="text" id="post" class="input-box" placeholder="Post Office">
-        <input type="text" id="city" class="input-box" placeholder="City / District">
-        <input type="tel" id="pincode" class="input-box" placeholder="Pincode">
-    </div>
-    
-    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-        <div style="flex: 1; position: relative;">
-            <i class="fas fa-calendar-alt" style="position: absolute; left: 12px; top: 15px; color: #e74c3c;"></i>
-            <input type="date" id="bookDate" class="input-box" style="margin-bottom:0; padding-left: 35px; border-color: #e74c3c; color: #e74c3c; font-weight: bold; font-size: 12px;">
-        </div>
-        <div style="flex: 1; position: relative;">
-            <i class="fas fa-clock" style="position: absolute; left: 12px; top: 15px; color: #2ecc71;"></i>
-            <input type="time" id="bookTime" class="input-box" style="margin-bottom:0; padding-left: 35px; border-color: #2ecc71; color: #2ecc71; font-weight: bold; font-size: 12px;">
-        </div>
+    <div class="dateTime-row">
+        <input type="date" id="bookDate" class="input-box">
+        <input type="time" id="bookTime" class="input-box">
     </div>
 
-    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-        <button class="main-btn" style="background:#3498db; font-size: 13px;" onclick="getGPS()"><i class="fas fa-crosshairs"></i> Live Location</button>
-        <button class="main-btn" style="background:#f39c12; font-size: 13px;" onclick="getAddressLocation()"><i class="fas fa-map-marked-alt"></i> Address Location</button>
-    </div>
-
-    <button id="finalSubmit" class="main-btn" style="background:var(--success); display:none;" onclick="saveAndSend()"><i class="fab fa-whatsapp"></i> Submit Booking</button>
+    <button class="main-btn" style="background:#3498db; margin-bottom:10px;" onclick="showLocModal()"><i class="fas fa-map-marker-alt"></i> लोकेशन कन्फर्म करें</button>
+    <button id="finalSubmit" class="main-btn" style="background:var(--success); display:none;" onclick="saveAndSend()"><i class="fab fa-whatsapp"></i> सबमिट करें</button>
 </div>
 
-<div id="track" class="page">
-    <h2 style="margin-bottom:20px; color:var(--primary);">Track Status</h2>
-    <input type="text" id="trackInput" class="input-box" placeholder="Enter Booking ID (AK-XXXX)">
-    <button class="main-btn" onclick="trackStatus()">Check Now</button>
-    <div id="statusResult" style="margin-top: 20px; padding: 15px; border-radius: 15px; background: #f9f9f9; display: none;"></div>
+<div id="locModal" class="modal">
+    <div class="modal-content">
+        <h3>लोकेशन मोड चुनें</h3><br>
+        <button class="main-btn" style="background:var(--primary); margin-bottom:15px;" onclick="getLiveGPS()">📍 लाइव GPS लोकेशन</button>
+        <button class="main-btn" style="background:#34495e;" onclick="getManualMap()">🏠 लिखे पते का मैप बनाएं</button>
+        <p onclick="document.getElementById('locModal').style.display='none'" style="color:red; margin-top:15px; cursor:pointer;">वापस जाएँ</p>
+    </div>
 </div>
 
 <div id="review" class="page">
-    <h2 style="color:var(--primary); margin-bottom:20px;">Customer Feedback</h2>
-    <div style="margin-bottom: 20px;">
-        <i class="fas fa-star star-btn" onclick="setRating(1)"></i>
-        <i class="fas fa-star star-btn" onclick="setRating(2)"></i>
-        <i class="fas fa-star star-btn" onclick="setRating(3)"></i>
-        <i class="fas fa-star star-btn" onclick="setRating(4)"></i>
-        <i class="fas fa-star star-btn" onclick="setRating(5)"></i>
+    <h2 style="color:var(--primary); margin-bottom:15px;">Customer Reviews</h2>
+    <div class="rating-stars">
+        <i class="fas fa-star" onclick="setStar(1)"></i>
+        <i class="fas fa-star" onclick="setStar(2)"></i>
+        <i class="fas fa-star" onclick="setStar(3)"></i>
+        <i class="fas fa-star" onclick="setStar(4)"></i>
+        <i class="fas fa-star" onclick="setStar(5)"></i>
     </div>
-    <textarea id="revText" class="input-box" placeholder="Write your experience here..." rows="5"></textarea>
-    <button class="main-btn" onclick="sendReview()">Submit Review</button>
+    <textarea id="revText" class="input-box" placeholder="अपना फीडबैक यहाँ लिखें..." rows="3"></textarea>
+    <button class="main-btn" onclick="sendReview()">रिव्यू सबमिट करें</button>
 </div>
 
 <div id="privacy" class="page">
     <h2 style="color:var(--primary); margin-bottom:20px;"><i class="fas fa-user-shield"></i> Privacy Policy</h2>
-    
-    <div class="p-card"><b>1. Introduction:</b> We respect your privacy and are committed to protecting your personal data.</div>
-    <div class="p-card"><b>2. Data Collection:</b> We collect only necessary information like Name, Phone, and Address to provide home services.</div>
-    <div class="p-card"><b>3. Location Access:</b> Live GPS location is used solely to guide our service experts to your doorstep.</div>
-    <div class="p-card"><b>4. Purpose of Use:</b> Your data is used for booking confirmation, service updates, and quality improvement.</div>
-    <div class="p-card"><b>5. Data Sharing:</b> We do not sell or share your personal information with any third-party marketing agencies.</div>
-    <div class="p-card"><b>6. Expert Safety:</b> Your contact details are shared only with the assigned expert for your specific service.</div>
-    <div class="p-card"><b>7. Cookies:</b> Our app may use temporary cookies to enhance user experience and app performance.</div>
-    <div class="p-card"><b>8. Security Measures:</b> We implement industry-standard security to protect your data from unauthorized access.</div>
-    <div class="p-card"><b>9. Data Retention:</b> We keep your booking records only as long as necessary for service fulfillment and legal records.</div>
-    <div class="p-card"><b>10. User Rights:</b> You have the right to request the deletion or update of your personal information at any time.</div>
-    <div class="p-card"><b>11. Third-Party Links:</b> Our app uses secure links for WhatsApp and Google Maps for seamless service.</div>
-    <div class="p-card"><b>12. Children's Privacy:</b> We do not knowingly collect any data from children under the age of 18.</div>
-    <div class="p-card"><b>13. Legal Compliance:</b> We follow all local data protection laws and regulations to ensure maximum security.</div>
-    <div class="p-card"><b>14. Policy Updates:</b> We may update this policy periodically. Continued use of the app implies acceptance of changes.</div>
-    <div class="p-card"><b>15. Contact Us:</b> For any privacy-related queries, please contact us at +91 9927464530.</div>
-
-    <button class="main-btn" onclick="go('home', document.querySelectorAll('.nav-item')[0])" style="background:var(--dark); margin: 20px 0;">Back to Home</button>
-</div>
-
-<div id="adminModal" class="modal">
-    <div class="modal-content">
-        <h3 style="color:var(--primary);">🔐 Admin Access</h3><br>
-        <input type="password" id="adminPass" class="input-box" placeholder="Enter Password">
-        <button class="main-btn" onclick="verifyAdmin()">Login</button>
-        <p onclick="closeAdmin()" style="color:red; margin-top:15px; cursor:pointer; font-weight:bold;">Close</p>
-    </div>
+    <div class="p-card">1. We collect name and phone for service delivery.</div>
+    <div class="p-card">2. Precise GPS location is accessed for navigation.</div>
+    <div class="p-card">3. Data is secure and not shared with third parties.</div>
+    <div class="p-card">4. Users can request data deletion anytime.</div>
+    <button class="main-btn" style="background:#e74c3c; margin-top:10px;" onclick="window.location.href='https://wa.me/919927464530?text=Delete%20My%20Data'">Delete My Data</button>
 </div>
 
 <div class="nav">
@@ -158,72 +127,41 @@
     <div class="nav-item" onclick="go('privacy', this)"><i class="fas fa-user-shield"></i>Privacy</div>
 </div>
 
-<div id="subModal" class="modal">
-    <div class="modal-content">
-        <h3 id="mTitle" style="color:var(--primary); margin-bottom:15px;"></h3>
-        <div id="mList" class="grid" style="grid-template-columns: 1fr 1fr; background:none; padding:0;"></div>
-        <button onclick="closeSub()" class="main-btn" style="background:var(--dark); margin-top:20px;">Back</button>
-    </div>
-</div>
+<div id="subModal" class="modal"><div class="modal-content"><h3 id="mTitle"></h3><div id="mList" class="grid" style="grid-template-columns: 1fr 1fr; background:none;"></div><button onclick="closeSub()" class="main-btn" style="background:var(--dark); margin-top:20px;">वापस जाएँ</button></div></div>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdgQ-M7wqK8uYWcbJhLY1msNX1hxJ_mif1vWmO9vIsSy6zorO3oVzPokQKlrApr9Rexw/exec";
     let userGPS = "Not Provided";
-    let tapCount = 0;
-    let currentRating = 0;
+    let selectedStars = 0;
 
-    window.onload = function() {
-        const dateInput = document.getElementById('bookDate');
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.setAttribute('min', today);
-        dateInput.value = today;
-    };
-
-    function adminCheck() {
-        tapCount++;
-        if(tapCount === 3) {
-            document.getElementById('adminModal').style.display = 'block';
-            tapCount = 0;
-        }
-        setTimeout(() => tapCount = 0, 2000);
-    }
-
-    function verifyAdmin() {
-        if(document.getElementById('adminPass').value === "Ak2525") {
-            window.location.href = "admin.html";
-        } else { alert("Incorrect Password!"); }
-    }
-
-    function closeAdmin() { document.getElementById('adminModal').style.display = 'none'; }
-
+    // Rolling Image Slider Logic
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
-    setInterval(() => {
-        if(imgs.length > 0) {
+    if(imgs.length > 0) {
+        setInterval(() => {
             imgs[currentImg].classList.remove('active');
             currentImg = (currentImg + 1) % imgs.length;
             imgs[currentImg].classList.add('active');
-        }
-    }, 3000);
+        }, 3000);
+    }
 
     const services = {
-        'PLUMBER': ['Tap Repair', 'Tank Clean', 'Leakage', 'Fitting', 'Geyser', 'Sink', 'Motor', 'Toilet', 'Other'],
-        'ELECTRICIAN': ['Fan', 'Wiring', 'Switch Board', 'Inverter', 'MCB', 'Light', 'Cooler', 'Jhummar', 'Other'],
-        'CARPENTER': ['Lock', 'Almirah', 'Bed', 'Door', 'Drawer', 'Polish', 'Chair', 'Kitchen', 'Other'],
-        'RO SERVICE': ['Filter', 'Membrane', 'Pump', 'Leakage', 'TDS', 'Service', 'Installation', 'Other'],
-        'CCTV': ['Fitting', 'DVR', 'Online', 'Wiring', 'HDD', 'Power', 'BNC', 'Shift', 'Other'],
-        'AC SERVICE': ['Service', 'Gas', 'Installation', 'PCB', 'Leakage', 'Split', 'Other'],
-        'CLEANING': ['Deep Clean', 'Bathroom', 'Sofa', 'Kitchen', 'Tank', 'Pest', 'Other'],
-        'FITTING': ['TV Stand', 'Curtain Rod', 'Mirror', 'Photo', 'Name Plate', 'Other'],
-        'OTHER': ['Painter', 'Mason', 'Welding', 'Tiles', 'Garden', 'Helper', 'Other']
+        'PLUMBER': ['नल रिपेयर', 'टंकी सफाई', 'लीकेज', 'Fitting', 'Geyser', 'सिंक', 'मोटर', 'अन्य'],
+        'ELECTRICIAN': ['पंख', 'वायरिंग', 'बोर्ड', 'Inverter', 'MCB', 'लाइट', 'कूलर', 'अन्य'],
+        'CARPENTER': ['लॉक', 'अलमारी', 'बेड', 'दरवाजा', 'दराज', 'पॉलिश', 'अन्य'],
+        'RO SERVICE': ['फ़िल्टर', 'मेम्ब्रेन', 'पंप', 'लीकेज', 'TDS', 'सर्विस', 'Install', 'अन्य'],
+        'CCTV': ['फिटिंग', 'DVR', 'ऑनलाइन', 'वायरिंग', 'HDD', 'अन्य'],
+        'AC SERVICE': ['सर्विस', 'गैस', 'Install', 'PCB', 'लीकेज', 'अन्य'],
+        'CLEANING': ['Deep Clean', 'सोफा', 'किचन', 'अन्य'],
+        'FITTING': ['TV Stand', 'पर्दा रॉड', 'आईना', 'अन्य'],
+        'OTHER': ['पेंटर', 'राजमिस्त्री', 'वेल्डिंग', 'अन्य']
     };
     
     const colors = {'PLUMBER':'#005eb8','ELECTRICIAN':'#f39c12','CARPENTER':'#e67e22','RO SERVICE':'#3498db','CCTV':'#e74c3c','AC SERVICE':'#1abc9c','CLEANING':'#27ae60','FITTING':'#9b59b6','OTHER':'#34495e'};
     const icons = {'PLUMBER':'faucet','ELECTRICIAN':'bolt','CARPENTER':'hammer','RO SERVICE':'tint','CCTV':'video','AC SERVICE':'snowflake','CLEANING':'broom','FITTING':'tools','OTHER':'plus-circle'};
 
-    const grid = document.getElementById('mainGrid');
     Object.keys(services).forEach(s => {
-        grid.innerHTML += `<div class="box" style="border-bottom-color:${colors[s]}" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}" style="color:${colors[s]}"></i><span>${s}</span></div>`;
+        document.getElementById('mainGrid').innerHTML += `<div class="box" style="border-bottom-color:${colors[s]}" onclick="openSub('${s}')"><i class="fas fa-${icons[s]}" style="color:${colors[s]}"></i><span>${s}</span></div>`;
     });
 
     function go(id, el) {
@@ -237,86 +175,51 @@
         const list = document.getElementById('mList');
         document.getElementById('mTitle').innerText = cat;
         list.innerHTML = "";
-        services[cat].forEach(s => {
-            list.innerHTML += `<div class="box" style="padding:10px; border-bottom-color:${colors[cat]}" onclick="selectSvc('${cat} - ${s}')"><span>${s}</span></div>`;
-        });
+        services[cat].forEach(s => { list.innerHTML += `<div class="box" style="padding:10px; border-bottom-color:${colors[cat]}" onclick="selectSvc('${cat} - ${s}')"><span>${s}</span></div>`; });
         document.getElementById('subModal').style.display = 'block';
     }
+    function selectSvc(val) { document.getElementById('svc').value = val; closeSub(); go('booking', document.querySelectorAll('.nav-item')[1]); }
+    function closeSub() { document.getElementById('subModal').style.display = 'none'; }
 
-    function selectSvc(val) {
-        document.getElementById('svc').value = val;
-        closeSub();
-        go('booking', document.querySelectorAll('.nav-item')[1]);
-    }
-
-    function getGPS() {
+    function showLocModal() { if(!document.getElementById('addr').value) return alert("पहले पता टाइप करें!"); document.getElementById('locModal').style.display = 'block'; }
+    function getLiveGPS() {
         if (navigator.geolocation) {
             document.getElementById('loader').style.display = 'flex';
             navigator.geolocation.getCurrentPosition(p => {
                 userGPS = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-                document.getElementById('finalSubmit').style.display = 'block';
-                document.getElementById('loader').style.display = 'none';
-                alert("📍 Location Secured!");
-            }, () => { alert("Enable GPS Access!"); document.getElementById('loader').style.display = 'none'; });
+                finishSetup("📍 लाइव लोकेशन सेव हो गई!");
+            }, () => { alert("GPS परमिशन दें!"); document.getElementById('loader').style.display = 'none'; });
         }
     }
-
-    function getAddressLocation() {
-        const addr = `${document.getElementById('village').value} ${document.getElementById('post').value} ${document.getElementById('pincode').value}`;
-        if(!document.getElementById('pincode').value) return alert("Pincode Required!");
-        userGPS = `https://www.google.com/maps/search/${encodeURIComponent(addr)}`;
-        document.getElementById('finalSubmit').style.display = 'block';
-        alert("✅ Address Location Set!");
+    function getManualMap() {
+        userGPS = `https://www.google.com/maps/search/${encodeURIComponent(document.getElementById('addr').value)}`;
+        finishSetup("🏠 लिखे पते का मैप लिंक बन गया!");
     }
+    function finishSetup(msg) { document.getElementById('locModal').style.display='none'; document.getElementById('finalSubmit').style.display='block'; document.getElementById('loader').style.display='none'; alert(msg); }
 
-    function setRating(n) {
-        currentRating = n;
-        const stars = document.querySelectorAll('.star-btn');
-        stars.forEach((star, index) => star.style.color = index < n ? "#f1c40f" : "#ddd");
+    function setStar(n) {
+        selectedStars = n;
+        const stars = document.querySelectorAll('.rating-stars i');
+        stars.forEach((s, i) => { s.classList.toggle('active', i < n); });
     }
-
-    async function saveAndSend() {
-        const nameVal = document.getElementById('name').value;
-        const phoneVal = document.getElementById('phone').value;
-        const dateVal = document.getElementById('bookDate').value;
-        const timeVal = document.getElementById('bookTime').value;
-        const fullAddr = `${document.getElementById('hNo').value}, ${document.getElementById('gali').value}, ${document.getElementById('village').value}, ${document.getElementById('post').value}, ${document.getElementById('city').value}, ${document.getElementById('pincode').value}`;
-
-        if(!nameVal || !phoneVal || !dateVal) return alert("Fill all details!");
-        
-        document.getElementById('loader').style.display = 'flex';
-        const id = "AK-" + Math.floor(1000 + Math.random() * 9000);
-        try {
-            let params = `?action=addBooking&Date=${dateVal}&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(fullAddr)}&Service=${encodeURIComponent(document.getElementById('svc').value)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending&Time=${timeVal}`;
-            fetch(SCRIPT_URL + params, {mode: 'no-cors'});
-            
-            let waMsg = `*AK SOLUTION HUB*%0A🆔 *ID:* ${id}%0A📅 *Date:* ${dateVal}%0A⏰ *Time:* ${timeVal}%0A👤 *Name:* ${encodeURIComponent(nameVal)}%0A📍 *Address:* ${encodeURIComponent(fullAddr)}%0A🌍 *Location:* ${encodeURIComponent(userGPS)}`;
-            setTimeout(() => { document.getElementById('loader').style.display = 'none'; window.location.href = `https://wa.me/919927464530?text=${waMsg}`; }, 1500);
-        } catch(e) { alert("Error!"); }
-    }
-
     function sendReview() {
-        if(currentRating === 0) return alert("Select Rating!");
-        alert("Thanks for feedback!");
-        currentRating = 0; setRating(0); document.getElementById('revText').value = "";
+        if(selectedStars === 0) return alert("सितारे चुनें!");
+        alert("फीडबैक के लिए धन्यवाद!"); 
         go('home');
     }
 
-    function closeSub() { document.getElementById('subModal').style.display = 'none'; }
-    
-    async function trackStatus() {
-        let inputId = document.getElementById('trackInput').value.toUpperCase();
-        if(!inputId) return alert("Enter ID!");
+    async function saveAndSend() {
+        const nameVal = document.getElementById('name').value, phoneVal = document.getElementById('phone').value, addrVal = document.getElementById('addr').value, svcVal = document.getElementById('svc').value, dateVal = document.getElementById('bookDate').value, timeVal = document.getElementById('bookTime').value;
+        if(!nameVal || !phoneVal || !addrVal || !dateVal || !timeVal) return alert("सभी जानकारी भरें!");
         document.getElementById('loader').style.display = 'flex';
+        const id = "AK-" + Math.floor(1000 + Math.random() * 9000);
         try {
-            let res = await fetch(SCRIPT_URL + "?action=getList&type=CUST");
-            let data = await res.json();
-            let found = data.find(x => x.ID === inputId);
-            let resDiv = document.getElementById('statusResult');
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = found ? `<b>ID:</b> ${found.ID}<br><b>Name:</b> ${found.Name}<br><b>Status:</b> <span style="color:var(--primary);">${found.Status}</span>` : "ID Not Found!";
-        } catch(e) { alert("Error!"); }
-        document.getElementById('loader').style.display = 'none';
+            let fullAddr = `${addrVal} | Dt: ${dateVal} | Tm: ${timeVal}`;
+            let p = `?action=addBooking&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(fullAddr)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
+            fetch(SCRIPT_URL + p, {mode: 'no-cors'});
+            let waMsg = `*AK SOLUTION HUB*%0A🆔 *ID:* ${id}%0A👤 *Name:* ${encodeURIComponent(nameVal)}%0A📞 *Phone:* ${phoneVal}%0A🛠️ *Service:* ${encodeURIComponent(svcVal)}%0A📅 *Date:* ${dateVal}%0A⏰ *Time:* ${timeVal}%0A📍 *Addr:* ${encodeURIComponent(addrVal)}%0A🌍 *Map:* ${encodeURIComponent(userGPS)}`;
+            setTimeout(() => { document.getElementById('loader').style.display = 'none'; window.location.href = `https://wa.me/919927464530?text=${waMsg}`; }, 1500);
+        } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error!"); }
     }
 </script>
 </body>

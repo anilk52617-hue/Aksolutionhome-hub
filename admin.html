@@ -9,12 +9,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
-        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; --advance: #9b59b6; }
+        :root { --primary: #005eb8; --success: #27ae60; --danger: #e74c3c; --warning: #f39c12; --running: #3498db; --dark: #2c3e50; }
         * { box-sizing: border-box; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; }
         body { background: #eef2f7; padding-bottom: 50px; }
         .header { background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .indicator-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 15px; }
-        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; height: 65px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .ind-box { background: white; padding: 12px 5px; border-radius: 15px; text-align: center; border-bottom: 4px solid #ddd; cursor: pointer; transition: 0.2s; }
         .ind-box:active { transform: scale(0.95); }
         .ind-box b { font-size: 18px; color: var(--dark); display: block; }
         .ind-box span { font-size: 9px; color: #888; font-weight: bold; text-transform: uppercase; }
@@ -32,7 +32,7 @@
         .panel-box i { font-size: 22px; margin-bottom: 5px; }
         .panel-box span { font-size: 9px; font-weight: bold; text-transform: uppercase; }
 
-        /* FIXED ID CARD STYLE */
+        /* ID CARD STYLE */
         #id-card-render { width: 300px; height: 500px; margin: 10px auto; background: white; border-radius: 15px; position: relative; overflow: hidden; border: 1px solid #eee; text-align: left; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .v-header-id { background: var(--primary); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 16px; }
         #v-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #fff; position: absolute; top: 60px; left: 50%; transform: translateX(-50%); object-fit: cover; z-index: 5; background: #f0f0f0; }
@@ -59,15 +59,7 @@
             <div style="text-align:center;"><b id="in-pend" style="color:var(--danger); font-size:14px;">0</b><span style="font-size:7px;">PEND</span></div>
         </div>
     </div>
-    
-    <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="flipPendingBox()">
-        <div id="pend-main-face"><span>Pending</span><b id="c-old-pend">0</b></div>
-        <div id="pend-stats-face" style="display:none; grid-template-columns: repeat(2, 1fr); width:100%; gap:2px;">
-            <div onclick="showSmartPendList('today')" style="text-align:center;"><b id="p-today-small" style="color:var(--danger); font-size:14px;">0</b><span style="font-size:7px;">TODAY</span></div>
-            <div onclick="showSmartPendList('adv')" style="text-align:center;"><b id="p-adv-small" style="color:var(--advance); font-size:14px;">0</b><span style="font-size:7px;">ADVANCE</span></div>
-        </div>
-    </div>
-
+    <div class="ind-box" style="border-color:var(--danger); background:#ffebee;" onclick="filterStatus('Pending')"><span>Pending</span><b id="c-old-pend">0</b></div>
     <div class="ind-box" style="border-color:var(--running); background:#e1f5fe;" onclick="loadRunningDetailed()"><span>Running</span><b id="c-run">0</b></div>
     <div class="ind-box" style="border-color:var(--success)" onclick="filterStatus('Done')"><span>Done</span><b id="c-done">0</b></div>
     <div class="ind-box" style="border-color:var(--warning)" onclick="loadList('CUST')"><span>Total Cust</span><b id="c-total">0</b></div>
@@ -149,82 +141,29 @@
             ]);
             fullCustData = cr; fullTeamData = tr;
             updateDashboard();
-        } catch(e) { alert("Data Sync Failed!"); }
+        } catch(e) { console.error(e); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
     function updateDashboard() {
-        let now = new Date();
         let todayStr = getTodayFormatted();
-        let todaySystemStr = now.toLocaleDateString('en-GB'); 
         let todayData = fullCustData.filter(x => {
             if (!x.Date) return false;
-            let recordDate = new Date(x.Date);
-            return recordDate.toLocaleDateString('en-GB') === todaySystemStr || x.Date.toString().includes(todayStr);
+            let recordDate = new Date(x.Date).toLocaleDateString('en-GB');
+            return recordDate === todayStr || x.Date.toString().includes(todayStr);
         });
-
-        // Today Box
         document.getElementById('c-today-new').innerText = todayData.length;
         document.getElementById('in-done').innerText = todayData.filter(x => x.Status === 'Done').length;
         document.getElementById('in-run').innerText = todayData.filter(x => x.Status === 'Running').length;
         document.getElementById('in-pend').innerText = todayData.filter(x => x.Status === 'Pending').length;
-
-        // Pending Smart Box
-        let totalPending = fullCustData.filter(x => x.Status === 'Pending');
-        document.getElementById('c-old-pend').innerText = totalPending.length;
-        
-        // Today Pending Count
-        document.getElementById('p-today-small').innerText = todayData.filter(x => x.Status === 'Pending').length;
-        
-        // Advance Pending Count (Any date in future)
-        let tStr = now.toISOString().split('T')[0];
-        document.getElementById('p-adv-small').innerText = totalPending.filter(x => {
-            let d = new Date(x.Date).toISOString().split('T')[0];
-            return d > tStr;
-        }).length;
-
+        document.getElementById('c-old-pend').innerText = fullCustData.filter(x => x.Status === 'Pending').length;
         document.getElementById('c-run').innerText = fullCustData.filter(x => x.Status === 'Running').length;
         document.getElementById('c-done').innerText = fullCustData.filter(x => x.Status === 'Done').length;
         document.getElementById('c-total').innerText = fullCustData.length;
         document.getElementById('c-team').innerText = fullTeamData.length;
     }
 
-    // Flip Functions
-    function flipTodayBox() { 
-        const m = document.getElementById('today-main-face'), s = document.getElementById('today-stats-face'); 
-        if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}
-        else{m.style.display='block'; s.style.display='none'; showTodayWork();} 
-    }
-
-    function flipPendingBox() {
-        event.stopPropagation();
-        const m = document.getElementById('pend-main-face'), s = document.getElementById('pend-stats-face');
-        if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}
-        else{m.style.display='block'; s.style.display='none'; filterStatus('Pending');}
-    }
-
-    // Smart List Filtering
-    function showSmartPendList(type) {
-        event.stopPropagation();
-        let todayStr = getTodayFormatted();
-        let filtered = [];
-        let title = "";
-
-        if(type === 'today') {
-            filtered = fullCustData.filter(x => x.Status === 'Pending' && x.Date.toString().includes(todayStr));
-            title = "आज की पेंडिंग बुकिंग";
-        } else {
-            let tStr = new Date().toISOString().split('T')[0];
-            filtered = fullCustData.filter(x => {
-                let d = new Date(x.Date).toISOString().split('T')[0];
-                return x.Status === 'Pending' && d > tStr;
-            });
-            title = "एडवांस पेंडिंग बुकिंग";
-        }
-
-        renderDataList(filtered, 'CUST');
-        document.getElementById('lt').innerText = title;
-    }
+    function flipTodayBox() { const m = document.getElementById('today-main-face'), s = document.getElementById('today-stats-face'); if(m.style.display!=='none'){m.style.display='none'; s.style.display='grid';}else{m.style.display='block'; s.style.display='none'; showTodayWork();} }
 
     async function loadRunningDetailed() { 
         let running = fullCustData.filter(x => x.Status === 'Running'); 
@@ -248,21 +187,14 @@
     }
 
     function showTodayWork() {
-        let now = new Date();
         let todayStr = getTodayFormatted();
-        let todaySystemStr = now.toLocaleDateString('en-GB');
-        let todayData = fullCustData.filter(x => {
-            if (!x.Date) return false;
-            let recordDate = new Date(x.Date);
-            return recordDate.toLocaleDateString('en-GB') === todaySystemStr || x.Date.toString().includes(todayStr);
-        });
+        let todayData = fullCustData.filter(x => { if (!x.Date) return false; let d = new Date(x.Date).toLocaleDateString('en-GB'); return d === todayStr || x.Date.toString().includes(todayStr); });
         if(todayData.length === 0) todayData = fullCustData.filter(x => x.Status === 'Pending' || x.Status === 'Running');
         let summaryHtml = `<div style="background:var(--dark); color:white; padding:12px; border-radius:15px; margin-bottom:15px; font-size:11px; display:flex; justify-content:space-between; align-items:center;"><div><b>आज कुल: ${todayData.length}</b></div></div>`;
         renderDataList(todayData, 'CUST', summaryHtml);
         document.getElementById('lt').innerText = "TODAY'S SUMMARY";
     }
 
-    // ORIGINAL PROFESSIONAL LIST DESIGN
     function renderDataList(d, t, extraHtml = "") {
         let h = extraHtml;
         d.forEach(i => {
@@ -290,33 +222,22 @@
     }
 
     async function processAssign() {
-        let cid = document.getElementById('as-cid').value.toUpperCase().trim();
-        let tid = document.getElementById('as-tid').value.toUpperCase().trim();
-        if(!cid || !tid) return alert("कृपया दोनों ID चुनें!");
+        let cid = document.getElementById('as-cid').value.toUpperCase();
+        let tid = document.getElementById('as-tid').value.toUpperCase();
+        if(!cid || !tid) return alert("दोनों ID चुनें!");
         document.getElementById('loader').style.display = 'flex';
         try {
-            await Promise.all([
-                fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`),
-                fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)
-            ]);
+            await Promise.all([fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Running&teamid=${tid}`), fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Busy`)]);
             let cust = fullCustData.find(x => x.ID === cid);
             let staff = fullTeamData.find(x => x.ID === tid);
             if(cust && staff) {
-                let sPhone = staff.Phone.toString().replace(/\D/g, '');
-                if(sPhone.length === 10) sPhone = "91" + sPhone;
-                let cPhone = cust.Phone.toString().replace(/\D/g, '');
-                if(cPhone.length === 10) cPhone = "91" + cPhone;
-                let teamMsg = `*AK SOLUTION HUB (Work Order)*%0A🚩 *नया कार्य असाइन हुआ है*%0A📅 *तारीख:* ${cust.Date || '-'}%0A🆔 *बुकिंग ID:* ${cust.ID}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🛠️ *सेवा:* ${encodeURIComponent(cust.Service)}%0A📍 *पता:* ${encodeURIComponent(cust.Address)}`;
-                let custMsg = `*AK SOLUTION HUB (Confirmed)*%0Aनमस्ते *${encodeURIComponent(cust.Name)}*,%0Aआपकी बुकिंग (ID: ${cust.ID}) कन्फर्म हो गई है।%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}`;
-                window.location.href = `whatsapp://send?phone=${sPhone}&text=${teamMsg}`;
-                setTimeout(() => {
-                    if(confirm("टीम को जानकारी भेज दी गई है। क्या अब कस्टमर को डिटेल भेजें?")) {
-                        window.location.href = `whatsapp://send?phone=${cPhone}&text=${custMsg}`;
-                    }
-                    syncCounts(); closeP('as-p');
-                }, 2500);
+                let mapLink = cust.GPS || "http://maps.google.com";
+                let teamMsg = `📍 *लोकेशन:* ${mapLink}%0A🆔 *बुकिंग ID:* ${cust.ID}%0A📞 *मोबाइल:* ${cust.Phone}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0A🔧 *सर्विस:* ${encodeURIComponent(cust.Service)}`;
+                let custMsg = `नमस्ते *${encodeURIComponent(cust.Name)}*, आपकी सर्विस बुकिंग कंफर्म हो गई है।%0A👤 *एक्सपर्ट:* ${encodeURIComponent(staff.Name)}%0A📞 *संपर्क:* ${staff.Phone}`;
+                window.open(`https://wa.me/91${staff.Phone}?text=${teamMsg}`, '_blank');
+                setTimeout(() => { window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank'); syncCounts(); closeP('as-p'); }, 2000);
             }
-        } catch(e) { alert("Assignment Error"); }
+        } catch(e) { alert("Error!"); }
         finally { document.getElementById('loader').style.display = 'none'; }
     }
 
@@ -326,81 +247,31 @@
         try {
             await fetch(SCRIPT_URL + `?action=updateStatus&id=${cid}&status=Done`); 
             if(tid && tid !== 'undefined') await fetch(SCRIPT_URL + `?action=updateStatus&id=${tid}&status=Free`); 
-            syncCounts(); closeP('list-p'); 
-        } catch(e) { alert("Error!"); }
-        finally { document.getElementById('loader').style.display = 'none'; }
+            
+            let cust = fullCustData.find(x => x.ID === cid);
+            let staff = fullTeamData.find(x => x.ID === tid);
+            if(cust && staff) {
+                let teamMsg = `✅ *काम पूरा हुआ!*%0A🆔 *बुकिंग ID:* ${cust.ID}%0A👤 *कस्टमर:* ${encodeURIComponent(cust.Name)}%0Aआप अब *FREE* हैं।`;
+                let custMsg = `नमस्ते *${encodeURIComponent(cust.Name)}*, आपका काम पूरा हो गया है। AK SOLUTION HUB चुनने के लिए धन्यवाद!`;
+                window.open(`https://wa.me/91${staff.Phone}?text=${teamMsg}`, '_blank');
+                setTimeout(() => { window.open(`https://wa.me/91${cust.Phone}?text=${custMsg}`, '_blank'); syncCounts(); closeP('list-p'); document.getElementById('loader').style.display = 'none'; }, 2000);
+            } else { syncCounts(); closeP('list-p'); document.getElementById('loader').style.display = 'none'; }
+        } catch(e) { alert("Error!"); document.getElementById('loader').style.display = 'none'; }
     }
 
-    function handleOTP() { 
-        let n = document.getElementById('rn').value, p = document.getElementById('rp').value;
-        currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000);
-        window.open(`https://wa.me/91${p}?text=OTP: ${currentGeneratedOTP}`, '_blank');
-        document.getElementById('otp-area').style.display = 'block';
-    }
-
-    async function verifyAndRegister() {
-        if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP");
-        document.getElementById('loader').style.display = 'flex';
-        let teamID = "T-" + Math.floor(1000 + Math.random() * 9999);
-        let p = `action=addTeam&ID=${encodeURIComponent(teamID)}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${encodeURIComponent(document.getElementById('rp').value)}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}`;
-        try { await fetch(`${SCRIPT_URL}?${p}`); closeP('reg-p'); syncCounts(); } catch(e) { alert("Error!"); }
-        finally { document.getElementById('loader').style.display = 'none'; }
-    }
-
-    function loadIDData() { 
-        let tid = document.getElementById('id-tid').value.toUpperCase(); 
-        let s = fullTeamData.find(x => x.ID === tid); 
-        if(!s) return alert("ID नहीं मिला"); 
-        document.getElementById('v-name').innerText = s.Name; 
-        document.getElementById('v-id').innerText = "ID: " + s.ID; 
-        document.getElementById('v-phone').innerText = s.Phone; 
-        document.getElementById('v-father').innerText = s.Father || "-"; 
-        document.getElementById('v-address').innerText = s.Address || "-"; 
-        document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); 
-        let now = new Date();
-        let iss = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear();
-        now.setMonth(now.getMonth() + 6);
-        let exp = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear();
-        document.getElementById('v-iss-out').innerText = iss;
-        document.getElementById('v-exp-out').innerText = exp;
-        document.getElementById('id-qr').innerHTML = ""; 
-        new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); 
-    }
-
+    function handleOTP() { let n = document.getElementById('rn').value, p = document.getElementById('rp').value; if(!p) return alert("नंबर लिखें"); currentGeneratedOTP = Math.floor(1000 + Math.random() * 9000); window.open(`https://wa.me/91${p}?text=OTP: ${currentGeneratedOTP}`, '_blank'); document.getElementById('otp-area').style.display = 'block'; }
+    async function verifyAndRegister() { if(document.getElementById('otp-val').value != currentGeneratedOTP) return alert("Wrong OTP"); document.getElementById('loader').style.display = 'flex'; let teamID = "T-" + Math.floor(1000 + Math.random() * 9999); let p = `action=addTeam&ID=${encodeURIComponent(teamID)}&Name=${encodeURIComponent(document.getElementById('rn').value)}&Father=${encodeURIComponent(document.getElementById('rf').value)}&Phone=${encodeURIComponent(document.getElementById('rp').value)}&Address=${encodeURIComponent(document.getElementById('ra').value)}&Service=${encodeURIComponent(document.getElementById('rs').value)}`; try { await fetch(`${SCRIPT_URL}?${p}`); closeP('reg-p'); syncCounts(); } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; } }
+    function loadIDData() { let tid = document.getElementById('id-tid').value.toUpperCase(); let s = fullTeamData.find(x => x.ID === tid); if(!s) return alert("ID नहीं मिला"); document.getElementById('v-name').innerText = s.Name; document.getElementById('v-id').innerText = "ID: " + s.ID; document.getElementById('v-phone').innerText = s.Phone; document.getElementById('v-father').innerText = s.Father || "-"; document.getElementById('v-address').innerText = s.Address || "-"; document.getElementById('v-work-label').innerText = (s.Service || "FIELD EXPERT").toUpperCase(); let now = new Date(); let iss = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear(); now.setMonth(now.getMonth() + 6); let exp = String(now.getDate()).padStart(2,'0') + "/" + String(now.getMonth() + 1).padStart(2,'0') + "/" + now.getFullYear(); document.getElementById('v-iss-out').innerText = iss; document.getElementById('v-exp-out').innerText = exp; document.getElementById('id-qr').innerHTML = ""; new QRCode(document.getElementById("id-qr"), { text: s.ID, width: 60, height: 60 }); }
     function openP(id) { document.getElementById(id).style.display = 'block'; if(id==='as-p') renderFree(); }
     function closeP(id) { document.getElementById(id).style.display = 'none'; }
     function fillAs(id) { closeP('list-p'); document.getElementById('as-cid').value = id; openP('as-p'); }
-    function renderFree() { 
-        let b = document.getElementById('staff-picker-box'); 
-        let freeStaff = fullTeamData.filter(x => x.Status === 'Free');
-        b.innerHTML = freeStaff.length ? "" : "<p>कोई फ्री स्टाफ नहीं</p>";
-        freeStaff.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; }); 
-    }
+    function renderFree() { let b = document.getElementById('staff-picker-box'); let freeStaff = fullTeamData.filter(x => x.Status === 'Free'); b.innerHTML = freeStaff.length ? "" : "<p style='padding:10px;'>कोई फ्री स्टाफ नहीं</p>"; freeStaff.forEach(t => { b.innerHTML += `<div onclick="document.getElementById('as-tid').value='${t.ID}'" style="padding:12px; border-bottom:1px solid #eee; cursor:pointer;">🟢 ${t.Name} (${t.ID})</div>`; }); }
     function loadList(t) { renderDataList(t === 'CUST' ? fullCustData : fullTeamData, t); }
     function filterStatus(s) { renderDataList(fullCustData.filter(x => x.Status === s), 'CUST'); }
-    async function quickUpdate(s) { 
-        let id = document.getElementById('man-id').value.toUpperCase(); 
-        if(!id) return alert("ID लिखें"); 
-        document.getElementById('loader').style.display = 'flex'; 
-        try { await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); } catch(e) { alert("Error!"); }
-        finally { document.getElementById('loader').style.display = 'none'; }
-    }
-    function searchInList() { 
-        let v = document.getElementById('listSearch').value.toUpperCase(); 
-        let c = document.getElementsByClassName('data-card'); 
-        for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; 
-    }
+    async function quickUpdate(s) { let id = document.getElementById('man-id').value.toUpperCase(); if(!id) return alert("ID लिखें"); document.getElementById('loader').style.display = 'flex'; try { await fetch(SCRIPT_URL + `?action=updateStatus&id=${id}&status=${s}`); syncCounts(); } catch(e) { alert("Error!"); } finally { document.getElementById('loader').style.display = 'none'; } }
+    function searchInList() { let v = document.getElementById('listSearch').value.toUpperCase(); let c = document.getElementsByClassName('data-card'); for (let i = 0; i < c.length; i++) c[i].style.display = c[i].innerText.toUpperCase().indexOf(v) > -1 ? "" : "none"; }
     function previewFile(e) { let r = new FileReader(); r.onload = function(){ document.getElementById('v-img').src = r.result; }; r.readAsDataURL(e.target.files[0]); }
-    function downloadID() { 
-        let tid = document.getElementById('id-tid').value.toUpperCase();
-        if (!tid || document.getElementById('v-name').innerText === "NAME") return alert("Data Load करें");
-        document.getElementById('loader').style.display = 'flex';
-        html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true }).then(canvas => { 
-            let link = document.createElement('a');
-            link.download = `AK-ID-${tid}.png`; link.href = canvas.toDataURL(); link.click();
-            document.getElementById('loader').style.display = 'none';
-        });
-    }
+    function downloadID() { let tid = document.getElementById('id-tid').value.toUpperCase(); if (!tid || document.getElementById('v-name').innerText === "NAME") return alert("Data Load करें"); document.getElementById('loader').style.display = 'flex'; html2canvas(document.getElementById('id-card-render'), { scale: 3, useCORS: true, allowTaint: true }).then(canvas => { let link = document.createElement('a'); link.download = `AK-ID-${tid}.png`; link.href = canvas.toDataURL(); link.click(); document.getElementById('loader').style.display = 'none'; }); }
     window.onload = syncCounts;
 </script>
 </body>
