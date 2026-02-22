@@ -16,7 +16,6 @@
         .call-btn { background: #27ae60; color: white; padding: 8px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 16px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(39,174,96,0.3); }
         .ticker { background: var(--primary); color: #fff; padding: 6px; font-size: 12px; overflow: hidden; }
 
-        /* Rolling Banner Style */
         .banner { width: 92%; margin: 15px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); height: 160px; position: relative; }
         .banner img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .banner img.active { display: block; animation: fade 0.8s; }
@@ -134,7 +133,6 @@
     let userGPS = "Not Provided";
     let selectedStars = 0;
 
-    // Rolling Image Slider Logic
     let currentImg = 0;
     const imgs = document.querySelectorAll('#bannerSlider img');
     if(imgs.length > 0) {
@@ -205,7 +203,7 @@
     function sendReview() {
         if(selectedStars === 0) return alert("सितारे चुनें!");
         alert("फीडबैक के लिए धन्यवाद!"); 
-        go('home');
+        go('home', document.querySelectorAll('.nav-item')[0]);
     }
 
     async function saveAndSend() {
@@ -217,8 +215,25 @@
             let fullAddr = `${addrVal} | Dt: ${dateVal} | Tm: ${timeVal}`;
             let p = `?action=addBooking&ID=${id}&Name=${encodeURIComponent(nameVal)}&Phone=${phoneVal}&Address=${encodeURIComponent(fullAddr)}&Service=${encodeURIComponent(svcVal)}&GPS=${encodeURIComponent(userGPS)}&Status=Pending`;
             fetch(SCRIPT_URL + p, {mode: 'no-cors'});
+            
             let waMsg = `*AK SOLUTION HUB*%0A🆔 *ID:* ${id}%0A👤 *Name:* ${encodeURIComponent(nameVal)}%0A📞 *Phone:* ${phoneVal}%0A🛠️ *Service:* ${encodeURIComponent(svcVal)}%0A📅 *Date:* ${dateVal}%0A⏰ *Time:* ${timeVal}%0A📍 *Addr:* ${encodeURIComponent(addrVal)}%0A🌍 *Map:* ${encodeURIComponent(userGPS)}`;
-            setTimeout(() => { document.getElementById('loader').style.display = 'none'; window.location.href = `https://wa.me/919927464530?text=${waMsg}`; }, 1500);
+            
+            setTimeout(() => { 
+                document.getElementById('loader').style.display = 'none'; 
+                // फॉर्म रीसेट
+                document.getElementById('name').value = "";
+                document.getElementById('phone').value = "";
+                document.getElementById('addr').value = "";
+                document.getElementById('bookDate').value = "";
+                document.getElementById('bookTime').value = "";
+                document.getElementById('finalSubmit').style.display = 'none';
+                
+                // होम पेज पर स्विच
+                go('home', document.querySelectorAll('.nav-item')[0]);
+                
+                // व्हाट्सएप पर भेजें
+                window.location.href = `https://wa.me/919927464530?text=${waMsg}`; 
+            }, 1000);
         } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error!"); }
     }
 </script>
